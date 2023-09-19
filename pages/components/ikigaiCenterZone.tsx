@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const OverlappedZone: React.FC = () => {
+const CenterZone: React.FC = () => {
   const colorClass = `hover:bg-purple-500`;
 
   return (
@@ -15,4 +15,4 @@ const OverlappedZone: React.FC = () => {
   );
 };
 
-export default OverlappedZone;
+export default CenterZone;

@@ -16,7 +16,7 @@ const DraggableDiv: React.FC<DraggableDivProps> = ({ imageUrl, text }) => {
       dragPropagation
       whileHover={{scale: 1.2}}
       whileDrag={{ scale: 1.3 }}  
-      className="w-64 h-64 rounded-2xl flex items-center justify-center z-20" 
+      className="w-64 h-64 rounded-2xl flex items-center justify-center z-30" 
     >
       <div className="w-9/10 h-9/10 relative overflow-hidden">
         <Image 
