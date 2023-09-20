@@ -8,7 +8,7 @@
   stroke-dasharray: 5 50;
   stroke-dashoffset: 0;
   stroke-linecap: round;
-  animation: dash 6s cubic-bezier(0.37, 0, 0.63, 1) infinite 0s;
+  animation: dash 6s cubic-bezier(0.37, 0, 0.63, 1) infinite 0.3s;
 }
 
 @keyframes dash {
