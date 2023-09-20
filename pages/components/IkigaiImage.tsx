@@ -38,7 +38,7 @@ const IkigaiImage: React.FC<IkigaiImageProps> = ({ imageUrl, text, onDragEnd, se
           layout="responsive"
           width={100}  
           height={100}
-          className="object-contain rounded-lg pointer-events-none " 
+          className="object-contain rounded-xl pointer-events-none " 
         />
         {/* <span className="absolute bottom-4 left-6 rounded-md text-white bg-gray-900 bg-opacity-70 h-8 px-4 py-1">{text}</span> */}
       </div>

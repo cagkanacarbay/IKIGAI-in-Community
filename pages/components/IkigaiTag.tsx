@@ -30,7 +30,7 @@ const IkigaiImage: React.FC<IkigaiTagProps> = ({ text, onDragEnd, setHoveredItem
       onHoverEnd={() => debouncedSetHoveredItem(null)}
       className="w-40 h-40 rounded-2xl flex items-center justify-center z-30" 
     >
-      <span className="absolute bottom-4 left-6 rounded-md text-white bg-gray-900 bg-opacity-70 h-8 px-4 py-1">{text}</span>
+      <span className="absolute bottom-4 left-6 rounded-md text-white bg-gray-900 bg-opacity-90 h-8 px-4 py-1">{text}</span>
     </motion.div>
   );
 }
