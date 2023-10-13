@@ -1,14 +1,7 @@
 import React from 'react';
 import styles from './IkigaiConnections.module.css';
+import { ItemCoordinates, Connection } from '@/lib/types';
 
-interface ItemCoordinates {
-  [key: string]: { x: number, y: number };
-}
-
-interface Connection {
-  image: string;
-  tag: string;
-}
 
 interface IkigaiConnectionsProps {
   hoveredItem: string | null;

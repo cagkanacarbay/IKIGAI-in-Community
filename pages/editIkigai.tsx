@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { Inter } from 'next/font/google';
 import { motion } from "framer-motion";
 import DraggableDiv from './components/draggableDiv';
-import IkigaiZoneEdit from './components/ikigaiZoneEdit';
+import IkigaiZoneEdit from './components/IkigaiZoneEdit';
 import { useState } from 'react';
 
 
