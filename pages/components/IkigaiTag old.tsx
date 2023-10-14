@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, PanInfo  } from 'framer-motion';
-import debounce from '../utils/debounce';
+import debounce from '../../lib/debounce';
 
 
 interface IkigaiTagProps {

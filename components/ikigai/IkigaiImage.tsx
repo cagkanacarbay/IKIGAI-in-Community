@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, PanInfo  } from 'framer-motion';
 import Image from 'next/image'; 
-import debounce from '../../lib/debounce';
+import debounce from '@/lib/debounce';
 import {
   ContextMenu,
   ContextMenuContent,

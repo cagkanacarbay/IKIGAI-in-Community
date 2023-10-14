@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Inter } from 'next/font/google';
 import IkigaiImage from './components/IkigaiImage';
 import IkigaiZoneEdit from './components/UserAddIkigaiZone';
@@ -6,8 +6,6 @@ import IkigaiTag from './components/IkigaiTag';
 import IkigaiConnections from './components/IkigaiConnections';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { ItemCoordinates, Connection, Position} from '@/lib/types';
-import { MapInteractionCSS, MapInteraction } from 'react-map-interaction';
-import QuickPinchZoom, { make3dTransformValue } from "react-quick-pinch-zoom";
 
 
 const inter = Inter({ subsets: ['latin'] });
@@ -40,7 +38,7 @@ export default function IkigaiBoard() {
       ...initialTags.map((tag) => [tag.tag, tag.position]),
     ])
   );  
-  const [mousePos, setMousePos] = useState<{ x: number, y: number }>({x: 0, y:0});
+  const [mousePos, setMousePos] = useState({x: 0, y: 0});
 
 
   useEffect(() => {
@@ -126,90 +124,47 @@ export default function IkigaiBoard() {
     }
   };
 
-
-  const onUpdate = useCallback(({ x, y, scale }) => {
-    const { current: container } = containerRef;
-    console.log(x, y, scale)
-
-    if (container) {
-      console.log("in container")
-      const value = make3dTransformValue({ x, y, scale });
-      container.style.setProperty("transform", value);
-    }
-  }, []);
-
   
   return (
-    // <MapInteractionCSS>
-    // <TransformWrapper>
-    //   <TransformComponent>
-    <QuickPinchZoom onUpdate={onUpdate} wheelScaleFactor={500} inertia={false} enforceBoundsDuringZoom >
+
     <main 
-      className={`flex min-h-screen flex-col justify-between ${inter.className} ${hoveredItem ? 'bg-neutral-700 bg-opacity-80' : 'bg-neutral-200 bg-opacity-100'} transition duration-2500 ease-in-out`}
+      className={`flex min-h-screen flex-col justify-between ${inter.className} ${hoveredItem ? 'bg-neutral-700 bg-opacity-80' : 'bg-neutral-200'} transition duration-2500 ease-in-out`}
       ref={containerRef}
     >
-          {/* <div>
+          <div>
             The mouse is at position{' '}
             <b>
               ({mousePos.x}, {mousePos.y})
             </b>
-          </div> */}
+          </div>
 
 
-        {/* {ikigaiImages.map((image, index) => (
-          <IkigaiImage
-            key={index}
-            imageUrl={image.imageUrl}
-            text={image.text}
-            position={image.position}
-            onDragEnd={handleItemDragEnd}
-            setHoveredItem={setHoveredItem}
-          />
-        ))}
-        {ikigaiTags.map((tag, index) => (
-          <IkigaiTag
-            key={index}
-            text={tag.tag}
-            position={tag.position}
-            onDragEnd={handleItemDragEnd}
-            setHoveredItem={setHoveredItem}
-          />
-        ))} */}
-        <div className="absolute top-0 left-1/4 transform -translate-y-1/3 -translate-x-1/4 z-10 border-2 border-red-500 z-10">
-          <IkigaiZoneEdit 
-            name="What you love" color="red" textPosition="top-12" handleAddTag={handleAddTag} handleAddIkigaiImage={handleAddIkigaiImage}
-          />
-        </div>
-
-        <div className="absolute top-1/4 right-0 transform -translate-y-1/4 translate-x-1/3 z-10 "  >
-          <IkigaiZoneEdit 
-            name="What the world needs" color="green" textPosition="right-12" handleAddTag={handleAddTag} handleAddIkigaiImage={handleAddIkigaiImage}
-          />
-        </div>
-        <div className="absolute bottom-0 left-1/4 transform translate-y-1/3 -translate-x-1/4 z-30 hover:z-50">
-          <IkigaiZoneEdit
-            name="What you can be paid for"
-            color="yellow"
-            textPosition="bottom-12"
-            handleAddTag={handleAddTag} handleAddIkigaiImage={handleAddIkigaiImage}
-          />
-        </div>
-        <div className="absolute top-1/4 left-0 transform -translate-y-1/4 -translate-x-1/3 z-40 hover:z-50">
-          <IkigaiZoneEdit
-            name="What you are good at"
-            color="blue"
-            textPosition="left-12"
-            handleAddTag={handleAddTag} handleAddIkigaiImage={handleAddIkigaiImage}
-          />
-        </div>
+      {ikigaiImages.map((image, index) => (
+        <IkigaiImage
+          key={index}
+          imageUrl={image.imageUrl}
+          text={image.text}
+          position={image.position}
+          onDragEnd={handleItemDragEnd}
+          setHoveredItem={setHoveredItem}
+        />
+      ))}
+      {ikigaiTags.map((tag, index) => (
+        <IkigaiTag
+          key={index}
+          text={tag.tag}
+          position={tag.position}
+          onDragEnd={handleItemDragEnd}
+          setHoveredItem={setHoveredItem}
+        />
+      ))}
+      <IkigaiZoneEdit 
+        name="What you love" color="red" textPosition="top-12" handleAddTag={handleAddTag} handleAddIkigaiImage={handleAddIkigaiImage}
+      />
 
 
-      {/* <IkigaiConnections hoveredItem={hoveredItem} connections={connections} itemCoordinates={itemCoordinates} /> */}
+      <IkigaiConnections hoveredItem={hoveredItem} connections={connections} itemCoordinates={itemCoordinates} />
     </main> 
-    </QuickPinchZoom>
-
-    // </MapInteractionCSS>
-
 
   );
 }

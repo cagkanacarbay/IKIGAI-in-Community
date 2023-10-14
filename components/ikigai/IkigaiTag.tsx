@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { motion, PanInfo } from 'framer-motion';
-import debounce from '../../lib/debounce';
+import debounce from '@/lib/debounce';
 import { Position } from '@/lib/types';
 import {
   ContextMenu,

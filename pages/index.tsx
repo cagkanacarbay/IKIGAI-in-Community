@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { Inter } from 'next/font/google';
 import { motion } from "framer-motion";
 import DraggableDiv from './components/draggableDiv';
-import IkigaiBoard from './components/ikigaiBoard';
+import IkigaiBoard from './components/ogIkigaiBoard';
 
 
 const inter = Inter({ subsets: ['latin'] })
