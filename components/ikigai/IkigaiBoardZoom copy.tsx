@@ -6,21 +6,27 @@ import IkigaiImage from '@/components/ikigai/ikigaiImage';
 import IkigaiTag from '@/components/ikigai/ikigaiTag';
 import { ItemCoordinates, Connection, Position} from '@/lib/types';
 import IkigaiConnections from '@/components/ikigai/ikigaiConnections';
-import { initialImages, initialTags, initialConnections } from '@/lib/dummyData';
-import { computeBoardPosition } from '@/lib/computePosition';
-import debounce from '@/lib/debounce';
-
-type UpdateParams = {
-  x: number;
-  y: number;
-  scale: number;
-};
 
 
+const initialImages = [
+  { imageUrl: "/images/dummy/eu4.jpg", text: "eu4", position: { x: -0, y: -0 }},
+  // { imageUrl: "/images/dummy/neptunespride.png", text: "neptunespride", position: { x: -200, y: 50 } },
+  // { imageUrl: "/images/dummy/extremeownership.jpg", text: "extreme-ownership", position: { x: -120, y: -250 } },
+  // { imageUrl: "/images/dummy/ada symbol opaque.png", text: "Cardano", position: { x: -250, y: 300 } },
+  // { imageUrl: "/images/dummy/warpeacewar.jpg", text: "war-peace-war", position: { x: 300, y: 300 } },
+  // { imageUrl: "/images/dummy/keynes.jpg", text: "keynes", position: { x: 0, y: -250 } },
+];
+
+const initialTags = [
+  { tag: "economics", position: {x: 0, y: 0 }},
+  { tag: "history", position: {x: 50, y: 15 }},
+  { tag: "stoicism", position: {x: 25, y: 25 }},
+  { tag: "strategy games", position: {x: 50, y: 100 }},
+];
 
 const IkigaiBoard: React.FC = () => {
   const mainContainerRef = useRef<HTMLDivElement | null>(null);
-  const ikigaiBoardRef = useRef<HTMLDivElement | null>(null);
+  const itemContainerRef = useRef<HTMLDivElement | null>(null);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [ikigaiImages, setIkigaiImages] = useState(initialImages);
   const [ikigaiTags, setIkigaiTags] = useState(initialTags);
@@ -30,16 +36,22 @@ const IkigaiBoard: React.FC = () => {
       ...initialTags.map((tag) => [tag.tag, tag.position]),
     ])
   );  
-  const [connections, setConnections] = useState<Connection[]>(initialConnections);
+  const [connections, setConnections] = useState<Connection[]>([
+    { image: 'extreme-ownership', tag: 'stoicism' },
+    { image: 'eu4', tag: 'strategy games' },
+    { image: 'neptunespride', tag: 'strategy games' },
+    { image: 'Cardano', tag: 'economics' },
+    { image: 'keynes', tag: 'economics' },
+    { image: 'keynes', tag: 'history' },
+    { image: 'war-peace-war', tag: 'history' },
+  ]);
 
   // Tracking dimensions of the Ikigai Board so we can place all Ikigai Items exactly right.
   const [boardDimensions, setBoardDimensions] = useState({ width: 0, height: 0 });
-  const [newTagCounter, setNewTagCounter] = useState(0);
 
   const [mousePos, setMousePos] = useState<{ x: number, y: number }>({x: 0, y:0});
 
-
-  const onUpdate = useCallback(({ x, y, scale }: UpdateParams) => {
+  const onUpdate = useCallback(({ x, y, scale }) => {
     // function for zoomin/out
     const { current: container } = mainContainerRef;
     
@@ -72,60 +84,55 @@ const IkigaiBoard: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // We use board dimensions to compute the placement of each item on the IKIGAI board
-    const debouncedUpdate = debounce(() => {
-      if (ikigaiBoardRef.current) {
-        const { width, height } = ikigaiBoardRef.current.getBoundingClientRect();
-        setBoardDimensions({ width, height });
-      }
-    }, 200);  
-  
-    // Initially set dimensions
-    debouncedUpdate();
-  
-    // Add resize listener
-    window.addEventListener('resize', debouncedUpdate);
-  
-    // Cleanup - remove listener on unmount
-    return () => {
-      window.removeEventListener('resize', debouncedUpdate);
-    };
+    if (mainContainerRef.current) {
+      const { width, height } = mainContainerRef.current.getBoundingClientRect();
+      setBoardDimensions({ width, height });
+    }
   }, []); 
 
   
   const handleAddTag = (position: Position) => {
     if (mainContainerRef.current) {
-      const computedPosition = computeBoardPosition(position, mainContainerRef);
+      const rect = mainContainerRef.current.getBoundingClientRect();
+      const offsetX = position.x - rect.left;
+      const offsetY = position.y - rect.top;
+      console.log(position.x, position.y)
+      console.log(offsetX, offsetY)
 
       const newTag = {
-        tag: `New Tag ${newTagCounter}`,
-        position: computedPosition
+        tag: "New Tag",
+        position: {
+          x: offsetX,
+          y: offsetY,
+        }
       };
 
       setIkigaiTags([...ikigaiTags, newTag]);
       setItemCoordinates({
         ...itemCoordinates,
-        [newTag.tag]: computedPosition,
+        [newTag.tag]: { x: offsetX, y: offsetY },
       });
-
-      setNewTagCounter(newTagCounter+1);
     }
   };
 
   const handleAddIkigaiImage = (imageUrl: string, position: Position) => {
     if (mainContainerRef.current) {
-      const computedPosition = computeBoardPosition(position, mainContainerRef);
+      const rect = mainContainerRef.current.getBoundingClientRect();
+      const offsetX = position.x - rect.left;
+      const offsetY = position.y - rect.top;
+      console.log(position.x, position.y)
+      console.log(offsetX, offsetY)
 
       const newImage = {
         imageUrl: imageUrl,
         text: "new image", 
-        position: computedPosition,
+        position: { x: position.x, y: position.y },
       };
     
       setIkigaiImages(prevImages => [...prevImages, newImage]);
       setItemCoordinates({
         ...itemCoordinates,
-        [newImage.text]: computedPosition,
+        [newImage.text]: { x: mousePos.x, y: mousePos.y },
       });
     }
   };
@@ -153,7 +160,7 @@ const IkigaiBoard: React.FC = () => {
             </b>
           </div>
 
-        <div className="relative w-[90vw] h-[90vw] border-4 border-slate-900" ref={ikigaiBoardRef}>
+        <div className="relative w-[70vw] h-[70vw] border-4 border-slate-900" ref={itemContainerRef}>
           {ikigaiImages.map((image, index) => (
             <IkigaiImage
               key={index}
@@ -172,11 +179,11 @@ const IkigaiBoard: React.FC = () => {
               position={tag.position}
               onDragEnd={handleItemDragEnd}
               setHoveredItem={setHoveredItem}
-              containerRef={ikigaiBoardRef}
+              containerRef={itemContainerRef}
               boardDimensions={boardDimensions}
             />
           ))}
-          <div className="absolute top-4 left-1/2 transform -translate-x-1/2  z-10">
+          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 -translate-y-1/4 z-10">
             <IkigaiZone
               name="What you love"
               color="red"
@@ -184,7 +191,7 @@ const IkigaiBoard: React.FC = () => {
               handleAddTag={handleAddTag} handleAddIkigaiImage={handleAddIkigaiImage}
             />
           </div>
-          <div className="absolute top-1/2 left-4 transform  -translate-y-1/2 z-10">
+          <div className="absolute top-1/2 left-4 transform -translate-x-1/4 -translate-y-1/2 z-10">
             <IkigaiZone
               name="What you are good at"
               color="blue"
@@ -192,7 +199,7 @@ const IkigaiBoard: React.FC = () => {
               handleAddTag={handleAddTag} handleAddIkigaiImage={handleAddIkigaiImage}
             />
           </div>
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2  z-10">
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 translate-y-1/4 z-10">
             <IkigaiZone
               name="What you can be paid for"
               color="yellow"
@@ -200,7 +207,7 @@ const IkigaiBoard: React.FC = () => {
               handleAddTag={handleAddTag} handleAddIkigaiImage={handleAddIkigaiImage}
             />
           </div>
-          <div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-10">
+          <div className="absolute top-1/2 right-4 transform translate-x-1/4 -translate-y-1/2 z-10">
             <IkigaiZone
               name="What the world needs"
               color="green"
@@ -209,7 +216,7 @@ const IkigaiBoard: React.FC = () => {
             />
           </div>
         </div>
-        <IkigaiConnections hoveredItem={hoveredItem} connections={connections} itemCoordinates={itemCoordinates} />
+        {/* <IkigaiConnections hoveredItem={hoveredItem} connections={connections} itemCoordinates={itemCoordinates} /> */}
 
       </div>
 

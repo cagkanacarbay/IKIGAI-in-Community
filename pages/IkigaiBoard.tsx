@@ -143,7 +143,7 @@ export default function IkigaiBoard() {
     // <MapInteractionCSS>
     // <TransformWrapper>
     //   <TransformComponent>
-    <QuickPinchZoom onUpdate={onUpdate} wheelScaleFactor={500} inertia={false} enforceBoundsDuringZoom >
+    // <QuickPinchZoom onUpdate={onUpdate} wheelScaleFactor={500} inertia={false} enforceBoundsDuringZoom >
     <main 
       className={`flex min-h-screen flex-col justify-between ${inter.className} ${hoveredItem ? 'bg-neutral-700 bg-opacity-80' : 'bg-neutral-200 bg-opacity-100'} transition duration-2500 ease-in-out`}
       ref={containerRef}
@@ -156,7 +156,7 @@ export default function IkigaiBoard() {
           </div> */}
 
 
-        {/* {ikigaiImages.map((image, index) => (
+        {ikigaiImages.map((image, index) => (
           <IkigaiImage
             key={index}
             imageUrl={image.imageUrl}
@@ -174,7 +174,7 @@ export default function IkigaiBoard() {
             onDragEnd={handleItemDragEnd}
             setHoveredItem={setHoveredItem}
           />
-        ))} */}
+        ))}
         <div className="absolute top-0 left-1/4 transform -translate-y-1/3 -translate-x-1/4 z-10 border-2 border-red-500 z-10">
           <IkigaiZoneEdit 
             name="What you love" color="red" textPosition="top-12" handleAddTag={handleAddTag} handleAddIkigaiImage={handleAddIkigaiImage}
@@ -206,7 +206,7 @@ export default function IkigaiBoard() {
 
       {/* <IkigaiConnections hoveredItem={hoveredItem} connections={connections} itemCoordinates={itemCoordinates} /> */}
     </main> 
-    </QuickPinchZoom>
+    // </QuickPinchZoom>
 
     // </MapInteractionCSS>
 

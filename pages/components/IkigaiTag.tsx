@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { motion, PanInfo } from 'framer-motion';
-import debounce from '../../lib/debounce';
+import debounce from '@/lib/debounce';
 import { Position } from '@/lib/types';
 import {
   ContextMenu,
@@ -50,7 +50,7 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({ text, position, onDragEnd, setHov
         onHoverStart={() => debouncedSetHoveredItem(text)}
         onHoverEnd={() => debouncedSetHoveredItem(null)}
         className="rounded-2xl flex items-center justify-center z-30 absolute"
-        initial={{x: position.x, y: position.y}}
+        // initial={{x: position.x, y: position.y}}
         onDoubleClick={() => setIsEditable(true)}  // Add this line to enable edit mode on double click
       >
         <ContextMenuTrigger>

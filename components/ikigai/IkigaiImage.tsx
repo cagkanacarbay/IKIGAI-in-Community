@@ -17,16 +17,18 @@ interface IkigaiImageProps {
   position: Position;
   onDragEnd: (text: string, x: number, y: number) => void;
   setHoveredItem: (text: string | null) => void;
-
+  boardDimensions: {width: number, height: number};
 }
 
-const IkigaiImage: React.FC<IkigaiImageProps> = ({ imageUrl, text, position, onDragEnd, setHoveredItem  }) => {
+const IkigaiImage: React.FC<IkigaiImageProps> = ({ imageUrl, text, position, onDragEnd, setHoveredItem, boardDimensions  }) => {
 
   const handleDragEnd = (_event: MouseEvent, info: PanInfo) => {
-    console.log(info)
     onDragEnd(text, info.point.x, info.point.y);
+    // TODO: get exact center if image rectangle. same as Ikigai tag
   };
 
+  const xCoordinateInPixel = (position.x / 100) * boardDimensions.width;
+  const yCoordinateInPixel = (position.y / 100) * boardDimensions.height;
   const debouncedSetHoveredItem = debounce(setHoveredItem, 200); 
   
   return (
@@ -34,28 +36,43 @@ const IkigaiImage: React.FC<IkigaiImageProps> = ({ imageUrl, text, position, onD
         <motion.div 
           drag
           dragMomentum={false}
-          dragPropagation
-          whileHover={{scale: 1.25}}
-          whileDrag={{ scale: 1.5 }}  
+          whileHover={{scale: 2}}
+          whileDrag={{ scale: 1.2 }}  
           onDragEnd={handleDragEnd}
           onHoverStart={() => debouncedSetHoveredItem(text)}
           onHoverEnd={() => debouncedSetHoveredItem(null)}
-          className="w-40 h-40 rounded-2xl flex items-center justify-center z-50 absolute" 
-          initial={{x: position.x, y: position.y}}
-        >
-          <div className="relative">
+          className="rounded-2xl flex items-center justify-center z-50 absolute" 
+          initial={{
+            x: 0,
+            y: 0,
+            opacity: 0.5
+          }}        
+          animate= {{ 
+            x: xCoordinateInPixel,
+            y: yCoordinateInPixel,
+            opacity: 1
+          }}        >
+        {/* <div className="relative"> */}
           <ContextMenuTrigger>
             <Image 
               src={imageUrl}  
               alt={text}
-              layout="responsive"
-              width={100}  
-              height={100}
+              sizes="
+               
+                16vw /* Above Tailwind's xl breakpoint */
+              "
+              style={{
+                width: '100%',
+                height: 'auto',
+              }}
+              width={50}  
+              height={50}
+              priority={true}
               className="object-contain rounded-xl pointer-events-none " 
             />
           </ContextMenuTrigger>
             {/* <span className="absolute bottom-4 left-6 rounded-md text-white bg-gray-900 bg-opacity-70 h-8 px-4 py-1">{text}</span> */}
-          </div>
+        {/* </div> */}
         </motion.div>
         <ContextMenuContent>
               <ContextMenuItem inset>

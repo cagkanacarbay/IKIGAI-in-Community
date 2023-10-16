@@ -41,7 +41,7 @@ const IkigaiImage: React.FC<IkigaiImageProps> = ({ imageUrl, text, position, onD
           onHoverStart={() => debouncedSetHoveredItem(text)}
           onHoverEnd={() => debouncedSetHoveredItem(null)}
           className="w-40 h-40 rounded-2xl flex items-center justify-center z-50 absolute" 
-          initial={{x: position.x, y: position.y}}
+          // initial={{x: position.x, y: position.y}}
         >
           <div className="relative">
           <ContextMenuTrigger>
