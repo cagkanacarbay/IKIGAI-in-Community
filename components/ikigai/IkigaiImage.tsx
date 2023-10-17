@@ -16,15 +16,21 @@ interface IkigaiImageProps {
   text: string;
   position: Position;
   onDragEnd: (text: string, x: number, y: number) => void;
+  setPanningEnabled: (dragging: boolean) => void;
   setHoveredItem: (text: string | null) => void;
   boardDimensions: {width: number, height: number};
 }
 
-const IkigaiImage: React.FC<IkigaiImageProps> = ({ imageUrl, text, position, onDragEnd, setHoveredItem, boardDimensions  }) => {
+const IkigaiImage: React.FC<IkigaiImageProps> = ({ imageUrl, text, position, onDragEnd, setPanningEnabled, setHoveredItem, boardDimensions  }) => {
 
   const handleDragEnd = (_event: MouseEvent, info: PanInfo) => {
     onDragEnd(text, info.point.x, info.point.y);
+    setPanningEnabled(true);
     // TODO: get exact center if image rectangle. same as Ikigai tag
+  };
+
+  const handleDragStart = (_event: MouseEvent) => {
+    setPanningEnabled(false); 
   };
 
   const xCoordinateInPixel = (position.x / 100) * boardDimensions.width;
@@ -36,11 +42,18 @@ const IkigaiImage: React.FC<IkigaiImageProps> = ({ imageUrl, text, position, onD
         <motion.div 
           drag
           dragMomentum={false}
-          whileHover={{scale: 2}}
+          whileHover={{scale: 1.5}}
           whileDrag={{ scale: 1.2 }}  
+          onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
-          onHoverStart={() => debouncedSetHoveredItem(text)}
-          onHoverEnd={() => debouncedSetHoveredItem(null)}
+          onHoverStart={() => {
+            setPanningEnabled(false);
+            debouncedSetHoveredItem(text);
+          }}          
+          onHoverEnd={() => {
+            setPanningEnabled(true);
+            debouncedSetHoveredItem(null);
+          }}          
           className="rounded-2xl flex items-center justify-center z-50 absolute" 
           initial={{
             x: 0,
@@ -58,8 +71,11 @@ const IkigaiImage: React.FC<IkigaiImageProps> = ({ imageUrl, text, position, onD
               src={imageUrl}  
               alt={text}
               sizes="
-               
-                16vw /* Above Tailwind's xl breakpoint */
+                (max-width: 640px) 6vw,     /* Tailwind's sm breakpoint */
+                (min-width: 641px) and (max-width: 768px) 8vw,  /* Between sm and md */
+                (min-width: 769px) and (max-width: 1024px) 9vw, /* Between md and lg */
+                (min-width: 1025px) and (max-width: 1280px) 10vw, /* Between lg and xl */
+                10vw /* Above Tailwind's xl breakpoint */
               "
               style={{
                 width: '100%',

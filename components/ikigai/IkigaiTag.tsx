@@ -13,12 +13,13 @@ interface IkigaiTagProps {
   text: string;
   position: Position;
   onDragEnd: (text: string, x: number, y: number) => void;
+  setPanningEnabled: (dragging: boolean) => void;
   setHoveredItem: (text: string | null) => void;
   containerRef: React.RefObject<HTMLDivElement>;
   boardDimensions: {width: number, height: number};
 }
 
-const IkigaiTag: React.FC<IkigaiTagProps> = ({ text, position, onDragEnd, setHoveredItem, containerRef, boardDimensions }) => {
+const IkigaiTag: React.FC<IkigaiTagProps> = ({ text, position, onDragEnd, setPanningEnabled, setHoveredItem, containerRef, boardDimensions }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const tagDivRef = useRef<HTMLDivElement>(null);
   const [isEditable, setIsEditable] = useState(false);
@@ -30,8 +31,9 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({ text, position, onDragEnd, setHov
     }
   }, [isEditable]);
 
-  const handleDragEnd = (_event: MouseEvent, info: PanInfo) => {
+  const handleDragEnd = (_event: MouseEvent | PointerEvent | TouchEvent, info: PanInfo) => {
     onDragEnd(text, info.point.x, info.point.y);
+    setPanningEnabled(true);
 
     // TODO: Get EXACT CENTER OF rectangle. 
     // const container = containerRef.current;
@@ -89,9 +91,23 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({ text, position, onDragEnd, setHov
         dragMomentum={false}
         whileHover={{ scale: 1.25 }}
         whileDrag={{ scale: 1.5 }}
-        onDragEnd={handleDragEnd}
-        onHoverStart={() => handleHoverStart()}
-        onHoverEnd={() => handleHoverEnd()}
+        onDragStart={() => setPanningEnabled(false)}
+        onDragEnd={(event, info) => {
+            handleDragEnd(event, info);
+            setPanningEnabled(true);
+        }}
+        onHoverStart={() => {
+            handleHoverStart();
+            setPanningEnabled(false);
+        }}
+        onHoverEnd={() => {
+            handleHoverEnd();
+            setPanningEnabled(true);
+        }}
+
+        // onDragEnd={handleDragEnd}
+        // onHoverStart={() => handleHoverStart()}
+        // onHoverEnd={() => handleHoverEnd()}
         className="rounded-2xl flex items-center justify-center z-30 absolute"
         initial={{
           x: 0,
@@ -110,7 +126,7 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({ text, position, onDragEnd, setHov
           {isEditable ? (
             <input
               ref={inputRef}
-              className="absolute rounded-md text-white bg-gray-600 px-4 py-1 text-xs sm:text-sm md:text-base text-center border-2 border-slate-100 "
+              className="absolute rounded-md text-white bg-gray-600 px-4 py-1 text-xs sm:text-sm text-center border-2 border-slate-100 "
               value={editableText}
               onChange={(e) => setEditableText(e.target.value)}
               onBlur={(e) => {
@@ -121,7 +137,7 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({ text, position, onDragEnd, setHov
           ) : (
             <div
               ref={inputRef}
-              className="absolute rounded-md text-white bg-gray-900 bg-opacity-90 px-4 py-1 text-xs sm:text-sm md:text-base text-center"
+              className="absolute rounded-md text-white bg-gray-900 bg-opacity-90 px-4 py-1 text-xs sm:text-sm text-center"
             >
               {editableText}
             </div>

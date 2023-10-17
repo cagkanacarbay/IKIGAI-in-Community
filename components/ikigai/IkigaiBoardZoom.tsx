@@ -17,7 +17,6 @@ type UpdateParams = {
 };
 
 
-
 const IkigaiBoard: React.FC = () => {
   const mainContainerRef = useRef<HTMLDivElement | null>(null);
   const ikigaiBoardRef = useRef<HTMLDivElement | null>(null);
@@ -35,6 +34,7 @@ const IkigaiBoard: React.FC = () => {
   // Tracking dimensions of the Ikigai Board so we can place all Ikigai Items exactly right.
   const [boardDimensions, setBoardDimensions] = useState({ width: 0, height: 0 });
   const [newTagCounter, setNewTagCounter] = useState(0);
+  const [panningEnabled, setPanningEnabled] = useState(false);
 
   const [mousePos, setMousePos] = useState<{ x: number, y: number }>({x: 0, y:0});
 
@@ -48,6 +48,28 @@ const IkigaiBoard: React.FC = () => {
       container.style.setProperty("transform", value);
     }
   }, []);
+
+  // const dragXY = useRef<{x?: number, y?: number, scale?: number}>({});
+
+  // const onUpdate = useCallback(({ x, y, scale }: UpdateParams) => {
+  //   // function for zoomin/out
+
+  //   if (dragXY.current?.scale !== scale) {
+  //     dragXY.current = { x, scale, y }
+  //   }
+
+  //   const newX = dragXY.current?.x || x;
+  //   const newY = dragXY.current?.y || y;
+  //   const newScale = scale;  
+
+  //   const { current: container } = mainContainerRef;
+  //   if (container) {
+
+  //     // const value = make3dTransformValue({ x, y, scale });
+  //     const value = make3dTransformValue({ x: dragXY.current?.x || x, y:dragXY.current?.y || y, scale })
+  //     container.style.setProperty("transform", value);
+  //   }
+  // }, []);
 
 
   useEffect(() => {
@@ -143,7 +165,13 @@ const IkigaiBoard: React.FC = () => {
 
 
   return (
-    <QuickPinchZoom onUpdate={onUpdate} wheelScaleFactor={500} inertia={false} tapZoomFactor={0.75} doubleTapToggleZoom >
+    <QuickPinchZoom 
+      onUpdate={onUpdate} wheelScaleFactor={500} inertia={false} 
+      tapZoomFactor={0.75} doubleTapToggleZoom draggableUnZoomed={true}
+      // verticalPadding={200} horizontalPadding={200}
+      enabled={panningEnabled}  // disable panning so drag/drop images takes priority when zoomed in
+      setOffsetsOnce={false}    // refresh image and tag positions when zoomed in
+    >
       <div className="flex justify-center items-center h-screen w-screen border-4 border-slate-500" 
             ref={mainContainerRef}>
         <div className='absolute top-0'>
@@ -161,6 +189,7 @@ const IkigaiBoard: React.FC = () => {
               text={image.text}
               position={image.position}
               onDragEnd={handleItemDragEnd}
+              setPanningEnabled={setPanningEnabled}
               setHoveredItem={setHoveredItem}
               boardDimensions={boardDimensions}
             />
@@ -171,6 +200,7 @@ const IkigaiBoard: React.FC = () => {
               text={tag.tag}
               position={tag.position}
               onDragEnd={handleItemDragEnd}
+              setPanningEnabled={setPanningEnabled}
               setHoveredItem={setHoveredItem}
               containerRef={ikigaiBoardRef}
               boardDimensions={boardDimensions}
@@ -180,7 +210,6 @@ const IkigaiBoard: React.FC = () => {
             <IkigaiZone
               name="What you love"
               color="red"
-              textPosition="top-12"
               handleAddTag={handleAddTag} handleAddIkigaiImage={handleAddIkigaiImage}
             />
           </div>
@@ -188,7 +217,6 @@ const IkigaiBoard: React.FC = () => {
             <IkigaiZone
               name="What you are good at"
               color="blue"
-              textPosition="left-12"
               handleAddTag={handleAddTag} handleAddIkigaiImage={handleAddIkigaiImage}
             />
           </div>
@@ -196,7 +224,6 @@ const IkigaiBoard: React.FC = () => {
             <IkigaiZone
               name="What you can be paid for"
               color="yellow"
-              textPosition="bottom-12"
               handleAddTag={handleAddTag} handleAddIkigaiImage={handleAddIkigaiImage}
             />
           </div>
@@ -204,12 +231,11 @@ const IkigaiBoard: React.FC = () => {
             <IkigaiZone
               name="What the world needs"
               color="green"
-              textPosition="right-12"
               handleAddTag={handleAddTag} handleAddIkigaiImage={handleAddIkigaiImage}
             />
           </div>
         </div>
-        <IkigaiConnections hoveredItem={hoveredItem} connections={connections} itemCoordinates={itemCoordinates} />
+        {/* <IkigaiConnections hoveredItem={hoveredItem} connections={connections} itemCoordinates={itemCoordinates} /> */}
 
       </div>
 
