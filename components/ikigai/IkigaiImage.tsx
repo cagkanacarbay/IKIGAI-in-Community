@@ -13,18 +13,18 @@ import { Position } from '@/lib/types';
 
 interface IkigaiImageProps {
   imageUrl: string;
-  text: string;
+  itemId: string;
   position: Position;
-  onDragEnd: (text: string, x: number, y: number) => void;
+  onDragEnd: (text: string, position: Position) => void;
   setPanningEnabled: (dragging: boolean) => void;
   setHoveredItem: (text: string | null) => void;
   boardDimensions: {width: number, height: number};
 }
 
-const IkigaiImage: React.FC<IkigaiImageProps> = ({ imageUrl, text, position, onDragEnd, setPanningEnabled, setHoveredItem, boardDimensions  }) => {
+const IkigaiImage: React.FC<IkigaiImageProps> = ({ imageUrl, itemId, position, onDragEnd, setPanningEnabled, setHoveredItem, boardDimensions  }) => {
 
   const handleDragEnd = (_event: MouseEvent, info: PanInfo) => {
-    onDragEnd(text, info.point.x, info.point.y);
+    onDragEnd(itemId, {x: info.point.x, y: info.point.y});
     setPanningEnabled(true);
     // TODO: get exact center if image rectangle. same as Ikigai tag
   };
@@ -48,7 +48,7 @@ const IkigaiImage: React.FC<IkigaiImageProps> = ({ imageUrl, text, position, onD
           onDragEnd={handleDragEnd}
           onHoverStart={() => {
             setPanningEnabled(false);
-            debouncedSetHoveredItem(text);
+            debouncedSetHoveredItem(itemId);
           }}          
           onHoverEnd={() => {
             setPanningEnabled(true);
@@ -69,20 +69,20 @@ const IkigaiImage: React.FC<IkigaiImageProps> = ({ imageUrl, text, position, onD
           <ContextMenuTrigger>
             <Image 
               src={imageUrl}  
-              alt={text}
+              alt=""
               sizes="
                 (max-width: 640px) 6vw,     /* Tailwind's sm breakpoint */
                 (min-width: 641px) and (max-width: 768px) 8vw,  /* Between sm and md */
                 (min-width: 769px) and (max-width: 1024px) 9vw, /* Between md and lg */
                 (min-width: 1025px) and (max-width: 1280px) 10vw, /* Between lg and xl */
-                10vw /* Above Tailwind's xl breakpoint */
-              "
+                120px /* Max size */
+                "
               style={{
                 width: '100%',
                 height: 'auto',
               }}
-              width={50}  
-              height={50}
+              width={100}  
+              height={100}
               priority={true}
               className="object-contain rounded-xl pointer-events-none " 
             />

@@ -16,3 +16,55 @@ export const computeBoardPosition = (position: Position, ikigaiBoardRef: React.R
   
   return { x: percentageX, y: percentageY };
 };
+
+type ItemDivRefs = {
+  [itemId: string]: React.RefObject<HTMLDivElement>;
+};
+
+
+export const getItemPositions = (
+  itemDivRefs: ItemDivRefs,
+  boardContainer: React.RefObject<HTMLDivElement>
+): { [itemId: string]: Position } => {
+
+  const container = boardContainer.current;
+  const positions: { [itemId: string]: Position } = {};
+
+  if (container) {
+    const containerRect = container.getBoundingClientRect();
+
+    for (const [itemId, itemRef] of Object.entries(itemDivRefs)) {
+      const itemDiv = itemRef.current;
+
+      if (itemDiv) {
+        // TODO: consolidate with computeBoardPosition function
+
+        const itemRect = itemDiv.getBoundingClientRect();
+        // get the middle point
+
+        const xPercentage = ((itemRect.left + itemRect.width / 2 - containerRect.left) / containerRect.width) * 100;
+        const yPercentage = ((itemRect.top + itemRect.height / 2 - containerRect.top) / containerRect.height) * 100;
+
+        positions[itemId] = { x: xPercentage, y: yPercentage };
+      }
+    }
+  }
+
+  return positions;
+};
+
+// export const getItemPositions = (itemDivRefs: Array<HTMLDivElement>, boardContainer: React.RefObject<HTMLDivElement>) : Array<Position> =>
+//     // TODO: Get EXACT CENTER OF rectangle. 
+//     const container = boardContainer.current;
+//     const itemDivs = tagDivRef.current;
+
+//   if (container && tagDiv) {
+//     // Calculate position as a percentage of the parent container's dimensions
+//     const containerRect = container.getBoundingClientRect();
+//     const rect = tagDiv.getBoundingClientRect();
+//     const xPercentage = ((rect.left + rect.width / 2) / containerRect.width) * 100;
+//     const yPercentage = ((rect.top + rect.height / 2) / containerRect.height) * 100;
+//     console.log(rect)
+//     console.log(itemId, xPercentage, yPercentage);
+
+//   return []

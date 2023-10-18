@@ -13,3 +13,11 @@ export interface Connection {
   tag: string;
 }
 
+export type IkigaiItem = {
+  type: 'image' | 'tag';
+  position: Position;
+  text?: string;
+  imageUrl?: string;
+};
+
+export type IkigaiItems = Record<string, IkigaiItem>;

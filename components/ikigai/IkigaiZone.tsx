@@ -15,7 +15,7 @@ import IkigaiZoneLogo from './ikigaiZoneLogo';
 interface IkigaiZoneProps {
   name: string;
   color: 'red' | 'green' | 'blue' | 'yellow';
-  handleAddTag: (position: Position) => void; 
+  handleAddTag: (position: Position, tagText: string) => void; 
   handleAddIkigaiImage: (imageUrl: string, position: Position) => void; 
 }
 
@@ -35,13 +35,20 @@ const IkigaiZone: React.FC<IkigaiZoneProps> = ({ name, color, handleAddTag, hand
     yellow: "bottom-6"
   }[color];
 
+  const newTagText = {
+    red: 'I love ...',
+    green: "The world needs ...",
+    blue: 'I am good at ...',
+    yellow: "I can be paid for ..."
+  }[color];
+
   const [position, setPosition] = useState<Position>({x: 0, y: 0});
   const imageUploadInputRef = React.useRef<HTMLInputElement>(null); 
 
   
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
-    console.log("in context menu: ", e.clientX, e.clientY )
+    // console.log("in context menu: ", e.clientX, e.clientY )
     setPosition({ x: e.clientX, y: e.clientY });
   };
 
@@ -63,20 +70,23 @@ const IkigaiZone: React.FC<IkigaiZoneProps> = ({ name, color, handleAddTag, hand
       <ContextMenu>
         <ContextMenuTrigger>
           <motion.div
-            className={`w-[55vw] h-[55vw] rounded-full flex items-center justify-center ${colorClass} bg-opacity-40 hover:bg-opacity-20 transition duration-300 ease-in-out `}
-            // whileHover={{ scale: 1.1 }}
+            className={
+              // at the largest screens we must cap the size of the zones so they dont overflow.
+              // zones are capped at 55vw*1200px. 1200 px is the size of ikigai board at xl screens. 
+              // if you change xl:h-[660px] xl:w-[660px] you must change the ikigai board size as well
+              `w-[55vw] h-[55vw] xl:h-[660px] xl:w-[660px] 
+              rounded-full flex items-center justify-center 
+              ${colorClass} bg-opacity-40 hover:bg-opacity-20 
+              transition duration-300 ease-in-out`}
             style={{ transformOrigin: 'center center' }}
           >
-            {/* <span className={`absolute ${textPosition} transform text-white font-bold`}>
-              {name}
-            </span> */}
             <motion.div className={`absolute ${textPositionClass} transform rounded-full`} whileHover={{scale: 1.5}}>
               <IkigaiZoneLogo zoneName={name}/>
             </motion.div>
           </motion.div>
           </ContextMenuTrigger>
           <ContextMenuContent>
-            <ContextMenuItem inset onClick={() => handleAddTag(position)}>
+            <ContextMenuItem inset onClick={() => handleAddTag(position, newTagText)}>
               New Tag 
             </ContextMenuItem>
             <ContextMenuItem inset onClick={handleAddImage}>New Image</ContextMenuItem>

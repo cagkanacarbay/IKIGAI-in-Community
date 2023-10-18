@@ -29,6 +29,33 @@ const IkigaiBoard: React.FC = () => {
 
   // All images and tags are initialized with the dummy data. TODO: initialize from database entries later.
   const [ikigaiItems, setIkigaiItems] = useState<IkigaiItems>(initialItems);
+  // Each motion div is reffed to compute their locations. 
+
+
+  // Define the type for ikigaiItemRefs
+  const ikigaiItemRefs = useRef<{ [itemId: string]: React.RefObject<HTMLDivElement> }>({});
+
+  const tagRef = useRef(null);
+
+
+  useEffect(() => {
+    // initialize item refs at mount
+    Object.keys(initialItems).forEach((itemId) => {
+      ikigaiItemRefs.current[itemId] = React.createRef();
+    });
+    console.log("created item refs:", ikigaiItemRefs)
+  }, [initialItems]);
+
+
+
+  const [ikigaiImages, setIkigaiImages] = useState(initialImages);
+  const [ikigaiTags, setIkigaiTags] = useState(initialTags);
+  const [itemCoordinates, setItemCoordinates] = useState<ItemCoordinates>(
+    Object.fromEntries([
+      ...initialImages.map((image) => [image.text, image.position]),
+      ...initialTags.map((tag) => [tag.tag, tag.position]),
+    ])
+  );  
 
   // Tracking dimensions of the Ikigai Board so we can place all Ikigai Items exactly right.
   const [boardDimensions, setBoardDimensions] = useState({ width: 0, height: 0 });
@@ -137,50 +164,26 @@ const IkigaiBoard: React.FC = () => {
   };
 
 
+
+  useEffect(() => {
+    console.log('Parent component rendered');
+  }, []);
+
   const handleItemDragEnd = (itemKey: string, position: Position) => {
-    setTimeout(() => {
+    setIkigaiItems((prevState) => {
+      const positionInPercentage = computeBoardPosition(position, mainContainerRef);
+      const updatedItem = { ...prevState[itemKey], position: positionInPercentage };
+      console.log("updating the item", updatedItem)
+      // console.log(ikigaiItems)
+      return { ...prevState};
+      // return { ...prevState, [itemKey]: updatedItem };
 
-      setIkigaiItems((prevState) => {
-        const tagElement = document.getElementById(`ikigai-tag-${itemKey}`);
-
-        if (!tagElement) {
-          return { ...prevState};
-        }
-
-        const rect = tagElement.getBoundingClientRect();
-        const positionz = {
-            x: rect.left,
-            y: rect.top
-        };
-
-
-        const positionInPercentage = computeBoardPosition(positionz, ikigaiBoardRef);
-        const updatedItem = { ...prevState[itemKey], position: positionInPercentage };
-        
-        return { ...prevState, [itemKey]: updatedItem };
-
-      });
-    }, 2); // 200ms delay
-
-    };
-
-  const handleGetPositions = () => {
-    const positions: { [key: string]: { x: number, y: number } } = {};
-
-    Object.keys(initialItems).forEach(key => {
-        const tagElement = document.getElementById(`ikigai-tag-${key}`);
-        if (tagElement) {
-            const rect = tagElement.getBoundingClientRect();
-            const position = {
-                x: rect.left,
-                y: rect.top
-            };
-            positions[key] = computeBoardPosition(position, mainContainerRef);
-        }
     });
-
-    console.log(positions);
   };
+
+
+ 
+
 
   return (
 
@@ -200,8 +203,13 @@ const IkigaiBoard: React.FC = () => {
             </b>
           </div>
 
-          <button onClick={handleGetPositions}>Get Positions</button>
-
+        <button onClick={() => {
+          console.log(ikigaiItemRefs.current)
+          const positions = getItemPositions(ikigaiItemRefs.current, mainContainerRef);
+          console.log(positions);
+        }}>
+          Get Positions
+        </button>
 
 
         <div className="relative w-[100vw] h-[100vw] xl:h-[1200px] xl:w-[1200px] border-4 border-slate-900" ref={ikigaiBoardRef}>
@@ -228,12 +236,14 @@ const IkigaiBoard: React.FC = () => {
             .map(([itemId, tag], index) => (
               <IkigaiTag
                 key={index}
-                itemId={itemId}
+                text={itemId}
                 position={tag.position}
                 onDragEnd={handleItemDragEnd}
                 setPanningEnabled={setPanningEnabled}
                 setHoveredItem={setHoveredItem}
                 containerRef={mainContainerRef}
+                ref={ikigaiItemRefs.current[itemId]}  
+                // ref={tagRef}
                 boardDimensions={boardDimensions}
               />
             ))}

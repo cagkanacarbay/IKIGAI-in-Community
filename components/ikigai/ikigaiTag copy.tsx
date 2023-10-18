@@ -10,21 +10,44 @@ import {
 } from "@/components/ui/context-menu"
 
 interface IkigaiTagProps {
-  itemId: string;
+  text: string;
   position: Position;
   onDragEnd: (text: string, position: Position) => void;
   setPanningEnabled: (dragging: boolean) => void;
   setHoveredItem: (text: string | null) => void;
   containerRef: React.RefObject<HTMLDivElement>;
+  // ref: React.RefObject<HTMLDivElement>;
   boardDimensions: {width: number, height: number};
 }
 
-const IkigaiTag: React.FC<IkigaiTagProps> = ({ itemId, position, onDragEnd, setPanningEnabled, setHoveredItem, containerRef, boardDimensions }) => {
+// const IkigaiTag: React.FC<IkigaiTagProps> = ({ text, position, onDragEnd, setPanningEnabled, setHoveredItem, containerRef, ref, boardDimensions }) => {
+const IkigaiTag = React.forwardRef<HTMLDivElement, IkigaiTagProps>(
+  (
+    {
+      text,
+      position,
+      onDragEnd,
+      setPanningEnabled,
+      setHoveredItem,
+      containerRef,
+      boardDimensions,
+    },
+    ref
+  ) => {
 
+  useEffect(() => {
+    console.log("Child component mounted or updated");
+    if (ref) {
+      console.log("Ref is: ", ref.current);
+    } else {
+      console.log("Ref is null");
+    }
+  }, [ref]);
+    
   const inputRef = useRef<HTMLInputElement>(null);
-  const tagDivRef = useRef<HTMLDivElement>(null);
+  // const tagDivRef = useRef<HTMLDivElement>(null);
   const [isEditable, setIsEditable] = useState(false);
-  const [editableText, setEditableText] = useState<string>(itemId);
+  const [editableText, setEditableText] = useState<string>(text);
 
   useEffect(() => {
     if (isEditable) {
@@ -32,11 +55,14 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({ itemId, position, onDragEnd, setP
     }
   }, [isEditable]);
 
+  useEffect(() => {
+    console.log('ikigaitag component rendered');
+  }, []);
 
   const handleDragEnd = (_event: MouseEvent | PointerEvent | TouchEvent, info: PanInfo) => {
     console.log(_event);
 
-    onDragEnd(itemId, {x: info.point.x, y: info.point.y});
+    // onDragEnd(text, {x: info.point.x, y: info.point.y});
     setPanningEnabled(true);
   };
 
@@ -72,7 +98,6 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({ itemId, position, onDragEnd, setP
   return (
     <ContextMenu>
       <motion.div
-        id={`ikigai-tag-${itemId}`}
         drag
         dragMomentum={false}
         whileHover={{ scale: 1.25 }}
@@ -102,7 +127,7 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({ itemId, position, onDragEnd, setP
           y: yCoordinateInPixel,
           opacity: 1
         }}
-        ref={tagDivRef}
+        ref={ref}
         // transition={{ delay: 0.5, duration: 2}}
       >
     <ContextMenuTrigger>
@@ -144,7 +169,7 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({ itemId, position, onDragEnd, setP
     </ContextMenu>
 
   );
-};
+});
 
 // this prevents some error due to forward refs
 IkigaiTag.displayName = "Ikigai Tag";
