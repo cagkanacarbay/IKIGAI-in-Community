@@ -9,14 +9,14 @@ import {
 import { Input } from "@/components/ui/input"
 import { Position } from '@/lib/types';
 import IkigaiZoneLogo from './ikigaiZoneLogo';
-
+import {HandleAddIkigaiImageArgs} from "@/lib/types"
 
 
 interface IkigaiZoneProps {
   name: string;
   color: 'red' | 'green' | 'blue' | 'yellow';
   handleAddTag: (position: Position, tagText: string) => void; 
-  handleAddIkigaiImage: (imageUrl: string, position: Position) => void; 
+  handleAddIkigaiImage: (args: HandleAddIkigaiImageArgs) => void;
 }
 
 const IkigaiZone: React.FC<IkigaiZoneProps> = ({ name, color, handleAddTag, handleAddIkigaiImage}) => {
@@ -48,7 +48,7 @@ const IkigaiZone: React.FC<IkigaiZoneProps> = ({ name, color, handleAddTag, hand
   
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
-    // console.log("in context menu: ", e.clientX, e.clientY )
+    console.log("in context menu: ", e.clientX, e.clientY )
     setPosition({ x: e.clientX, y: e.clientY });
   };
 
@@ -56,12 +56,13 @@ const IkigaiZone: React.FC<IkigaiZoneProps> = ({ name, color, handleAddTag, hand
     imageUploadInputRef.current?.click();  
   }
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       // Using current mouse position for new image's position
-      handleAddIkigaiImage(imageUrl, position); 
+      // console.log("sending image to uplaod with pos: ", position)
+      handleAddIkigaiImage({imageUrl, position}); 
     }
   };
 
@@ -91,7 +92,7 @@ const IkigaiZone: React.FC<IkigaiZoneProps> = ({ name, color, handleAddTag, hand
             </ContextMenuItem>
             <ContextMenuItem inset onClick={handleAddImage}>New Image</ContextMenuItem>
           </ContextMenuContent>
-          <Input id="picture" type="file" ref={imageUploadInputRef} onChange={handleImageChange} style={{ display: 'none' }}/>
+          <Input id="picture" type="file" ref={imageUploadInputRef} onChange={handleImageUpload} style={{ display: 'none' }}/>
 
         </ContextMenu>
       </div>

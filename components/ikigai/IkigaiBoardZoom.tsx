@@ -4,10 +4,10 @@ import QuickPinchZoom, { make3dTransformValue } from "react-quick-pinch-zoom";
 import IkigaiImage from '@/components/ikigai/ikigaiImage';
 // import IkigaiTag from '@/components/ikigai/IkigaiTag';
 import IkigaiTag from '@/components/ikigai/ikigaiTag';
-import { ItemCoordinates, Connection, Position, IkigaiItems, IkigaiItem} from '@/lib/types';
+import { ItemCoordinates, Connection, Position, IkigaiItems, IkigaiItem, HandleAddIkigaiImageArgs} from '@/lib/types';
 import IkigaiConnections from '@/components/ikigai/ikigaiConnections';
-import { initialImages, initialTags, initialConnections, initialItems } from '@/lib/dummyData';
-import { computeBoardPosition, getItemPositions } from '@/lib/computePosition';
+// import { initialImages, initialTags, initialConnections, initialItems } from '@/lib/dummyData';
+import { computeBoardPositionFromRects, computeBoardPositionFromPixelPosition } from '@/lib/computePosition';
 import debounce from '@/lib/debounce';
 
 
@@ -17,8 +17,12 @@ type ZoomUpdateParams = {
   scale: number;
 };
 
+interface IkigaiBoardProps {
+  items: IkigaiItems;
+};
 
-const IkigaiBoard: React.FC = () => {
+
+const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ items }) => {
 
   const mainContainerRef = useRef<HTMLDivElement | null>(null);
   const ikigaiBoardRef = useRef<HTMLDivElement | null>(null);
@@ -28,7 +32,7 @@ const IkigaiBoard: React.FC = () => {
   // const [connections, setConnections] = useState<Connection[]>(initialConnections);
 
   // All images and tags are initialized with the dummy data. TODO: initialize from database entries later.
-  const [ikigaiItems, setIkigaiItems] = useState<IkigaiItems>(initialItems);
+  const [ikigaiItems, setIkigaiItems] = useState<IkigaiItems>(items);
 
   // Tracking dimensions of the Ikigai Board so we can place all Ikigai Items exactly right.
   const [boardDimensions, setBoardDimensions] = useState({ width: 0, height: 0 });
@@ -38,8 +42,8 @@ const IkigaiBoard: React.FC = () => {
   const [panningEnabled, setPanningEnabled] = useState(false);
 
   // TODO: Remove all this when we get actual data
-  const initialImageCount = Object.values(initialItems).filter(item => item.type === 'image').length;
-  const initialTagCount = Object.values(initialItems).filter(item => item.type === 'tag').length;
+  const initialImageCount = Object.values(items).filter(item => item.type === 'image').length;
+  const initialTagCount = Object.values(items).filter(item => item.type === 'tag').length;
   const [imageCount, setImageCount] = useState(initialImageCount);
   const [tagCount, setTagCount] = useState(initialTagCount);
 
@@ -102,7 +106,7 @@ const IkigaiBoard: React.FC = () => {
 
   const handleAddTag = (position: Position, tagText: string) => {
     if (mainContainerRef.current) {
-      const computedPosition = computeBoardPosition(position, mainContainerRef);
+      const computedPosition = computeBoardPositionFromPixelPosition(position, mainContainerRef);
       const tagId = `Tag ${tagCount}`;  // TODO: replace with actual IDs from db
       const newTag: IkigaiItem = {
         type: 'tag',
@@ -119,10 +123,17 @@ const IkigaiBoard: React.FC = () => {
     }
   };
 
-  const handleAddIkigaiImage = (imageUrl: string, position: Position) => {
-    if (mainContainerRef.current) {
-      const computedPosition = computeBoardPosition(position, mainContainerRef);
-      const imageId = `image ${imageCount}`; // TODO: replace with actual IDs from db
+  const handleAddIkigaiImage = ({
+    imageUrl,
+    position,
+    replacedImageId
+  }: HandleAddIkigaiImageArgs) => {
+    console.log(position)
+      if (mainContainerRef.current) {
+      const computedPosition = computeBoardPositionFromPixelPosition(position, mainContainerRef);
+      // const imageId = `image ${imageCount}`; // TODO: replace with actual IDs from db
+      const imageId = replacedImageId || `image ${imageCount}`; // Use provided imageId or generate one
+
       const newImage: IkigaiItem = {
         type: 'image',
         imageUrl: imageUrl,
@@ -134,55 +145,114 @@ const IkigaiBoard: React.FC = () => {
         [imageId]: newImage,
       });
 
-      setImageCount(tagCount + 1);
+      setImageCount(imageCount + 1);
 
     }
   };
 
-
-  const handleItemDragEnd = (itemKey: string) => {
+  const handleItemDragEnd = (itemId: string) => {
     setTimeout(() => {
 
       setIkigaiItems((prevState) => {
-        const tagElement = document.getElementById(`ikigai-item-${itemKey}`);
 
-        if (!tagElement) {
+        if (!ikigaiBoardRef.current) {
           return { ...prevState};
         }
 
-        const rect = tagElement.getBoundingClientRect();
-        const positionz = {
-            x: rect.left,
-            y: rect.top
-        };
-
-        const positionInPercentage = computeBoardPosition(positionz, ikigaiBoardRef);
-        const updatedItem = { ...prevState[itemKey], position: positionInPercentage };
+        const tagElement = document.getElementById(`ikigai-item-${itemId}`);
+        if (!tagElement) {
+          return { ...prevState};
+        }
         
-        return { ...prevState, [itemKey]: updatedItem };
+        const itemRect = tagElement.getBoundingClientRect();
+        const ikigaiBoardRect = ikigaiBoardRef.current.getBoundingClientRect();
+  
+        const positionInPercentage = computeBoardPositionFromRects(itemRect, ikigaiBoardRect);
+        const updatedItem = { ...prevState[itemId], position: positionInPercentage };
+        
+        return { ...prevState, [itemId]: updatedItem };
 
       });
-    }, 2); // 200ms delay
+      // 200ms delay this delay makes sure the position of the item is correct. 
+      // otherwise due to dragging and hover we get some crazy positions
+    }, 10); 
 
-    };
+  };
 
-  const handleGetPositions = () => {
-    const positions: { [key: string]: { x: number, y: number } } = {};
 
-    Object.keys(initialItems).forEach(key => {
+  // const handleItemDragEnd = (itemId: string) => {
+  //   setTimeout(() => {
+
+  //     setIkigaiItems((prevState) => {
+  //       const tagElement = document.getElementById(`ikigai-item-${itemId}`);
+
+  //       if (!tagElement) {
+  //         return { ...prevState};
+  //       }
+
+  //       const rect = tagElement.getBoundingClientRect();
+  //       const positionz = {
+  //           x: rect.left,
+  //           y: rect.top
+  //       };
+
+  //       const positionInPercentage = computeBoardPosition(positionz, ikigaiBoardRef);
+  //       const updatedItem = { ...prevState[itemId], position: positionInPercentage };
+        
+  //       return { ...prevState, [itemId]: updatedItem };
+
+  //     });
+  //     // 200ms delay this delay makes sure the position of the item is correct. 
+  //     // otherwise due to dragging and hover we get some crazy positions
+  //   }, 2); 
+
+  // };
+
+  const handleDeleteItem = (itemId: string) => {
+    if (ikigaiItems[itemId]) {
+      const updatedIkigaiItems = { ...ikigaiItems };
+      delete updatedIkigaiItems[itemId];
+      setIkigaiItems(updatedIkigaiItems)
+    }
+  }
+ 
+
+  const handleSaveBoard = () => {
+
+    if (ikigaiBoardRef.current){
+      const ikigaiBoardRect = ikigaiBoardRef.current.getBoundingClientRect();
+      const positions: { [key: string]: { x: number, y: number } } = {};
+      
+      Object.keys(ikigaiItems).forEach(key => {
         const tagElement = document.getElementById(`ikigai-item-${key}`);
         if (tagElement) {
-            const rect = tagElement.getBoundingClientRect();
-            const position = {
-                x: rect.left,
-                y: rect.top
-            };
-            positions[key] = computeBoardPosition(position, mainContainerRef);
+          const itemRect = tagElement.getBoundingClientRect();
+          positions[key] = computeBoardPositionFromRects(itemRect, ikigaiBoardRect);
         }
-    });
+      });
+  
+      console.log(positions);
+    }
 
-    console.log(positions);
   };
+
+  // const handleSavePositions = () => {
+  //   const positions: { [key: string]: { x: number, y: number } } = {};
+
+  //   Object.keys(ikigaiItems).forEach(key => {
+  //     const tagElement = document.getElementById(`ikigai-item-${key}`);
+  //     if (tagElement) {
+  //         const rect = tagElement.getBoundingClientRect();
+  //         const position = {
+  //             x: rect.left,
+  //             y: rect.top
+  //         };
+  //         positions[key] = computeBoardPosition(position, mainContainerRef);
+  //       }
+  //   });
+
+  //   console.log(positions);
+  // };
 
   return (
 
@@ -202,7 +272,7 @@ const IkigaiBoard: React.FC = () => {
             </b>
           </div>
 
-          <button onClick={handleGetPositions}>Get Positions</button>
+          <button onClick={handleSaveBoard}>Save Board</button>
 
 
 
@@ -213,7 +283,7 @@ const IkigaiBoard: React.FC = () => {
             .filter(([itemId, item]) => item.type === 'image')
             .map(([itemId, image], index) => (
               <IkigaiImage
-                key={index}
+                key={itemId}
                 itemId={itemId}
                 imageUrl={image.imageUrl!}
                 position={image.position}
@@ -221,6 +291,8 @@ const IkigaiBoard: React.FC = () => {
                 setPanningEnabled={setPanningEnabled}
                 setHoveredItem={setHoveredItem}
                 boardDimensions={boardDimensions}
+                handleReplaceIkigaiImage={handleAddIkigaiImage}
+                handleDeleteImage={handleDeleteItem}
               />
             ))}
 
@@ -229,7 +301,7 @@ const IkigaiBoard: React.FC = () => {
             .filter(([itemId, item]) => item.type === 'tag')
             .map(([itemId, tag], index) => (
               <IkigaiTag
-                key={index}
+                key={itemId}
                 itemId={itemId}
                 position={tag.position}
                 onDragEnd={handleItemDragEnd}
@@ -237,6 +309,7 @@ const IkigaiBoard: React.FC = () => {
                 setHoveredItem={setHoveredItem}
                 containerRef={mainContainerRef}
                 boardDimensions={boardDimensions}
+                handleDeleteTag={handleDeleteItem}
               />
             ))}
 

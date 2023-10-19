@@ -34,7 +34,7 @@ export const initialItems: IkigaiItems = {
   'war-peace-war': { type: 'image', position: { x: 20, y: 10 }, imageUrl: '/images/dummy/warpeacewar.jpg' },
   'keynes': { type: 'image', position: { x: 52, y: 25 }, imageUrl: '/images/dummy/keynes.jpg' },
   'economics': { type: 'tag', position: { x: 40, y: 15 }, text: 'economics' },
-  'history': { type: 'tag', position: { x: 0, y: 100 }, text: 'history' },
+  'history': { type: 'tag', position: { x: 40, y: 80 }, text: 'history' },
   'stoicism': { type: 'tag', position: { x: 50, y: 50 }, text: 'stoicism' },
-  'strategy games': { type: 'tag', position: { x: 90, y: 90 }, text: 'strategy games' },
+  'strategy games': { type: 'tag', position: { x: 65, y: 10 }, text: 'strategy games' },
 };

@@ -7,7 +7,7 @@ import IkigaiTag from '@/components/ikigai/ikigaiTag';
 import { ItemCoordinates, Connection, Position, IkigaiItems, IkigaiItem} from '@/lib/types';
 import IkigaiConnections from '@/components/ikigai/ikigaiConnections';
 import { initialImages, initialTags, initialConnections, initialItems } from '@/lib/dummyData';
-import { computeBoardPosition, getItemPositions } from '@/lib/computePosition';
+import { computeBoardPositionFromPixelPosition, getItemPositions } from '@/lib/computePosition';
 import debounce from '@/lib/debounce';
 
 
@@ -129,7 +129,7 @@ const IkigaiBoard: React.FC = () => {
 
   const handleAddTag = (position: Position, tagText: string) => {
     if (mainContainerRef.current) {
-      const computedPosition = computeBoardPosition(position, mainContainerRef);
+      const computedPosition = computeBoardPositionFromPixelPosition(position, mainContainerRef);
       const tagId = `Tag ${tagCount}`;  // TODO: replace with actual IDs from db
       const newTag: IkigaiItem = {
         type: 'tag',
@@ -148,7 +148,7 @@ const IkigaiBoard: React.FC = () => {
 
   const handleAddIkigaiImage = (imageUrl: string, position: Position) => {
     if (mainContainerRef.current) {
-      const computedPosition = computeBoardPosition(position, mainContainerRef);
+      const computedPosition = computeBoardPositionFromPixelPosition(position, mainContainerRef);
       const imageId = `image ${imageCount}`; // TODO: replace with actual IDs from db
       const newImage: IkigaiItem = {
         type: 'image',
@@ -171,7 +171,7 @@ const IkigaiBoard: React.FC = () => {
 
   const handleItemDragEnd = (itemKey: string, position: Position) => {
     setIkigaiItems((prevState) => {
-      const positionInPercentage = computeBoardPosition(position, mainContainerRef);
+      const positionInPercentage = computeBoardPositionFromPixelPosition(position, mainContainerRef);
       const updatedItem = { ...prevState[itemKey], position: positionInPercentage };
       console.log("updating the item", updatedItem)
       // console.log(ikigaiItems)

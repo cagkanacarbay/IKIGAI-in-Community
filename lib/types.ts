@@ -21,3 +21,10 @@ export type IkigaiItem = {
 };
 
 export type IkigaiItems = Record<string, IkigaiItem>;
+
+
+export type HandleAddIkigaiImageArgs = {
+  imageUrl: string;
+  position: Position;
+  replacedImageId?: string;
+};

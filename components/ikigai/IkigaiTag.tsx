@@ -18,9 +18,14 @@ interface IkigaiTagProps {
   setHoveredItem: (text: string | null) => void;
   containerRef: React.RefObject<HTMLDivElement>;
   boardDimensions: {width: number, height: number};
+  handleDeleteTag: (itemId: string) => void;
+
 }
 
-const IkigaiTag: React.FC<IkigaiTagProps> = ({ itemId, position, onDragEnd, setPanningEnabled, setHoveredItem, containerRef, boardDimensions }) => {
+const IkigaiTag: React.FC<IkigaiTagProps> = ({ 
+    itemId, position, onDragEnd, setPanningEnabled, setHoveredItem, 
+    containerRef, boardDimensions, handleDeleteTag }
+  ) => {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const tagDivRef = useRef<HTMLDivElement>(null);
@@ -33,6 +38,7 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({ itemId, position, onDragEnd, setP
     }
   }, [isEditable]);
 
+  // const handleTagDelete()
 
   const handleDragEnd = (_event: MouseEvent | PointerEvent | TouchEvent, _info: PanInfo) => {
     console.log(_event);
@@ -46,7 +52,6 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({ itemId, position, onDragEnd, setP
       e.preventDefault();
       setIsEditable(false);
     }
-
   };
 
   const enterEditMode = () => {
@@ -61,9 +66,6 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({ itemId, position, onDragEnd, setP
     setHoveredItemDebounced.current(editableText);
   }, [editableText]);
   
-  const handleHoverEnd = useCallback(() => {
-    setHoveredItemDebounced.current(null);
-  }, []);
 
   const xCoordinateInPixel = (position.x / 100) * boardDimensions.width;
   const yCoordinateInPixel = (position.y / 100) * boardDimensions.height;
@@ -76,10 +78,9 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({ itemId, position, onDragEnd, setP
         id={`ikigai-item-${itemId}`}
         drag
         dragMomentum={false}
-        whileHover={{ scale: 1.25 }}
-        whileDrag={{ scale: 1.5 }}
+        whileHover={{ scale: 1.1 }}
+        // whileDrag={{ scale: 1.5 }}
         onDragStart={() => setPanningEnabled(false)}
-
         onDragEnd={(event, info) => {
             handleDragEnd(event, info);
             setPanningEnabled(true);
@@ -132,14 +133,8 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({ itemId, position, onDragEnd, setP
         <ContextMenuItem inset onClick={() => enterEditMode()}>
           Edit 
         </ContextMenuItem>
-        <ContextMenuItem inset>
-          Replace (TODO)
-        </ContextMenuItem>
-        <ContextMenuItem inset >
-          Connect (TODO)
-        </ContextMenuItem>
-        <ContextMenuItem inset >
-          Delete (TODO)
+        <ContextMenuItem inset onClick={() => handleDeleteTag(itemId)}>
+          Delete 
         </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
@@ -147,8 +142,6 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({ itemId, position, onDragEnd, setP
   );
 };
 
-// this prevents some error due to forward refs
-IkigaiTag.displayName = "Ikigai Tag";
 
 export default IkigaiTag;
 
