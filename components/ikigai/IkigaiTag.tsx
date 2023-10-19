@@ -9,10 +9,11 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu"
 
+
 interface IkigaiTagProps {
   itemId: string;
   position: Position;
-  onDragEnd: (text: string, position: Position) => void;
+  onDragEnd: (text: string) => void;
   setPanningEnabled: (dragging: boolean) => void;
   setHoveredItem: (text: string | null) => void;
   containerRef: React.RefObject<HTMLDivElement>;
@@ -33,10 +34,10 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({ itemId, position, onDragEnd, setP
   }, [isEditable]);
 
 
-  const handleDragEnd = (_event: MouseEvent | PointerEvent | TouchEvent, info: PanInfo) => {
+  const handleDragEnd = (_event: MouseEvent | PointerEvent | TouchEvent, _info: PanInfo) => {
     console.log(_event);
 
-    onDragEnd(itemId, {x: info.point.x, y: info.point.y});
+    onDragEnd(itemId);
     setPanningEnabled(true);
   };
 
@@ -72,7 +73,7 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({ itemId, position, onDragEnd, setP
   return (
     <ContextMenu>
       <motion.div
-        id={`ikigai-tag-${itemId}`}
+        id={`ikigai-item-${itemId}`}
         drag
         dragMomentum={false}
         whileHover={{ scale: 1.25 }}

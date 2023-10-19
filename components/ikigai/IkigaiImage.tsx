@@ -15,7 +15,7 @@ interface IkigaiImageProps {
   imageUrl: string;
   itemId: string;
   position: Position;
-  onDragEnd: (text: string, position: Position) => void;
+  onDragEnd: (text: string) => void;
   setPanningEnabled: (dragging: boolean) => void;
   setHoveredItem: (text: string | null) => void;
   boardDimensions: {width: number, height: number};
@@ -23,15 +23,6 @@ interface IkigaiImageProps {
 
 const IkigaiImage: React.FC<IkigaiImageProps> = ({ imageUrl, itemId, position, onDragEnd, setPanningEnabled, setHoveredItem, boardDimensions  }) => {
 
-  const handleDragEnd = (_event: MouseEvent, info: PanInfo) => {
-    onDragEnd(itemId, {x: info.point.x, y: info.point.y});
-    setPanningEnabled(true);
-    // TODO: get exact center if image rectangle. same as Ikigai tag
-  };
-
-  const handleDragStart = (_event: MouseEvent) => {
-    setPanningEnabled(false); 
-  };
 
   const xCoordinateInPixel = (position.x / 100) * boardDimensions.width;
   const yCoordinateInPixel = (position.y / 100) * boardDimensions.height;
@@ -40,12 +31,18 @@ const IkigaiImage: React.FC<IkigaiImageProps> = ({ imageUrl, itemId, position, o
   return (
     <ContextMenu>
         <motion.div 
+          id={`ikigai-item-${itemId}`}
           drag
           dragMomentum={false}
           whileHover={{scale: 1.5}}
           whileDrag={{ scale: 1.2 }}  
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
+          onDragStart={() =>{
+            setPanningEnabled(false);
+          }}
+          onDragEnd={() => {
+            onDragEnd(itemId);
+            setPanningEnabled(true);
+          }}
           onHoverStart={() => {
             setPanningEnabled(false);
             debouncedSetHoveredItem(itemId);

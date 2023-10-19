@@ -133,15 +133,18 @@ const IkigaiBoard: React.FC = () => {
         ...ikigaiItems,
         [imageId]: newImage,
       });
+
+      setImageCount(tagCount + 1);
+
     }
   };
 
 
-  const handleItemDragEnd = (itemKey: string, position: Position) => {
+  const handleItemDragEnd = (itemKey: string) => {
     setTimeout(() => {
 
       setIkigaiItems((prevState) => {
-        const tagElement = document.getElementById(`ikigai-tag-${itemKey}`);
+        const tagElement = document.getElementById(`ikigai-item-${itemKey}`);
 
         if (!tagElement) {
           return { ...prevState};
@@ -152,7 +155,6 @@ const IkigaiBoard: React.FC = () => {
             x: rect.left,
             y: rect.top
         };
-
 
         const positionInPercentage = computeBoardPosition(positionz, ikigaiBoardRef);
         const updatedItem = { ...prevState[itemKey], position: positionInPercentage };
@@ -168,7 +170,7 @@ const IkigaiBoard: React.FC = () => {
     const positions: { [key: string]: { x: number, y: number } } = {};
 
     Object.keys(initialItems).forEach(key => {
-        const tagElement = document.getElementById(`ikigai-tag-${key}`);
+        const tagElement = document.getElementById(`ikigai-item-${key}`);
         if (tagElement) {
             const rect = tagElement.getBoundingClientRect();
             const position = {
@@ -238,30 +240,6 @@ const IkigaiBoard: React.FC = () => {
               />
             ))}
 
-          {/* {ikigaiImages.map((image, index) => (
-            <IkigaiImage
-              key={index}
-              imageUrl={image.imageUrl}
-              text={image.text}
-              position={image.position}
-              onDragEnd={handleItemDragEnd}
-              setPanningEnabled={setPanningEnabled}
-              setHoveredItem={setHoveredItem}
-              boardDimensions={boardDimensions}
-            />
-          ))}
-          {ikigaiTags.map((tag, index) => (
-            <IkigaiTag
-              key={index}
-              text={tag.tag}
-              position={tag.position}
-              onDragEnd={handleItemDragEnd}
-              setPanningEnabled={setPanningEnabled}
-              setHoveredItem={setHoveredItem}
-              containerRef={ikigaiBoardRef}
-              boardDimensions={boardDimensions}
-            />
-          ))} */}
           <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 hover:z-20">
             <IkigaiZone
               name="What you love"
