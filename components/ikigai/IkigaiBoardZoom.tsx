@@ -2,13 +2,18 @@ import React, {useState, useCallback, useRef, useEffect} from 'react';
 import IkigaiZone from './IkigaiZone';
 import QuickPinchZoom, { make3dTransformValue } from "react-quick-pinch-zoom";
 import IkigaiImage from '@/components/ikigai/ikigaiImage';
-// import IkigaiTag from '@/components/ikigai/IkigaiTag';
 import IkigaiTag from '@/components/ikigai/ikigaiTag';
 import { ItemCoordinates, Connection, Position, IkigaiItems, IkigaiItem, HandleAddIkigaiImageArgs} from '@/lib/types';
 import IkigaiConnections from '@/components/ikigai/ikigaiConnections';
-// import { initialImages, initialTags, initialConnections, initialItems } from '@/lib/dummyData';
 import { computeBoardPositionFromRects, computeBoardPositionFromPixelPosition } from '@/lib/computePosition';
 import debounce from '@/lib/debounce';
+import { saveIkigaiBoardItems } from "@/lib/saveBoard"
+import { Button } from '../ui/button';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 
 
 type ZoomUpdateParams = {
@@ -59,28 +64,6 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ items }) => {
       const value = make3dTransformValue({ x, y, scale });
       container.style.setProperty("transform", value);
     }
-  }, []);
-
-
-  useEffect(() => {
-    // Helper to get mouse position
-    const handleMouseMove = (event: MouseEvent) => {
-      if (mainContainerRef.current) {
-        const rect = mainContainerRef.current.getBoundingClientRect();
-        const centeredX = event.clientX - (rect.left + rect.width / 2);
-        const centeredY = event.clientY - (rect.top + rect.height / 2);
-        setMousePos({ x: centeredX, y: centeredY });
-      }
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-
-    return () => {
-      window.removeEventListener(
-        'mousemove',
-        handleMouseMove
-      );
-    };
   }, []);
 
   useEffect(() => {
@@ -179,35 +162,6 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ items }) => {
 
   };
 
-
-  // const handleItemDragEnd = (itemId: string) => {
-  //   setTimeout(() => {
-
-  //     setIkigaiItems((prevState) => {
-  //       const tagElement = document.getElementById(`ikigai-item-${itemId}`);
-
-  //       if (!tagElement) {
-  //         return { ...prevState};
-  //       }
-
-  //       const rect = tagElement.getBoundingClientRect();
-  //       const positionz = {
-  //           x: rect.left,
-  //           y: rect.top
-  //       };
-
-  //       const positionInPercentage = computeBoardPosition(positionz, ikigaiBoardRef);
-  //       const updatedItem = { ...prevState[itemId], position: positionInPercentage };
-        
-  //       return { ...prevState, [itemId]: updatedItem };
-
-  //     });
-  //     // 200ms delay this delay makes sure the position of the item is correct. 
-  //     // otherwise due to dragging and hover we get some crazy positions
-  //   }, 2); 
-
-  // };
-
   const handleDeleteItem = (itemId: string) => {
     if (ikigaiItems[itemId]) {
       const updatedIkigaiItems = { ...ikigaiItems };
@@ -215,44 +169,13 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ items }) => {
       setIkigaiItems(updatedIkigaiItems)
     }
   }
- 
 
-  const handleSaveBoard = () => {
-
-    if (ikigaiBoardRef.current){
-      const ikigaiBoardRect = ikigaiBoardRef.current.getBoundingClientRect();
-      const positions: { [key: string]: { x: number, y: number } } = {};
-      
-      Object.keys(ikigaiItems).forEach(key => {
-        const tagElement = document.getElementById(`ikigai-item-${key}`);
-        if (tagElement) {
-          const itemRect = tagElement.getBoundingClientRect();
-          positions[key] = computeBoardPositionFromRects(itemRect, ikigaiBoardRect);
-        }
-      });
-  
-      console.log(positions);
-    }
-
-  };
-
-  // const handleSavePositions = () => {
-  //   const positions: { [key: string]: { x: number, y: number } } = {};
-
-  //   Object.keys(ikigaiItems).forEach(key => {
-  //     const tagElement = document.getElementById(`ikigai-item-${key}`);
-  //     if (tagElement) {
-  //         const rect = tagElement.getBoundingClientRect();
-  //         const position = {
-  //             x: rect.left,
-  //             y: rect.top
-  //         };
-  //         positions[key] = computeBoardPosition(position, mainContainerRef);
-  //       }
-  //   });
-
-  //   console.log(positions);
-  // };
+  const handleSaveBoard = async () => {
+      // Saves ikigaiItems in a zip file with a JSON that refers to items prop
+      // Images are also saved in the zip to images/...
+      const updatedIkigaiItems = JSON.parse(JSON.stringify(ikigaiItems));
+      await saveIkigaiBoardItems(updatedIkigaiItems);
+};
 
   return (
 
@@ -265,17 +188,22 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ items }) => {
     >
       <div className="flex justify-center items-center h-screen w-screen border-4 border-slate-500" 
             ref={mainContainerRef}>
-        <div className='absolute top-0'>
-            The mouse is at position{' '}
-            <b>
-              ({mousePos.x}, {mousePos.y})
-            </b>
-          </div>
-
-          <button onClick={handleSaveBoard}>Save Board</button>
-
-
-
+        <Button className="absolute top-1 left-1" onClick={handleSaveBoard}>Save Board</Button>
+        {/* <Button className="absolute top-12 left-1" onClick={handleSaveBoard}>Load Board</Button> */}
+        <div className="absolute top-1 right-1 rounded-full ">
+          <Popover>
+            <PopoverTrigger><Button variant="outline">?</Button></PopoverTrigger>
+            <PopoverContent>
+              <h3 className="font-bold mb-2">Interactions</h3>
+              <p className="max-w-sm mb-2">Right click anywhere to add a new tag or image.</p>
+              <p className="max-w-sm mb-2">Right click on an existing tag or image to edit or delete.</p>
+              <p className="max-w-sm mb-4">Drag around anything to find their places in your Ikigai.</p>
+              <h3 className="font-bold mb-2">Zoom In/Out</h3>
+              <p className="max-w-sm mb-2">Press CTRL/CMD and use your mouse wheel to zoom in.</p>
+              <p className="max-w-sm">Or double click anywhere to zoom in, and again to zoom back out.</p>
+            </PopoverContent>
+          </Popover>
+        </div>
         <div className="relative w-[100vw] h-[100vw] xl:h-[1200px] xl:w-[1200px] border-4 border-slate-900" ref={ikigaiBoardRef}>
           {/* if you change xl:h-[1200px] xl:w-[1200px] above you must also change the ikigai zone size so things dont go mad. */}
 
@@ -351,52 +279,3 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ items }) => {
 };
 
 export default IkigaiBoard;
-
- // const handleAddTag = (position: Position) => {
-  //   if (mainContainerRef.current) {
-  //     const computedPosition = computeBoardPosition(position, mainContainerRef);
-
-  //     const newTag = {
-  //       tag: `New Tag ${newTagCounter}`,
-  //       position: computedPosition
-  //     };
-
-  //     setIkigaiTags([...ikigaiTags, newTag]);
-  //     setItemCoordinates({
-  //       ...itemCoordinates,
-  //       [newTag.tag]: computedPosition,
-  //     });
-
-  //     setNewTagCounter(newTagCounter+1);
-
-  //   }
-  // };
-
-  // const handleAddIkigaiImage = (imageUrl: string, position: Position) => {
-  //   if (mainContainerRef.current) {
-  //     const computedPosition = computeBoardPosition(position, mainContainerRef);
-
-  //     const newImage = {
-  //       imageUrl: imageUrl,
-  //       text: "new image", 
-  //       position: computedPosition,
-  //     };
-    
-  //     setIkigaiImages(prevImages => [...prevImages, newImage]);
-  //     setItemCoordinates({
-  //       ...itemCoordinates,
-  //       [newImage.text]: computedPosition,
-  //     });
-  //   }
-  // };
-  
-  // const handleItemDragEnd = (text: string, x: number, y: number) => {
-  //   setItemCoordinates((prevState) => ({
-  //     ...prevState,
-  //     [text]: { x, y },
-  //   }));
-  // }; 
-
-  // const addConnection = (image: string, tag: string) => {
-  //   setConnections([...connections, { image, tag }]);
-  // };
