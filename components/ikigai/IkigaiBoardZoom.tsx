@@ -1,10 +1,10 @@
 import React, {useState, useCallback, useRef, useEffect} from 'react';
-import IkigaiZone from './IkigaiZone';
+import IkigaiZone from './ikigaiZone';
 import QuickPinchZoom, { make3dTransformValue } from "react-quick-pinch-zoom";
 import IkigaiImage from '@/components/ikigai/ikigaiImage';
 import IkigaiTag from '@/components/ikigai/ikigaiTag';
 import { ItemCoordinates, Connection, Position, IkigaiItems, IkigaiItem, HandleAddIkigaiImageArgs} from '@/lib/types';
-import IkigaiConnections from '@/components/ikigai/ikigaiConnections';
+// import IkigaiConnections from '@/components/ikigai/ikigaiConnections';
 import { computeBoardPositionFromRects, computeBoardPositionFromPixelPosition } from '@/lib/computePosition';
 import debounce from '@/lib/debounce';
 import { saveIkigaiBoardItems } from "@/lib/saveBoard"
@@ -189,10 +189,10 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ items }) => {
       <div className="flex justify-center items-center h-screen w-screen border-4 border-slate-500" 
             ref={mainContainerRef}>
         <Button className="absolute top-1 left-1" onClick={handleSaveBoard}>Save Board</Button>
-        {/* <Button className="absolute top-12 left-1" onClick={handleSaveBoard}>Load Board</Button> */}
+        <Button className="absolute top-12 left-1" onClick={handleSaveBoard}>Load Board</Button>
         <div className="absolute top-1 right-1 rounded-full ">
           <Popover>
-            <PopoverTrigger><Button variant="outline">?</Button></PopoverTrigger>
+            <PopoverTrigger asChild><Button variant="outline">?</Button></PopoverTrigger>
             <PopoverContent>
               <h3 className="font-bold mb-2">Interactions</h3>
               <p className="max-w-sm mb-2">Right click anywhere to add a new tag or image.</p>
