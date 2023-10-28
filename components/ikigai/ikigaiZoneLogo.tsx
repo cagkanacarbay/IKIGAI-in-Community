@@ -2,7 +2,7 @@ interface IkigaiLogoProps {
   zoneName: string;
 }
 
-const IkigaiZoneLogo: React.FC<IkigaiLogoProps> = ({ zoneName }) => {
+const IkigaiZoneIcon: React.FC<IkigaiLogoProps> = ({ zoneName }) => {
 
   switch (zoneName) {
     case 'What you love':
@@ -85,4 +85,4 @@ const IkigaiZoneLogo: React.FC<IkigaiLogoProps> = ({ zoneName }) => {
   }
 };
 
-export default IkigaiZoneLogo;
+export default IkigaiZoneIcon;

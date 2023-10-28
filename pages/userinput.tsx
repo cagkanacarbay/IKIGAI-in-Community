@@ -1,5 +1,5 @@
 import { Inter } from 'next/font/google';
-import IkigaiBoard from '@/components/ikigai/ikigaiBoardZoom';
+import IkigaiBoard from '@/components/ikigai/ikigaiBoard';
 import {initialItems} from "@/lib/dummyData"
 import UploadIkigai from '@/components/ikigai/uploadIkigai';
 

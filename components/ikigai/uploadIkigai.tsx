@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import JSZip from 'jszip';
-import IkigaiBoard from './ikigaiBoardZoom';
+import IkigaiBoard from './ikigaiBoard';
 import { IkigaiItems } from '@/lib/types';
 
 export function UploadIkigai() {
@@ -10,11 +10,6 @@ export function UploadIkigai() {
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-
-    // if (file && file.type !== "application/zip") {
-    //   console.error("The selected file is not a ZIP file.");
-    //   return;
-    // }
 
     if (!file) return;
 

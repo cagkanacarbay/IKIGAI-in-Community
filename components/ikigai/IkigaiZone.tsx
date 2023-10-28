@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/context-menu"
 import { Input } from "@/components/ui/input"
 import { Position } from '@/lib/types';
-import IkigaiZoneLogo from './ikigaiZoneLogo';
+import IkigaiZoneIcon from './ikigaiZoneLogo';
 import {HandleAddIkigaiImageArgs} from "@/lib/types"
 
 
@@ -82,7 +82,7 @@ const IkigaiZone: React.FC<IkigaiZoneProps> = ({ name, color, handleAddTag, hand
             style={{ transformOrigin: 'center center' }}
           >
             <motion.div className={`absolute ${textPositionClass} transform rounded-full`} whileHover={{scale: 1.5}}>
-              <IkigaiZoneLogo zoneName={name}/>
+              <IkigaiZoneIcon zoneName={name}/>
             </motion.div>
           </motion.div>
           </ContextMenuTrigger>

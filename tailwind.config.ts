@@ -13,8 +13,13 @@ const config: Config = {
         '2000': '2000ms',
         '3000': '3000ms',
       },
+      backdropFilter: {
+        'none': 'none',
+        'blur': 'blur(15px)',
+      },
     },
   },
   plugins: [],
+  variants: {},
 }
 export default config

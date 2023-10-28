@@ -8,13 +8,7 @@ import { ItemCoordinates, Connection, Position, IkigaiItems, IkigaiItem, HandleA
 import { computeBoardPositionFromRects, computeBoardPositionFromPixelPosition } from '@/lib/computePosition';
 import debounce from '@/lib/debounce';
 import { saveIkigaiBoardItems } from "@/lib/saveBoard"
-import { Button } from '../ui/button';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-
+import Toolbar from './toolbar';
 
 type ZoomUpdateParams = {
   x: number;
@@ -23,11 +17,13 @@ type ZoomUpdateParams = {
 };
 
 interface IkigaiBoardProps {
-  items: IkigaiItems;
+  // items?: IkigaiItems;
+  ikigaiItems: IkigaiItems,
+  setIkigaiItems: React.Dispatch<React.SetStateAction<IkigaiItems>>;
 };
 
 
-const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ items }) => {
+const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }) => {
 
   const mainContainerRef = useRef<HTMLDivElement | null>(null);
   const ikigaiBoardRef = useRef<HTMLDivElement | null>(null);
@@ -36,8 +32,7 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ items }) => {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   // const [connections, setConnections] = useState<Connection[]>(initialConnections);
 
-  // All images and tags are initialized with the dummy data. TODO: initialize from database entries later.
-  const [ikigaiItems, setIkigaiItems] = useState<IkigaiItems>(items);
+  // const [ikigaiItems, setIkigaiItems] = useState<IkigaiItems>(items);
 
   // Tracking dimensions of the Ikigai Board so we can place all Ikigai Items exactly right.
   const [boardDimensions, setBoardDimensions] = useState({ width: 0, height: 0 });
@@ -47,16 +42,13 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ items }) => {
   const [panningEnabled, setPanningEnabled] = useState(false);
 
   // TODO: Remove all this when we get actual data
-  const initialImageCount = Object.values(items).filter(item => item.type === 'image').length;
-  const initialTagCount = Object.values(items).filter(item => item.type === 'tag').length;
+  const initialImageCount = Object.values(ikigaiItems).filter(item => item.type === 'image').length;
+  const initialTagCount = Object.values(ikigaiItems).filter(item => item.type === 'tag').length;
   const [imageCount, setImageCount] = useState(initialImageCount);
   const [tagCount, setTagCount] = useState(initialTagCount);
 
-  // Helper mousePos. TODO: remove whenever
-  const [mousePos, setMousePos] = useState<{ x: number, y: number }>({x: 0, y:0});
 
-
-  const onUpdate = useCallback(({ x, y, scale }: ZoomUpdateParams) => {
+  const onZoomUpdate = useCallback(({ x, y, scale }: ZoomUpdateParams) => {
     // function for zoomin/out
     const { current: container } = mainContainerRef;
     
@@ -87,7 +79,7 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ items }) => {
     };
   }, []); 
 
-  const handleAddTag = (position: Position, tagText: string) => {
+  const handleAddIkigaiTag = (position: Position, tagText: string) => {
     if (mainContainerRef.current) {
       const computedPosition = computeBoardPositionFromPixelPosition(position, mainContainerRef);
       const tagId = `Tag ${tagCount}`;  // TODO: replace with actual IDs from db
@@ -175,12 +167,14 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ items }) => {
       // Images are also saved in the zip to images/...
       const updatedIkigaiItems = JSON.parse(JSON.stringify(ikigaiItems));
       await saveIkigaiBoardItems(updatedIkigaiItems);
-};
+  };
+
+  
 
   return (
 
     <QuickPinchZoom 
-      onUpdate={onUpdate} wheelScaleFactor={500} inertia={false} 
+      onUpdate={onZoomUpdate} wheelScaleFactor={500} inertia={false} 
       tapZoomFactor={0.75} doubleTapToggleZoom draggableUnZoomed={false}
       verticalPadding={200} horizontalPadding={200}
       enabled={panningEnabled}  // disable panning so drag/drop images takes priority when zoomed in
@@ -188,22 +182,8 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ items }) => {
     >
       <div className="flex justify-center items-center h-screen w-screen border-4 border-slate-500" 
             ref={mainContainerRef}>
-        <Button className="absolute top-1 left-1" onClick={handleSaveBoard}>Save Board</Button>
-        <Button className="absolute top-12 left-1" onClick={handleSaveBoard}>Load Board</Button>
-        <div className="absolute top-1 right-1 rounded-full ">
-          <Popover>
-            <PopoverTrigger asChild><Button variant="outline">?</Button></PopoverTrigger>
-            <PopoverContent>
-              <h3 className="font-bold mb-2">Interactions</h3>
-              <p className="max-w-sm mb-2">Right click anywhere to add a new tag or image.</p>
-              <p className="max-w-sm mb-2">Right click on an existing tag or image to edit or delete.</p>
-              <p className="max-w-sm mb-4">Drag around anything to find their places in your Ikigai.</p>
-              <h3 className="font-bold mb-2">Zoom In/Out</h3>
-              <p className="max-w-sm mb-2">Press CTRL/CMD and use your mouse wheel to zoom in.</p>
-              <p className="max-w-sm">Or double click anywhere to zoom in, and again to zoom back out.</p>
-            </PopoverContent>
-          </Popover>
-        </div>
+        <Toolbar handleSaveBoard={handleSaveBoard} />
+
         <div className="relative w-[100vw] h-[100vw] xl:h-[1200px] xl:w-[1200px] border-4 border-slate-900" ref={ikigaiBoardRef}>
           {/* if you change xl:h-[1200px] xl:w-[1200px] above you must also change the ikigai zone size so things dont go mad. */}
 
@@ -245,28 +225,28 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ items }) => {
             <IkigaiZone
               name="What you love"
               color="red"
-              handleAddTag={handleAddTag} handleAddIkigaiImage={handleAddIkigaiImage}
+              handleAddTag={handleAddIkigaiTag} handleAddIkigaiImage={handleAddIkigaiImage}
             />
           </div>
           <div className="absolute top-1/2 left-4 transform -translate-y-1/2 z-10 hover:z-20">
             <IkigaiZone
               name="What you are good at"
               color="blue"
-              handleAddTag={handleAddTag} handleAddIkigaiImage={handleAddIkigaiImage}
+              handleAddTag={handleAddIkigaiTag} handleAddIkigaiImage={handleAddIkigaiImage}
             />
           </div>
           <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10 hover:z-20">
             <IkigaiZone
               name="What you can be paid for"
               color="yellow"
-              handleAddTag={handleAddTag} handleAddIkigaiImage={handleAddIkigaiImage}
+              handleAddTag={handleAddIkigaiTag} handleAddIkigaiImage={handleAddIkigaiImage}
             />
           </div>
           <div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-10 hover:z-20">
             <IkigaiZone
               name="What the world needs"
               color="green"
-              handleAddTag={handleAddTag} handleAddIkigaiImage={handleAddIkigaiImage}
+              handleAddTag={handleAddIkigaiTag} handleAddIkigaiImage={handleAddIkigaiImage}
             />
           </div>
         </div>
