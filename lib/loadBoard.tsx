@@ -1,42 +1,48 @@
+// handleLoadBoard.ts
 import JSZip from 'jszip';
-import { IkigaiItems } from './types';
+import { IkigaiItems } from '@/lib/types';
 
-export const saveIkigaiBoardItems = async (updatedIkigaiItems: IkigaiItems) => {
-    // Saves the ikigaiItems state from IkigaiBoard 
-    // as a zip file containing all the images, 
-    // and all the tags in a JSON file.
+const loadIkigaiBoard = async (file: File): Promise<IkigaiItems | null> => {
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
 
-    // Create a new instance of JSZip
-    const zip = new JSZip();
+    if (fileExtension !== 'zip') {
+        console.error("The selected file is not a ZIP file.");
+        return null;
+    }
 
-    // Convert updated state to JSON string and add it to the zip
+    try {
+        const zip = new JSZip();
+        const zipContent = await zip.loadAsync(file);
+        const ikigaiItemsJSON = await zipContent.file("ikigaiItems.json")?.async("text");
+        const ikigaiItems: IkigaiItems = JSON.parse(ikigaiItemsJSON!);
 
-    // Download each image, convert to Blob and add to the ZIP
-    const imagePromises = Object.values(updatedIkigaiItems).map(async (item) => {
-        if (item.type === 'image' && item.imageUrl) {
-            const response = await fetch(item.imageUrl);
-            const blob = await response.blob();
-            const imgName = item.imageUrl.split('/').pop();
-            zip.file(`images/${imgName}`, blob);
-
-            // Update the imageUrl to refer to the saved image in the zip folder
-            item.imageUrl = `images/${imgName}`;
+        if (!ikigaiItems || typeof ikigaiItems !== 'object') {
+            throw new Error("Invalid JSON structure.");
         }
-    });
 
-    await Promise.all(imagePromises);
+        const imageBlobs: { [key: string]: string } = {};
+        const imageFilePromises = Object.values(ikigaiItems)
+            .filter(item => item.type === 'image' && item.imageUrl)
+            .map(async item => {
+                const imageData = await zipContent.file(item.imageUrl)?.async('blob');
+                const blobUrl = URL.createObjectURL(imageData);
+                imageBlobs[item.imageUrl] = blobUrl;
+            });
 
-    zip.file("ikigaiItems.json", JSON.stringify(updatedIkigaiItems));
+        await Promise.all(imageFilePromises);
 
-    // Generate the zip file and offer it for download
-    const zipBlob = await zip.generateAsync({ type: "blob" });
-    const url = URL.createObjectURL(zipBlob);
-    const downloadAnchorNode = document.createElement('a');
+        Object.values(ikigaiItems).forEach(item => {
+            if (item.type === 'image' && item.imageUrl && imageBlobs[item.imageUrl]) {
+                item.imageUrl = imageBlobs[item.imageUrl];
+            }
+        });
 
-    downloadAnchorNode.setAttribute("href", url);
-    downloadAnchorNode.setAttribute("download", "ikigaiData.zip");
-    document.body.appendChild(downloadAnchorNode);
-    downloadAnchorNode.click();
-    downloadAnchorNode.remove();
+        return ikigaiItems;
 
-};
+    } catch (err) {
+        console.error("Error processing the ZIP file:", err.message);
+        return null;
+    }
+}
+
+export default loadIkigaiBoard;
