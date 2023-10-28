@@ -20,13 +20,11 @@ export default function Home() {
     if (ikigaiItems) {
         setItems(ikigaiItems);
         setBoardLoaded(true);
-        console.log("Loaded ikigai items", ikigaiItems);
     }
   };
 
   useEffect(() => {
     console.log("Updated items state", items);
-    // setShowEmptyState(false);
     if (boardLoaded) {
       setShowEmptyState(false);
     }

@@ -210,6 +210,7 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
             .map(([itemId, tag], index) => (
               <IkigaiTag
                 key={itemId}
+                tagItem={tag}
                 itemId={itemId}
                 position={tag.position}
                 onDragEnd={handleItemDragEnd}
@@ -218,6 +219,8 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
                 containerRef={mainContainerRef}
                 boardDimensions={boardDimensions}
                 handleDeleteTag={handleDeleteItem}
+                ikigaiItems={ikigaiItems}
+                setIkigaiItems={setIkigaiItems}
               />
             ))}
 

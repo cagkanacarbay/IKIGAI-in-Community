@@ -8,10 +8,11 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu"
-
+import { IkigaiItems, IkigaiItem } from '@/lib/types';
 
 interface IkigaiTagProps {
   itemId: string;
+  tagItem: IkigaiItem;
   position: Position;
   onDragEnd: (text: string) => void;
   setPanningEnabled: (dragging: boolean) => void;
@@ -19,18 +20,19 @@ interface IkigaiTagProps {
   containerRef: React.RefObject<HTMLDivElement>;
   boardDimensions: {width: number, height: number};
   handleDeleteTag: (itemId: string) => void;
-
+  ikigaiItems: IkigaiItems;
+  setIkigaiItems: (items: IkigaiItems) => void;
 }
 
 const IkigaiTag: React.FC<IkigaiTagProps> = ({ 
-    itemId, position, onDragEnd, setPanningEnabled, setHoveredItem, 
-    containerRef, boardDimensions, handleDeleteTag }
+    itemId, tagItem, position, onDragEnd, setPanningEnabled, setHoveredItem, 
+    containerRef, boardDimensions, handleDeleteTag, ikigaiItems, setIkigaiItems }
   ) => {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const tagDivRef = useRef<HTMLDivElement>(null);
   const [isEditable, setIsEditable] = useState(false);
-  const [editableText, setEditableText] = useState<string>(itemId);
+  const [editableText, setEditableText] = useState<string>(tagItem.text || "");
 
   useEffect(() => {
     if (isEditable) {
@@ -47,10 +49,22 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({
     setPanningEnabled(true);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleEnterTagText = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       setIsEditable(false);
+
+      const inputValue = e.target as HTMLInputElement;
+      if (itemId in ikigaiItems) {
+        const updatedItems = {
+          ...ikigaiItems,
+          [itemId]: {
+            ...ikigaiItems[itemId],
+            text: inputValue.value
+          }
+        };
+        setIkigaiItems(updatedItems);
+      }
     }
   };
 
@@ -59,7 +73,7 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({
     setEditableText(editableText);
     setTimeout(() => {
       inputRef.current?.focus(); // Set focus after a brief delay to ensure the input is rendered
-    }, 100);
+    }, 250);
   };
 
   const handleHoverStart = useCallback(() => {
@@ -117,7 +131,7 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({
               onBlur={(e) => {
                 setIsEditable(false);
               }}
-              onKeyUp={handleKeyPress}
+              onKeyUp={handleEnterTagText}
             />
           ) : (
             <div
