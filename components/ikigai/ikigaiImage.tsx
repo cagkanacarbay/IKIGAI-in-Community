@@ -82,7 +82,7 @@ const IkigaiImage: React.FC<IkigaiImageProps> = ({
           id={`ikigai-item-${itemId}`}
           drag
           dragMomentum={false}
-          whileHover={{scale: 1.1}}
+          whileHover={{scale: 1.2}}
           // whileDrag={{ scale: 1.2 }}  
           onDragStart={() =>{
             setPanningEnabled(false);
