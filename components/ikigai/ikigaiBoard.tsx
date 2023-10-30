@@ -47,6 +47,33 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
   const [imageCount, setImageCount] = useState(initialImageCount);
   const [tagCount, setTagCount] = useState(initialTagCount);
 
+  
+  const [boardSizeClass, setBoardSizeClass] = useState('w-[100vw] h-[100vw]');
+
+  useEffect(() => {
+    // Update the size of the board so it matches the shorter size edge of the viewport
+    const updateSize = () => {
+      const vh = window.innerHeight;
+      const vw = window.innerWidth;
+      if (vh < vw) {
+        setBoardSizeClass('w-[100vh] h-[100vh]');
+      } else {
+        setBoardSizeClass('w-[100vw] h-[100vw]');
+      }
+      console.log("updated board size to", boardSizeClass)
+
+    };
+
+    // Initial update
+    updateSize();
+
+    // Listen for window resize
+    window.addEventListener('resize', updateSize);
+
+    // Cleanup listener on unmount
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+
 
   const onZoomUpdate = useCallback(({ x, y, scale }: ZoomUpdateParams) => {
     // function for zoomin/out
@@ -183,9 +210,10 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
       <div className="flex justify-center items-center h-screen w-screen border-4 border-slate-500" 
             ref={mainContainerRef}>
         <Toolbar handleSaveBoard={handleSaveBoard} />
-
-        <div className="relative w-[100vw] h-[100vw] xl:h-[1200px] xl:w-[1200px] border-4 border-slate-900" ref={ikigaiBoardRef}>
-          {/* if you change xl:h-[1200px] xl:w-[1200px] above you must also change the ikigai zone size so things dont go mad. */}
+        
+        <div ref={ikigaiBoardRef} className={`relative ${boardSizeClass} max-height-[1200px] max-width-[1200px] border-4 border-slate-900`}>
+        {/* if you change xl:h-[1200px] xl:w-[1200px] above you must also change the ikigai zone size so things dont go mad. */}
+        
 
           {Object.entries(ikigaiItems)
             .filter(([itemId, item]) => item.type === 'image')

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { motion } from 'framer-motion';
 import {
   ContextMenu,
@@ -42,8 +42,35 @@ const IkigaiZone: React.FC<IkigaiZoneProps> = ({ name, color, handleAddTag, hand
     yellow: "I can be paid for ..."
   }[color];
 
+
   const [position, setPosition] = useState<Position>({x: 0, y: 0});
   const imageUploadInputRef = React.useRef<HTMLInputElement>(null); 
+
+  const [dynamicSizeClass, setDynamicSizeClass] = useState('w-[55vw] h-[55vw]');
+
+
+  useEffect(() => {
+    const updateSize = () => {
+      const vh = window.innerHeight;
+      const vw = window.innerWidth;
+      if (vh < vw) {
+        setDynamicSizeClass('w-[55vh] h-[55vh]');
+      } else {
+        setDynamicSizeClass('w-[55vw] h-[55vw]');
+      }
+      console.log("uodated size to", dynamicSizeClass)
+
+    };
+
+    // Initial update
+    updateSize();
+
+    // Listen for window resize
+    window.addEventListener('resize', updateSize);
+
+    // Cleanup listener on unmount
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
 
   
   const handleContextMenu = (e: React.MouseEvent) => {
@@ -75,7 +102,8 @@ const IkigaiZone: React.FC<IkigaiZoneProps> = ({ name, color, handleAddTag, hand
               // at the largest screens we must cap the size of the zones so they dont overflow.
               // zones are capped at 55vw*1200px. 1200 px is the size of ikigai board at xl screens. 
               // if you change xl:h-[660px] xl:w-[660px] you must change the ikigai board size as well
-              `w-[55vw] h-[55vw] xl:h-[660px] xl:w-[660px] 
+              // `${dynamicSizeClass} xl:h-[660px] xl:w-[660px] 
+              `${dynamicSizeClass} max-height-[660px] max-width-[660px]
               rounded-full flex items-center justify-center 
               ${colorClass} bg-opacity-40 hover:bg-opacity-20 
               transition duration-300 ease-in-out`}
