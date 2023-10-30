@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Position } from '@/lib/types';
 import IkigaiZoneIcon from './ikigaiZoneLogo';
 import {HandleAddIkigaiImageArgs} from "@/lib/types"
-
+import Icon from '@/components/icons';
 
 interface IkigaiZoneProps {
   name: string;
@@ -115,10 +115,14 @@ const IkigaiZone: React.FC<IkigaiZoneProps> = ({ name, color, handleAddTag, hand
           </motion.div>
           </ContextMenuTrigger>
           <ContextMenuContent>
-            <ContextMenuItem inset onClick={() => handleAddTag(position, newTagText)}>
+            <ContextMenuItem onClick={() => handleAddTag(position, newTagText)} className="flex justify-between items-center">
               New Tag 
+              <Icon iconName='tag'/>
             </ContextMenuItem>
-            <ContextMenuItem inset onClick={handleAddImage}>New Image</ContextMenuItem>
+            <ContextMenuItem onClick={handleAddImage} className="flex justify-between items-center">
+              New Image
+              <Icon iconName='image'/>
+            </ContextMenuItem>
           </ContextMenuContent>
           <Input id="picture" type="file" ref={imageUploadInputRef} onChange={handleImageUpload} style={{ display: 'none' }}/>
 

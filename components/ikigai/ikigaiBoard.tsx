@@ -109,7 +109,7 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
   const handleAddIkigaiTag = (position: Position, tagText: string) => {
     if (mainContainerRef.current) {
       const computedPosition = computeBoardPositionFromPixelPosition(position, mainContainerRef);
-      const tagId = `Tag ${tagCount}`;  // TODO: replace with actual IDs from db
+      const tagId = `Tag ${Date.now()}`;  // TODO: replace with actual IDs from db
       const newTag: IkigaiItem = {
         type: 'tag',
         text: tagText,
@@ -134,7 +134,7 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
       if (mainContainerRef.current) {
       const computedPosition = computeBoardPositionFromPixelPosition(position, mainContainerRef);
       // const imageId = `image ${imageCount}`; // TODO: replace with actual IDs from db
-      const imageId = replacedImageId || `image ${imageCount}`; // Use provided imageId or generate one
+      const imageId = replacedImageId || `image ${Date.now()}`; // Use provided imageId or generate one
 
       const newImage: IkigaiItem = {
         type: 'image',

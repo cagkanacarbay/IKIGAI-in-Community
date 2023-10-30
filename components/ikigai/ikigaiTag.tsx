@@ -9,6 +9,7 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu"
 import { IkigaiItems, IkigaiItem } from '@/lib/types';
+import Icon from "@/components/icons";
 
 interface IkigaiTagProps {
   itemId: string;
@@ -50,8 +51,8 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({
   };
 
   const handleEnterTagText = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
     if (e.key === 'Enter') {
-      e.preventDefault();
       setIsEditable(false);
 
       const inputValue = e.target as HTMLInputElement;
@@ -65,6 +66,8 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({
         };
         setIkigaiItems(updatedItems);
       }
+    } else if (e.key === 'Escape') {
+      setIsEditable(false);
     }
   };
 
@@ -132,6 +135,7 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({
                 setIsEditable(false);
               }}
               onKeyUp={handleEnterTagText}
+              maxLength={36}
             />
           ) : (
             <div
@@ -144,11 +148,13 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({
         </ContextMenuTrigger>
       </motion.div>
       <ContextMenuContent>
-        <ContextMenuItem inset onClick={() => enterEditMode()}>
+        <ContextMenuItem onClick={() => enterEditMode()} className="flex justify-between items-center">
           Edit 
+          <Icon iconName='edit'/>
         </ContextMenuItem>
-        <ContextMenuItem inset onClick={() => handleDeleteTag(itemId)}>
+        <ContextMenuItem onClick={() => handleDeleteTag(itemId)} className="flex justify-between items-center">
           Delete 
+          <Icon iconName='eraser'/>
         </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>

@@ -12,6 +12,7 @@ import {
 import { Position } from '@/lib/types';
 import {HandleAddIkigaiImageArgs} from "@/lib/types"
 import { Input } from "@/components/ui/input"
+import Icon from '@/components/icons';
 
 
 interface IkigaiImageProps {
@@ -112,14 +113,13 @@ const IkigaiImage: React.FC<IkigaiImageProps> = ({
               {/* <ContextMenuItem inset>
                 Rescale (TODO)
               </ContextMenuItem> */}
-              <ContextMenuItem inset onClick={handleAddImage}>
+              <ContextMenuItem  onClick={handleAddImage} className="flex justify-between items-center">
                 Replace
+                <Icon iconName='image-replace'/>
               </ContextMenuItem>
-              {/* <ContextMenuItem inset >
-                Connect (TODO)
-              </ContextMenuItem> */}
-              <ContextMenuItem inset onClick={handleImageDelete}>
-                Delete
+              <ContextMenuItem  onClick={handleImageDelete} className="flex justify-between items-center">
+                Delete                 
+                <Icon iconName='image-delete'/>
               </ContextMenuItem>
         </ContextMenuContent>
         <Input id="picture" type="file" ref={imageUploadInputRef} onChange={handleImageReplace} style={{ display: 'none' }}/>
