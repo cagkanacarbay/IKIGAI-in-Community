@@ -17,10 +17,6 @@ const config: Config = {
         'none': 'none',
         'blur': 'blur(15px)',
       },
-      fontSize: {
-        xxs: '7px',
-        xxxs: '6px',
-      }
     },
   },
   plugins: [],

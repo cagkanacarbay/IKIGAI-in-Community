@@ -88,7 +88,7 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({
   const yCoordinateInPixel = (position.y / 100) * boardDimensions.height;
 
   const setHoveredItemDebounced = useRef(debounce(setHoveredItem, 200));
-  const tagClass = "absolute rounded-md text-white bg-gray-900 bg-opacity-90 px-4 py-1 text-[7px] sm:text-xs md:text-xs text-center"
+  const tagClass = "absolute rounded-md text-white bg-gray-900 bg-opacity-90 px-4 py-1 text-[7px] sm:text-xs xl:text-sm text-center"
   
   
   return (
@@ -130,7 +130,7 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({
           {isEditable ? (
             <input
               ref={inputRef}
-              className="absolute rounded-md text-white bg-gray-600 px-4 py-1 text-[7px] sm:text-xs text-center border-2 border-slate-100 "
+              className={`${tagClass} border-2 border-slate-100 bg-slate-700`}
               value={editableText}
               onChange={(e) => setEditableText(e.target.value)}
               onBlur={(e) => {
@@ -143,8 +143,6 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({
             <div
               ref={inputRef}
               className={tagClass}
-              // className="absolute rounded-md text-white bg-gray-900 bg-opacity-90 px-4 py-1 text-[7px] sm:text-xs text-center"
-
             >
               {editableText}
             </div>

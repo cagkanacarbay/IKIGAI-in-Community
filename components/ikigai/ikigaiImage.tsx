@@ -13,6 +13,7 @@ import { Position } from '@/lib/types';
 import {HandleAddIkigaiImageArgs} from "@/lib/types"
 import { Input } from "@/components/ui/input"
 import Icon from '@/components/icons';
+import Modal from '@/components/ui/modal';
 
 
 interface IkigaiImageProps {
@@ -34,6 +35,25 @@ const IkigaiImage: React.FC<IkigaiImageProps> = ({
   }) => {
 
   const imageUploadInputRef = React.useRef<HTMLInputElement>(null); 
+  const [isModalOpen, setModalOpen] = React.useState(false);
+  const modalRef = React.useRef<HTMLDivElement | null>(null);
+
+  const closeModal = (event: MouseEvent) => {
+    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      setModalOpen(false);
+    }
+  };
+
+  React.useEffect(() => {
+    document.addEventListener('mousedown', closeModal);
+    return () => {
+      document.removeEventListener('mousedown', closeModal);
+    };
+  }, []);
+
+  const handleViewFull = () => {
+    setModalOpen(true);
+  };
 
   const handleAddImage = () => {
     imageUploadInputRef.current?.click();  
@@ -79,7 +99,7 @@ const IkigaiImage: React.FC<IkigaiImageProps> = ({
             setPanningEnabled(true);
             debouncedSetHoveredItem(null);
           }}          
-          className="rounded-2xl flex items-center justify-center z-50 absolute" 
+          className="rounded-2xl flex items-center justify-center z-40 absolute" 
           initial={{
             x: 0,
             y: 0,
@@ -102,7 +122,7 @@ const IkigaiImage: React.FC<IkigaiImageProps> = ({
               className="
                 object-contain pointer-events-none
                 rounded-sm md:rounded-md xl:rounded-xl 
-                w-9 sm:w-14 md:w-16 lg:w-20 xl:w-24 
+                w-9 sm:w-12 md:w-16 lg:w-20 xl:w-24 
               " 
             />
           </ContextMenuTrigger>
@@ -113,6 +133,10 @@ const IkigaiImage: React.FC<IkigaiImageProps> = ({
               {/* <ContextMenuItem inset>
                 Rescale (TODO)
               </ContextMenuItem> */}
+              <ContextMenuItem onClick={handleViewFull} className="flex justify-between items-center">
+                Fullscreen
+                <Icon iconName='maximize'/>
+              </ContextMenuItem>
               <ContextMenuItem  onClick={handleAddImage} className="flex justify-between items-center">
                 Replace
                 <Icon iconName='image-replace'/>
@@ -123,7 +147,11 @@ const IkigaiImage: React.FC<IkigaiImageProps> = ({
               </ContextMenuItem>
         </ContextMenuContent>
         <Input id="picture" type="file" ref={imageUploadInputRef} onChange={handleImageReplace} style={{ display: 'none' }}/>
-
+        {isModalOpen && (
+          <div ref={modalRef} className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md flex items-center justify-center z-50">
+            <Modal image={imageUrl} onClose={() => setModalOpen(false)} />
+          </div>
+        )}
       </ContextMenu>
   );
 }
