@@ -12,7 +12,7 @@ const Toolbar: React.FC<ToolbarProps> = ({ handleSaveBoard }) => {
       <Button className="absolute top-1 left-1" onClick={handleSaveBoard}>Save Board</Button>
       <div className="absolute top-1 right-1 rounded-full ">
         <Popover>
-          <PopoverTrigger asChild className='z-50'><Button variant="outline">?</Button></PopoverTrigger>
+          <PopoverTrigger asChild><Button variant="outline">?</Button></PopoverTrigger>
           <PopoverContent>
               <h3 className="font-bold mb-2">Instructions</h3>
               <p className="max-w-sm mb-2"><strong>Right click</strong> to add a new tag or image.</p>

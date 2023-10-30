@@ -102,7 +102,7 @@ const IkigaiImage: React.FC<IkigaiImageProps> = ({
               className="
                 object-contain pointer-events-none
                 rounded-sm md:rounded-md xl:rounded-xl 
-                w-7 sm:w-12 md:w-16 lg:w-24 xl:w-28 
+                w-9 sm:w-14 md:w-16 lg:w-20 xl:w-24 
               " 
             />
           </ContextMenuTrigger>
