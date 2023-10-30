@@ -41,15 +41,17 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
   // This prevents panning while dragging.
   const [panningEnabled, setPanningEnabled] = useState(false);
 
-  // TODO: Remove all this when we get actual data
-  const initialImageCount = Object.values(ikigaiItems).filter(item => item.type === 'image').length;
-  const initialTagCount = Object.values(ikigaiItems).filter(item => item.type === 'tag').length;
-  const [imageCount, setImageCount] = useState(initialImageCount);
-  const [tagCount, setTagCount] = useState(initialTagCount);
-
-  
   const [boardSizeClass, setBoardSizeClass] = useState('w-[100vw] h-[100vw]');
 
+  // Set newTagId when a new tag is created so we can set focus on it for user to edit tag
+  const [newTagId, setNewTagId] = useState<string | null>(null);
+
+  const handleNewTagRegistered = () => {
+    // when a new tag is registered (the user types something or presses ESC), 
+    // we set the newTagId to null
+    setNewTagId(null);
+  }
+    
   useEffect(() => {
     // Update the size of the board so it matches the shorter size edge of the viewport
     const updateSize = () => {
@@ -120,8 +122,9 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
         ...ikigaiItems,
         [tagId]: newTag,
       });
+
+      setNewTagId(tagId);
   
-      setTagCount(tagCount + 1);
     }
   };
 
@@ -133,7 +136,6 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
     console.log(position)
       if (mainContainerRef.current) {
       const computedPosition = computeBoardPositionFromPixelPosition(position, mainContainerRef);
-      // const imageId = `image ${imageCount}`; // TODO: replace with actual IDs from db
       const imageId = replacedImageId || `image ${Date.now()}`; // Use provided imageId or generate one
 
       const newImage: IkigaiItem = {
@@ -146,8 +148,6 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
         ...ikigaiItems,
         [imageId]: newImage,
       });
-
-      setImageCount(imageCount + 1);
 
     }
   };
@@ -249,6 +249,8 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
                 handleDeleteTag={handleDeleteItem}
                 ikigaiItems={ikigaiItems}
                 setIkigaiItems={setIkigaiItems}
+                isNew={itemId === newTagId} 
+                handleNewTagRegistered={handleNewTagRegistered}
               />
             ))}
 

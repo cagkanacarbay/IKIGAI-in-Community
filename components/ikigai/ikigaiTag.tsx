@@ -23,29 +23,28 @@ interface IkigaiTagProps {
   handleDeleteTag: (itemId: string) => void;
   ikigaiItems: IkigaiItems;
   setIkigaiItems: (items: IkigaiItems) => void;
+  isNew?: boolean;
+  handleNewTagRegistered: () => void;
+
 }
 
 const IkigaiTag: React.FC<IkigaiTagProps> = ({ 
     itemId, tagItem, position, onDragEnd, setPanningEnabled, setHoveredItem, 
-    containerRef, boardDimensions, handleDeleteTag, ikigaiItems, setIkigaiItems }
+    containerRef, boardDimensions, handleDeleteTag, ikigaiItems, setIkigaiItems,
+    isNew, handleNewTagRegistered}
   ) => {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const tagDivRef = useRef<HTMLDivElement>(null);
-  const [isEditable, setIsEditable] = useState(false);
   const [editableText, setEditableText] = useState<string>(tagItem.text || "");
+  const [isEditable, setIsEditable] = useState(false); 
 
-  useEffect(() => {
-    if (isEditable) {
-      inputRef.current?.focus();
-    }
-  }, [isEditable]);
-
-  // const handleTagDelete()
+  const handleHoverStart = useCallback(() => {
+    setHoveredItemDebounced.current(editableText);
+  }, [editableText]);
 
   const handleDragEnd = (_event: MouseEvent | PointerEvent | TouchEvent, _info: PanInfo) => {
-    console.log(_event);
-
+    // console.log(_event);
     onDragEnd(itemId);
     setPanningEnabled(true);
   };
@@ -65,23 +64,29 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({
           }
         };
         setIkigaiItems(updatedItems);
+        handleNewTagRegistered?.();
       }
     } else if (e.key === 'Escape') {
       setIsEditable(false);
+      handleNewTagRegistered?.();
     }
   };
 
-  const enterEditMode = () => {
+  const enterEditMode = useCallback(() => {
     setIsEditable(true);
     setEditableText(editableText);
     setTimeout(() => {
       inputRef.current?.focus(); // Set focus after a brief delay to ensure the input is rendered
     }, 250);
-  };
-
-  const handleHoverStart = useCallback(() => {
-    setHoveredItemDebounced.current(editableText);
   }, [editableText]);
+
+  useEffect(() => {
+    if (isNew) {
+      enterEditMode();
+    }
+  }, [isNew, enterEditMode]);
+
+
   
 
   const xCoordinateInPixel = (position.x / 100) * boardDimensions.width;
@@ -131,13 +136,19 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({
             <input
               ref={inputRef}
               className={`${tagClass} border-2 border-slate-100 bg-slate-700`}
-              value={editableText}
-              onChange={(e) => setEditableText(e.target.value)}
+              value={isNew ? "" : editableText}
+              onChange={(e) => {
+                if (isNew) {
+                  handleNewTagRegistered(); // Make isNew false
+                }
+                setEditableText(e.target.value);
+              }}
               onBlur={(e) => {
                 setIsEditable(false);
               }}
               onKeyUp={handleEnterTagText}
               maxLength={36}
+              placeholder={tagItem.text || ""}
             />
           ) : (
             <div
