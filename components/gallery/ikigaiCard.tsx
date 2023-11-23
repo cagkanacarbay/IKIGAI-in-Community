@@ -27,7 +27,7 @@ const IkigaiCard: React.FC<IkigaiCardProps> = ({ userName, userAvatar, images, t
             <img
                 className="h-96 w-full object-cover object-center rounded-full"
                 src={userAvatar}
-                alt={`${userName}'s Avatar`} 
+                alt={`${userName}s Avatar`} 
             />
           <h4 className="text-xl">{userName}'s IKIGAI</h4>
         </div>
