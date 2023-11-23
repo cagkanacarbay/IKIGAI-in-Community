@@ -40,17 +40,17 @@ const IkigaiCard: React.FC<IkigaiCardProps> = ({ userName, userAvatar, images, t
         </div>
       </CardBody>
 
-      <CardFooter>
+      {/* <CardFooter>
         <button className="btn btn-icon-only rounded-circle">
-          {/* <Icon name="settings" className="sm" /> */}
+          <Icon name="settings" className="sm" />
         </button>
         <button className="btn btn-icon-only rounded-circle">
-          {/* <Icon name="edit" className="sm" /> */}
+          <Icon name="edit" className="sm" />
         </button>
         <button className="btn btn-icon-only rounded-circle">
-          {/* <Icon name="more_vert" className="sm" /> */}
+          <Icon name="more_vert" className="sm" />
         </button>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   );
 };
