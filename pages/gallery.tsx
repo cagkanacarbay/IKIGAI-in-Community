@@ -12,8 +12,10 @@ interface Ikigai {
 // This would be your page component for the gallery
 const GalleryPage: React.FC = () => {
   const [ikigais, setIkigais] = useState<Ikigai[]>([]);
+  console.log(process.env.NEXT_PUBLIC_API_HOST)
 
-  fetch('/api/ikigai')
+  //   fetch('/api/ikigai')
+  fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/ikigai`)
   .then((response) => response.json())
   .then((data) => {
     console.log('API Response:', data);

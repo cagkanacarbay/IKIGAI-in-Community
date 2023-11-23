@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+
+}
+
+model ikigai {
+    @@map("ikigai") // Maps to the 'ikigai' table in the database
+
+  ikigai_id Int     @id @default(autoincrement())
+  items     items[]
+}
+
+model items {
+    @@map("items") // Maps to the 'ikigai' table in the database
+
+  item_id   Int         @id @default(autoincrement())
+  type      String      @db.VarChar(255)
+  text      String?     @db.VarChar(255)
+  image_url String?     @db.VarChar(255)
+  ikigai_id Int?
+  ikigai    ikigai?     @relation(fields: [ikigai_id], references: [ikigai_id], onDelete: NoAction, onUpdate: NoAction)
+  positions positions[]
+}
+
+model positions {
+    @@map("positions") // Maps to the 'ikigai' table in the database
+
+  position_id Int       @id @default(autoincrement())
+  item_id     Int
+  x_position  Float
+  y_position  Float
+  timestamp   DateTime? @default(now()) @db.Timestamp(6)
+  items       items     @relation(fields: [item_id], references: [item_id], onDelete: NoAction, onUpdate: NoAction)
+}

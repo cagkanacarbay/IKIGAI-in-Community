@@ -1,10 +1,6 @@
 import React from 'react';
-import Card from '@material-tailwind/react/components/Card';
+import {Card, CardBody, CardFooter} from '@material-tailwind/react';
 
-import CardBody from '@material-tailwind/react/components/Card/CardBody';
-import CardFooter from '@material-tailwind/react/components/Card/CardFooter';
-import Icon from '../icons';
-// import Icon from '@material-tailwind/react/components/Icon';
 
 interface IkigaiCardProps {
   userName: string;
