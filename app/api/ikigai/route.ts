@@ -22,8 +22,12 @@ export async function GET() {
 
     for (const ikigai of ikigais) {
       ikigaiData[`${ikigai.ikigai_id}`] = {
-        tags: ikigai.items.filter(item => item.type === 'tag' && item.text).map(item => item.text),
-        images: ikigai.items.filter(item => item.type === 'image' && item.image_url).map(item => item.image_url),
+        tags: ikigai.items
+          .filter(item => item.type === 'tag' && item.text !== null)
+          .map(item => item.text as string), // Type assertion as string
+        images: ikigai.items
+          .filter(item => item.type === 'image' && item.image_url !== null)
+          .map(item => item.image_url as string), // Type assertion as string
       };
     }
 
