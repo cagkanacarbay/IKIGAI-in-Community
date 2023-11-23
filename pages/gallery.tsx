@@ -13,8 +13,8 @@ interface Ikigai {
 const GalleryPage: React.FC = () => {
   const [ikigais, setIkigais] = useState<Ikigai[]>([]);
 //   console.log(process.env.NEXT_PUBLIC_API_HOST)
-    const apiHost = process.env.NEXT_PUBLIC_API_HOST;
-    const url = apiHost ? `${apiHost}/api/ikigai` : '/api/ikigai';
+    const apiHost = process.env.NEXT_PUBLIC_API_HOST || '';
+    const url = `${apiHost}/api/ikigai`;
     console.log(url)
     
     fetch(url)
