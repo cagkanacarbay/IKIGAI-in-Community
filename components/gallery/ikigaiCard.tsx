@@ -29,7 +29,7 @@ const IkigaiCard: React.FC<IkigaiCardProps> = ({ userName, userAvatar, images, t
                 src={userAvatar}
                 alt={`${userName}s Avatar`} 
             />
-          <h4 className="text-xl">{userName}'s IKIGAI</h4>
+          <h4 className="text-xl">{userName}s IKIGAI</h4>
         </div>
         <div className="flex flex-wrap gap-2 mt-2">
           {tags.map((tag, index) => (
