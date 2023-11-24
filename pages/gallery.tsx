@@ -13,19 +13,25 @@ interface Ikigai {
 const GalleryPage: React.FC = () => {
   const [ikigais, setIkigais] = useState<Ikigai[]>([]);
 
-  console.log('thisis vercelurl: ', process.env.VERCEL_URL)
 
   // const apiHost = process.env.NEXT_PUBLIC_API_HOST || '';
   // const url = `${apiHost}/api/ikigai`;
-  // console.log(''url'')
     
-    fetch("/api/ikigai")
-  .then((response) => response.json())
-  .then((data) => {
-    console.log('API Response:', data);
-    setIkigais(data);
-  })
-  .catch(console.error);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/ikigai");
+        const data = await response.json();
+        console.log('API Response:', data);
+        setIkigais(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
 
   return (
     <div className="container mx-auto p-4">
