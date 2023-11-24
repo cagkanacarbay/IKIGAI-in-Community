@@ -12,12 +12,14 @@ interface Ikigai {
 // This would be your page component for the gallery
 const GalleryPage: React.FC = () => {
   const [ikigais, setIkigais] = useState<Ikigai[]>([]);
-//   console.log(process.env.NEXT_PUBLIC_API_HOST)
-    const apiHost = process.env.NEXT_PUBLIC_API_HOST || '';
-    const url = `${apiHost}/api/ikigai`;
-    console.log(url)
+
+  console.log('thisis vercelurl: ', process.env.VERCEL_URL)
+
+  // const apiHost = process.env.NEXT_PUBLIC_API_HOST || '';
+  // const url = `${apiHost}/api/ikigai`;
+  // console.log(''url'')
     
-    fetch(url)
+    fetch("/api/ikigai")
   .then((response) => response.json())
   .then((data) => {
     console.log('API Response:', data);
