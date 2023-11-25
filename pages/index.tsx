@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Inter } from 'next/font/google';
 import IkigaiBoard from '@/components/ikigai/ikigaiBoard';
-import IkigaiEmptyState from '@/components/ikigai/emptyState'; // Ensure to import the IkigaiEmptyState component
-import { initialItems } from "@/lib/dummyData";
+import IkigaiEmptyState from '@/components/ikigai/emptyState'; 
 import { IkigaiItems } from '@/lib/types';
 import loadIkigaiBoard from '@/lib/loadBoard';
 

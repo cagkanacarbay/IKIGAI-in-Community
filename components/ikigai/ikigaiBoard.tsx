@@ -195,7 +195,6 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
       const updatedIkigaiItems = JSON.parse(JSON.stringify(ikigaiItems));
       await saveIkigaiBoardItems(updatedIkigaiItems);
   };
-
   
 
   return (

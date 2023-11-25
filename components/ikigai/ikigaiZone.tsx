@@ -11,6 +11,7 @@ import { Position } from '@/lib/types';
 import IkigaiZoneIcon from './ikigaiZoneLogo';
 import {HandleAddIkigaiImageArgs} from "@/lib/types"
 import Icon from '@/components/icons';
+import { uploadImageToStorageProvider } from '@/lib/storage';
 
 interface IkigaiZoneProps {
   name: string;
@@ -83,15 +84,25 @@ const IkigaiZone: React.FC<IkigaiZoneProps> = ({ name, color, handleAddTag, hand
     imageUploadInputRef.current?.click();  
   }
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      // save the image as a blob on the client and put the image on the board
       const imageUrl = URL.createObjectURL(file);
-      // Using current mouse position for new image's position
-      // console.log("sending image to uplaod with pos: ", position)
-      handleAddIkigaiImage({imageUrl, position}); 
+      handleAddIkigaiImage({ imageUrl, position });
+  
+      // // send the image to vercel blob
+      // const uploadedUrl = await uploadImageToStorageProvider(file);
+  
+      // if (uploadedUrl) {
+      //   // Use the returned URL for the uploaded image
+      //   handleAddIkigaiImage({ imageUrl: uploadedUrl, position });
+
+      // }
     }
   };
+  
+
 
   return (
     <div onContextMenu={handleContextMenu}>
