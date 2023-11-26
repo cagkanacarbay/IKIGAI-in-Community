@@ -17,15 +17,10 @@ async function uploadImageToStorageProvider(file: File): Promise<string | null> 
 
     const compressedFile = await compressedFilePromise as File;
 
-    console.log(file)
-    console.log(compressedFile)
-
-    
-
     const formData = new FormData();
     formData.append('file', compressedFile);
 
-    const response = await fetch('/api/ikigai', {
+    const response = await fetch('/api/storage/image', {
       method: 'POST',
       body: formData,
     });

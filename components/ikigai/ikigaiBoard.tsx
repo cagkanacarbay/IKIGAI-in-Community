@@ -201,21 +201,28 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
     }
   }
 
+  // const handleSaveBoardLocally = async () => {
+  //     // Saves ikigaiItems in a zip file with a JSON that refers to items prop
+  //     // Images are also saved in the zip to images/...
+  //     const updatedIkigaiItems = JSON.parse(JSON.stringify(ikigaiItems));
+  //     await saveIkigaiBoardItems(updatedIkigaiItems);
+  // };
+
   const handleSaveBoard = async () => {
-      // Saves ikigaiItems in a zip file with a JSON that refers to items prop
-      // Images are also saved in the zip to images/...
-      const updatedIkigaiItems = JSON.parse(JSON.stringify(ikigaiItems));
-      await saveIkigaiBoardItems(updatedIkigaiItems);
+    // uploads the board to the database
+    const response = await fetch('/api/ikigai', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(ikigaiItems),
+    });
+  
+    const result = await response.json();
+    console.log("Ikigai uploaded to the database. see below result")
+    console.log(result)
   };
   
-  // useEffect(() => {
-  //   // Save ikigaiItems in the local storage whenever there is an update.
-  //   // console.log("updating local storage")
-  //   // localStorage.setItem('ikigaiItems', JSON.stringify(ikigaiItems));
-  //   const savedItems = localStorage.getItem('ikigaiItems');
-
-  //   console.log(savedItems)
-  // }, [ikigaiItems]);
 
   return (
 
