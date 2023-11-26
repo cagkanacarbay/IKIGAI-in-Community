@@ -131,12 +131,12 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
   const handleAddIkigaiImage = ({
     imageUrl,
     position,
-    replacedImageId
+    id
   }: HandleAddIkigaiImageArgs) => {
     console.log(position)
       if (mainContainerRef.current) {
       const computedPosition = computeBoardPositionFromPixelPosition(position, mainContainerRef);
-      const imageId = replacedImageId || `image ${Date.now()}`; // Use provided imageId or generate one
+      const imageId = id || `image ${Date.now()}`; // Use provided imageId or generate one
 
       const newImage: IkigaiItem = {
         type: 'image',
@@ -151,6 +151,18 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
 
     }
   };
+
+  const updateIkigaiImageStorageUrl = (id: string, storageUrl: string) => {
+    setIkigaiItems(prevItems => {
+      const updatedItems = { ...prevItems };
+      if (updatedItems[id]) {
+        updatedItems[id] = { ...updatedItems[id], storageUrl };
+      }
+      console.log(updatedItems[id])
+
+      return updatedItems;
+    });
+  };  
 
   const handleItemDragEnd = (itemId: string) => {
     setTimeout(() => {
@@ -196,6 +208,14 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
       await saveIkigaiBoardItems(updatedIkigaiItems);
   };
   
+  // useEffect(() => {
+  //   // Save ikigaiItems in the local storage whenever there is an update.
+  //   // console.log("updating local storage")
+  //   // localStorage.setItem('ikigaiItems', JSON.stringify(ikigaiItems));
+  //   const savedItems = localStorage.getItem('ikigaiItems');
+
+  //   console.log(savedItems)
+  // }, [ikigaiItems]);
 
   return (
 
@@ -258,6 +278,7 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
               name="What you love"
               color="red"
               handleAddTag={handleAddIkigaiTag} handleAddIkigaiImage={handleAddIkigaiImage}
+              updateIkigaiImageStorageUrl={updateIkigaiImageStorageUrl}
             />
           </div>
           <div className="absolute top-1/2 left-4 transform -translate-y-1/2 z-10 hover:z-20">
@@ -265,6 +286,7 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
               name="What you are good at"
               color="blue"
               handleAddTag={handleAddIkigaiTag} handleAddIkigaiImage={handleAddIkigaiImage}
+              updateIkigaiImageStorageUrl={updateIkigaiImageStorageUrl}
             />
           </div>
           <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10 hover:z-20">
@@ -272,6 +294,7 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
               name="What you can be paid for"
               color="yellow"
               handleAddTag={handleAddIkigaiTag} handleAddIkigaiImage={handleAddIkigaiImage}
+              updateIkigaiImageStorageUrl={updateIkigaiImageStorageUrl}
             />
           </div>
           <div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-10 hover:z-20">
@@ -279,6 +302,7 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
               name="What the world needs"
               color="green"
               handleAddTag={handleAddIkigaiTag} handleAddIkigaiImage={handleAddIkigaiImage}
+              updateIkigaiImageStorageUrl={updateIkigaiImageStorageUrl}
             />
           </div>
         </div>

@@ -13,6 +13,18 @@ export default function Home() {
   const [showEmptyState, setShowEmptyState] = useState(true);
   const [boardLoaded, setBoardLoaded] = useState(false);
   // const [items, setItems] = useState({});
+
+
+  useEffect(() => {
+    // Check local storage for saved ikigaiItems
+    const savedItems = localStorage.getItem('ikigaiItems');
+    console.log(savedItems)
+    if (savedItems) {
+      setItems(JSON.parse(savedItems));
+      setShowEmptyState(false); 
+      setBoardLoaded(true);     
+    }
+  }, []);
   
   const handleLoadIkigai = async (file: File) => {
     const ikigaiItems = await loadIkigaiBoard(file);
@@ -23,11 +35,42 @@ export default function Home() {
   };
 
   useEffect(() => {
-    console.log("Updated items state", items);
     if (boardLoaded) {
+      console.log("Updated items state", items);
       setShowEmptyState(false);
+      localStorage.setItem('ikigaiItems', JSON.stringify(items));
+      const savedItems = localStorage.getItem('ikigaiItems');
+
+      console.log(savedItems)
     }
   }, [items, boardLoaded]);
+
+  useEffect(() => {
+    const fetchAndCreateBlobUrls = async () => {
+      const updatedItems = { ...items };
+  
+      for (const key in items) {
+        const item = items[key];
+        if (item.type === 'image' && item.storageUrl) {
+          try {
+            const response = await fetch(item.storageUrl);
+            const blob = await response.blob();
+            const blobUrl = URL.createObjectURL(blob);
+            updatedItems[key] = { ...item, imageUrl: blobUrl };
+          } catch (error) {
+            console.error('Error fetching image:', error);
+          }
+        }
+      }
+  
+      setItems(updatedItems);
+    };
+  
+    if (boardLoaded) {
+      fetchAndCreateBlobUrls();
+    }
+  }, [boardLoaded]);
+  
 
   return (
     <main className={`flex min-h-screen flex-col items-center justify-between ${inter.className}`}>
