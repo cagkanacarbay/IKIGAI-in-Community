@@ -1,56 +1,65 @@
 import React from 'react';
-import {Card, CardBody, CardFooter} from '@material-tailwind/react';
+import { 
+  Card, CardBody, CardHeader, Avatar,
+  Typography, CardFooter, Carousel 
+} from '@material-tailwind/react';
 
 
 interface IkigaiCardProps {
   userName: string;
   userAvatar: string;
-  images: string[]; // URLs of images
+  images: string[]; 
   tags: string[];
 }
 
 const IkigaiCard: React.FC<IkigaiCardProps> = ({ userName, userAvatar, images, tags }) => {
   return (
-    <Card>
-      <div className="flex space-x-2 p-2">
-        {images.slice(0, 4).map((image, index) => (
-        <img
-            className="h-96 w-full object-cover object-center"
-            key={index} src={image}
-            alt={`Ikigai ${index}`}
-        />
-        ))}
-      </div>
 
-      <CardBody>
-        <div className="flex items-center space-x-4">
-            <img
-                className="h-96 w-full object-cover object-center rounded-full"
-                src={userAvatar}
-                alt={`${userName}s Avatar`} 
-            />
-          <h4 className="text-xl">{userName}s IKIGAI</h4>
-        </div>
-        <div className="flex flex-wrap gap-2 mt-2">
+    <Card className="max-w-sm mx-auto bg-blue-gray-200">
+      <CardHeader
+            // variant="filled"
+            color="white"
+            className="flex items-center justify-center px-6 shadow-md "
+            floated={false}
+            shadow={false}
+          >
+          <div className="flex-grow border-t border-gray-700"></div>
+          <Avatar
+            size="sm"
+            variant="circular"
+            alt={userName}
+            src={userAvatar}
+            className="border-2 border-white hover:z-10"
+          />
+          <Typography variant="h5" color="black" className='px-2'>
+            {userName}
+          </Typography>
+          <div className="flex-grow border-t border-gray-700"></div>
+      </CardHeader>
+      <CardBody className=''>
+        <Carousel className="rounded-md shadow-md rounded-xl">
+          {images.map((image, index) => (
+            <div key={index} className="h-48 md:h-64 w-full relative rounded-xl "> {/* Adjust the height here */}
+              <img
+                key={index}
+                src={image}
+                alt={`Ikigai ${index}`}
+                className="h-full w-full object-contain rounded-xl"
+              />
+            </div>
+          ))}
+        </Carousel>  
+
+      </CardBody>
+      <CardFooter className='pt-0 bg-blue-gray-200'>
+        <div className="flex flex-wrap justify-center gap-1">
           {tags.map((tag, index) => (
-            <span key={index} className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
+            <span key={index} className="rounded-full shadow-xs px-3 py-1 text-sm text-black bg-white m-1">
               {tag}
             </span>
           ))}
         </div>
-      </CardBody>
-
-      {/* <CardFooter>
-        <button className="btn btn-icon-only rounded-circle">
-          <Icon name="settings" className="sm" />
-        </button>
-        <button className="btn btn-icon-only rounded-circle">
-          <Icon name="edit" className="sm" />
-        </button>
-        <button className="btn btn-icon-only rounded-circle">
-          <Icon name="more_vert" className="sm" />
-        </button>
-      </CardFooter> */}
+      </CardFooter>
     </Card>
   );
 };

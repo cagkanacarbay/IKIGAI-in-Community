@@ -1,5 +1,6 @@
 import IkigaiCard from "@/components/gallery/ikigaiCard";
 import React, { useEffect, useState } from 'react';
+import { Carousel } from "@material-tailwind/react";
 
 interface Ikigai {
   id: number;
@@ -33,15 +34,16 @@ const GalleryPage: React.FC = () => {
 
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 ">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
       {Object.entries(ikigais).map(([ikigaiId, ikigaiData]) => (
         <IkigaiCard
             key={ikigaiId}
-            userName="Dummy User"
+            userName="Cha Khan Cho"
             userAvatar="/images/logo.png"
-            images={ikigaiData.images.slice(0, 4)}
-            tags={ikigaiData.tags.slice(0, 8)}
+            images={ikigaiData.images}
+            tags={ikigaiData.tags}
         />
         ))}
       </div>
