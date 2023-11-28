@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@libsql/client": "^0.3.6",
     "@material-tailwind/react": "^2.1.4",
+    "@prisma/adapter-libsql": "^5.6.0",
     "@prisma/client": "^5.6.0",
     "@radix-ui/react-context-menu": "^2.1.5",
     "@radix-ui/react-dialog": "^1.0.5",

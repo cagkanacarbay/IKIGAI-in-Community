@@ -1,40 +1,48 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+  connection_limit=1
+  connect_timeout=10
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
-
+  provider = "sqlite"
+  url      = "file:./dev.db"
+  
 }
 
 model ikigai {
-    @@map("ikigai") // Maps to the 'ikigai' table in the database
-
   ikigai_id Int     @id @default(autoincrement())
+  user_id   Int     // Foreign key to reference User
+  user      user    @relation(fields: [user_id], references: [id], onDelete: Cascade)
   items     items[]
 }
 
 model items {
-    @@map("items") // Maps to the 'ikigai' table in the database
-
-  item_id   Int         @id @default(autoincrement())
-  type      String      @db.VarChar(255)
-  text      String?     @db.VarChar(255)
-  image_url String?     @db.VarChar(255)
+  item_id   Int       @id @default(autoincrement())
+  type      String
+  text      String?
+  image_url String?
   ikigai_id Int?
-  ikigai    ikigai?     @relation(fields: [ikigai_id], references: [ikigai_id], onDelete: NoAction, onUpdate: NoAction)
+  ikigai    ikigai?   @relation(fields: [ikigai_id], references: [ikigai_id], onDelete: NoAction, onUpdate: NoAction)
   positions positions[]
 }
 
 model positions {
-    @@map("positions") // Maps to the 'ikigai' table in the database
-
-  position_id Int       @id @default(autoincrement())
+  position_id Int      @id @default(autoincrement())
   item_id     Int
   x_position  Float
   y_position  Float
-  timestamp   DateTime? @default(now()) @db.Timestamp(6)
-  items       items     @relation(fields: [item_id], references: [item_id], onDelete: NoAction, onUpdate: NoAction)
+  timestamp   DateTime? @default(now())
+  items       items    @relation(fields: [item_id], references: [item_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model user {
+  id           Int       @id @default(autoincrement())
+  username     String    @unique
+  email        String    @unique
+  password_hash String
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+  ikigais      ikigai[]
 }
