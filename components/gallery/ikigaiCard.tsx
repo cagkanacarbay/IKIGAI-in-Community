@@ -24,13 +24,13 @@ const IkigaiCard: React.FC<IkigaiCardProps> = ({ userName, userAvatar, images, t
             shadow={false}
           >
           <div className="flex-grow border-t border-gray-700"></div>
-          <Avatar
+          {/* <Avatar
             size="sm"
             variant="circular"
             alt={userName}
             src={userAvatar}
             className="border-2 border-white hover:z-10"
-          />
+          /> */}
           <Typography variant="h5" color="black" className='px-2'>
             {userName}
           </Typography>
