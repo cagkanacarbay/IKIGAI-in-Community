@@ -64,7 +64,7 @@ const IkigaiImage: React.FC<IkigaiImageProps> = ({
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       // Using current mouse position for new image's position
-      handleReplaceIkigaiImage({imageUrl, position: {x: xCoordinateInPixel, y: yCoordinateInPixel}, replacedImageId: itemId}); 
+      handleReplaceIkigaiImage({imageUrl, position: {x: xCoordinateInPixel, y: yCoordinateInPixel}, id: itemId}); 
     }
   };
   

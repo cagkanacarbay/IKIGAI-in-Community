@@ -5,6 +5,9 @@ import { Prisma } from '@prisma/client';
 
 interface IkigaiData {
   [key: string]: {
+    id: number,
+    user_id: number,
+    username: string,
     tags: string[];
     images: string[];
   };
@@ -15,6 +18,7 @@ export async function GET() {
     const ikigais = await prisma.ikigai.findMany({
       include: {
         items: true, 
+        user: true
       },
     });
 
@@ -22,6 +26,9 @@ export async function GET() {
 
     for (const ikigai of ikigais) {
       ikigaiData[`${ikigai.ikigai_id}`] = {
+        id: ikigai.ikigai_id,
+        user_id: ikigai.user_id,
+        username: ikigai.user.username,
         tags: ikigai.items
           .filter(item => item.type === 'tag' && item.text !== null)
           .map(item => item.text as string), // Type assertion as string

@@ -109,32 +109,6 @@ const IkigaiZone: React.FC<IkigaiZoneProps> = ({ name, color, handleAddTag, hand
       }
     }
   };
-  
-
-  // const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = event.target.files?.[0];
-  //   if (file) {
-  //     if (file.size > 1048576) {
-  //       alert("File size should not exceed 1MB.");
-  //       return;
-  //     }
-  //     // save the image as a blob on the client and put the image on the board
-  //     const imageUrl = URL.createObjectURL(file);
-  //     handleAddIkigaiImage({ imageUrl, position });
-  
-  //     // send the image to vercel blob
-  //     const uploadedUrl = await uploadImageToStorageProvider(file);
-  //     console.log("got the uploaded url", uploadedUrl)
-  
-  //     if (uploadedUrl) {
-  //       // Use the returned URL for the uploaded image
-  //       handleAddIkigaiImage({ imageUrl: uploadedUrl, position });
-  //     }
-
-  //   }
-  // };
-  
-
 
   return (
     <div onContextMenu={handleContextMenu}>

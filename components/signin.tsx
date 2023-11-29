@@ -1,5 +1,6 @@
 import { signIn } from 'next-auth/react';
 import React, { useState } from 'react';
+import Link from 'next/link';
 
 export default function SignInForm() {
   const [username, setUsername] = useState('');
@@ -108,9 +109,9 @@ export default function SignInForm() {
   
             <p className="mt-10 text-center text-sm text-gray-500">
               Not a member?{' '}
-              <a href="/signup" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+              <Link href="/signup" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
                 Sign up here
-              </a>
+              </Link>
             </p>
           </div>
         </div>

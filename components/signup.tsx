@@ -2,6 +2,7 @@ import React, { useState, ChangeEvent, FormEvent } from "react";
 import { Card, Typography } from "@material-tailwind/react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 
 export function RegistrationForm() {
@@ -113,9 +114,9 @@ export function RegistrationForm() {
             </Button>
             <Typography color="gray" className="mt-4 text-center font-normal">
                 Already have an account?{" "}
-            <a href="/signin" className="font-medium text-gray-900">
+            <Link href="/signin" className="font-medium text-gray-900">
                 Sign In
-            </a>
+            </Link>
             </Typography>
         </form>
     </Card>

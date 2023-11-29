@@ -3,19 +3,26 @@ import {
   Card, CardBody, CardHeader, Avatar,
   Typography, CardFooter, Carousel 
 } from '@material-tailwind/react';
-
+import { useRouter } from 'next/router';
 
 interface IkigaiCardProps {
+  ikigaiId: string,
   userName: string;
-  userAvatar: string;
   images: string[]; 
   tags: string[];
 }
 
-const IkigaiCard: React.FC<IkigaiCardProps> = ({ userName, userAvatar, images, tags }) => {
+const IkigaiCard: React.FC<IkigaiCardProps> = ({ ikigaiId, userName, images, tags }) => {
+  const router = useRouter(); // Use the useRouter hook
+
+  // Click handler to navigate to the Ikigai details page
+  const handleCardClick = () => {
+    router.push(`/ikigai/${ikigaiId}`);
+  };
+
   return (
 
-    <Card className="max-w-sm mx-auto bg-blue-gray-200">
+    <Card className="max-w-sm mx-auto bg-blue-gray-200" onClick={handleCardClick}>
       <CardHeader
             // variant="filled"
             // color="white"
