@@ -1,11 +1,11 @@
 import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
-export const config = {
-    api: {
-      bodyParser: false,
-    },
-  };
+// export const config = {
+//     api: {
+//       bodyParser: false,
+//     },
+//   };
 
 export async function POST(request: Request): Promise<NextResponse> {
 
