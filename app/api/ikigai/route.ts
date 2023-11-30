@@ -342,18 +342,21 @@ export async function PATCH(req: NextRequest) {
     const requestBody = await req.json();
     console.log("requestBody:", requestBody)
     const userId = parseInt(token.sub as string, 10);
-    const { ikigaiId, ikigaiItems }: { ikigaiId: string; ikigaiItems: Record<string, IkigaiItem> } = requestBody;
-    const ikigaiIdNumber = Number(ikigaiId)
+    const ikigaiId: number = Number(requestBody.ikigaiId)
+    const ikigaiItems: Record<string, IkigaiItem> = requestBody.items
+    // const { ikigaiId, ikigaiItems }: { ikigaiId: string; ikigaiItems: Record<string, IkigaiItem> } = requestBody;
+    console.log(ikigaiItems)
 
     // Fetch the Ikigai to check ownership and existence
     const existingIkigai = await prisma.ikigai.findUnique({
-      where: { ikigai_id: ikigaiIdNumber },
+      where: { ikigai_id: ikigaiId },
       include: { items: true },
     });
 
     console.log(existingIkigai)
 
     if (!existingIkigai || existingIkigai.user_id !== userId) {
+      // If requester is not the owner, we wont allow ikigai to be updated. its not theirs. 
       return new Response(JSON.stringify({ message: 'Forbidden' }), {
         status: 403,
         headers: {
@@ -363,13 +366,15 @@ export async function PATCH(req: NextRequest) {
     }
 
     // Update Ikigai
-    await prisma.$transaction(async (prisma) => {
+    const updates = await prisma.$transaction(async (prisma) => {
       // Update existing items and their positions
+      console.log("makin a transaction")
+      console.log(ikigaiItems)
       for (const key in ikigaiItems) {
         const item = ikigaiItems[key];
 
         let existingItem = existingIkigai.items.find(i => i.item_id.toString() === key);
-
+        console.log("here is the existing item:", existingItem)
         
         if (existingItem) {
           // Update position
@@ -387,7 +392,7 @@ export async function PATCH(req: NextRequest) {
               type: item.type,
               text: item.text || '',
               image_url: item.storageUrl || '',
-              ikigai: { connect: { ikigai_id: ikigaiIdNumber } },
+              ikigai: { connect: { ikigai_id: ikigaiId } },
             },
           });
 
@@ -403,7 +408,7 @@ export async function PATCH(req: NextRequest) {
       }
     });
 
-    return new Response(JSON.stringify({ message: 'Ikigai board updated successfully' }), {
+    return new Response(JSON.stringify({ message: 'Ikigai board updated successfully', updates: updates }), {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
