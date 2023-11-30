@@ -1,9 +1,8 @@
-// app/api/ikigai/[ikigaiId].ts
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/prisma/client'; // Adjust the import path as necessary
+import { IkigaiItem } from '@/lib/types';
 
 export async function GET(req: NextRequest, { params }: { params: { ikigaiId: string }}) {
-  // Extract ikigaiId from the route parameter
   const ikigaiId = params.ikigaiId;
 
   try {
@@ -25,7 +24,16 @@ export async function GET(req: NextRequest, { params }: { params: { ikigaiId: st
             positions: true,
           },
         },
-        user: true,
+        user: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+            created_at: true,
+            updated_at: true,
+            // Exclude password_hash by not mentioning it or explicitly setting it to false
+          },
+        },
       },
     });
 
@@ -54,3 +62,45 @@ export async function GET(req: NextRequest, { params }: { params: { ikigaiId: st
     });
   }
 }
+
+
+
+// export async function POST(req: NextRequest, { params }: { params: { ikigaiId: string }}) {
+
+
+//   try {
+//     const ikigaiId = Number(params.ikigaiId);
+
+//     const ikigaiItems: Record<string, IkigaiItem> = await req.json();
+
+//     const result = await prisma.$transaction(async (prisma) => {
+//       const testUserId = 1; // TODO: Replace with the actual user ID
+
+//       const newIkigai = await prisma.ikigai.create({
+//         data: {
+//           user: { connect: { id: (ikigaiId } },
+//           items: {
+//             create: Object.values(ikigaiItems).map((item) => ({
+//               type: item.type,
+//               text: item.text,
+//               image_url: item.storageUrl,
+//               positions: {
+//                 create: {
+//                   x_position: item.position.x,
+//                   y_position: item.position.y,
+//                 },
+//               },
+//             })),
+//           },
+//         },
+//       });
+
+//       return newIkigai;
+//     });
+
+//     return NextResponse.json({ message: 'Ikigai board saved successfully', result }, { status: 200 });
+//   } catch (error) {
+//     console.error('Error saving Ikigai board:', error);
+//     return NextResponse.json({ error }, { status: 500 });
+//   }
+// }

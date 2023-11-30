@@ -32,5 +32,13 @@ export default NextAuth({
       }
     })
   ],
+  callbacks: {
+    async session({ session, token }) {
+      if (token.sub) {
+        session.user.id = token.sub; // Assuming `id` is stored in the token
+      }
+      return session;
+    },
+  },
   // Additional NextAuth configuration...
 });

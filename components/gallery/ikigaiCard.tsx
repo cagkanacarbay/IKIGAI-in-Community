@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  Card, CardBody, CardHeader, Avatar,
+  Card, CardBody, CardHeader,
   Typography, CardFooter, Carousel 
 } from '@material-tailwind/react';
 import { useRouter } from 'next/router';
@@ -13,16 +13,20 @@ interface IkigaiCardProps {
 }
 
 const IkigaiCard: React.FC<IkigaiCardProps> = ({ ikigaiId, userName, images, tags }) => {
-  const router = useRouter(); // Use the useRouter hook
+  const router = useRouter();
 
   // Click handler to navigate to the Ikigai details page
   const handleCardClick = () => {
     router.push(`/ikigai/${ikigaiId}`);
   };
 
+  const handleCarouselClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
+  };
+
   return (
 
-    <Card className="max-w-sm mx-auto bg-blue-gray-200" onClick={handleCardClick}>
+    <Card className="max-w-sm mx-auto bg-blue-gray-200 hover:bg-blue-gray-300" onClick={handleCardClick}>
       <CardHeader
             // variant="filled"
             // color="white"
@@ -44,7 +48,7 @@ const IkigaiCard: React.FC<IkigaiCardProps> = ({ ikigaiId, userName, images, tag
           <div className="flex-grow border-t border-gray-700"></div>
       </CardHeader>
       <CardBody className=''>
-        <Carousel className="rounded-md shadow-md rounded-xl bg-blue-gray-100">
+        <Carousel className="rounded-md shadow-md rounded-xl bg-blue-gray-100" onClick={handleCarouselClick}>
           {images.map((image, index) => (
             <div key={index} className="h-48 md:h-64 w-full relative rounded-xl "> {/* Adjust the height here */}
               <img
@@ -52,13 +56,14 @@ const IkigaiCard: React.FC<IkigaiCardProps> = ({ ikigaiId, userName, images, tag
                 src={image}
                 alt={`Ikigai ${index}`}
                 className="h-full w-full object-contain rounded-xl"
+                onClick={handleCarouselClick}
               />
             </div>
           ))}
         </Carousel>  
 
       </CardBody>
-      <CardFooter className='pt-0 bg-blue-gray-200'>
+      <CardFooter className='pt-0'>
         <div className="flex flex-wrap justify-center gap-1">
           {tags.map((tag, index) => (
             <span key={index} className="rounded-full shadow-xs px-3 py-1 text-sm text-black bg-white m-1">

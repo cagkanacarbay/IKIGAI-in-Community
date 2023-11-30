@@ -1,6 +1,5 @@
 import IkigaiCard from "@/components/gallery/ikigaiCard";
 import React, { useEffect, useState } from 'react';
-import { Carousel } from "@material-tailwind/react";
 
 interface Ikigai {
   id: number;
@@ -13,9 +12,6 @@ interface Ikigai {
 const GalleryPage: React.FC = () => {
   const [ikigais, setIkigais] = useState<Ikigai[]>([]);
 
-  // const apiHost = process.env.NEXT_PUBLIC_API_HOST || '';
-  // const url = `${apiHost}/api/ikigai`;
-    
   useEffect(() => {
     const fetchData = async () => {
       try {

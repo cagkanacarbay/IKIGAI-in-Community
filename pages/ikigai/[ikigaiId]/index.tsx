@@ -3,10 +3,13 @@ import { useRouter } from 'next/router';
 import IkigaiBoard from '@/components/ikigai/ikigaiBoard';
 import { Spinner } from "@material-tailwind/react";
 import { IkigaiItems, IkigaiItem, Position } from '@/lib/types';
+import { UserInDB } from '@/lib/types';
+
 
 export default function Ikigai() {
   const [items, setItems] = useState<IkigaiItems>({});
   const [isLoading, setIsLoading] = useState(false); 
+  const [user, setUser] = useState<UserInDB>();
   const router = useRouter();
   const { ikigaiId } = router.query;
 
@@ -20,6 +23,7 @@ export default function Ikigai() {
             throw new Error('Failed to fetch Ikigai');
           }
           const data = await response.json();
+          setUser(data.user);
 
           // Process items to add a position attribute
           const processedItems: IkigaiItems = {};
@@ -40,7 +44,8 @@ export default function Ikigai() {
               storageUrl: undefined // Add storageUrl if applicable
             };
           });
-
+          
+          console.log(data)
           console.log(processedItems);
           setItems(processedItems);
         } catch (error) {
@@ -65,7 +70,7 @@ export default function Ikigai() {
             Ikigai loading...
           </div>
         ) : (
-          <IkigaiBoard ikigaiItems={items} setIkigaiItems={setItems} />
+          <IkigaiBoard ikigaiItems={items} setIkigaiItems={setItems} ownerUser={user} ikigaiId={Array.isArray(ikigaiId) ? ikigaiId[0] : ikigaiId}/>
         )}
       </div>
     </main>
