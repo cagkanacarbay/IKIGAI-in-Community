@@ -8,10 +8,12 @@ import { UserInDB } from '@/lib/types';
 
 export default function Ikigai() {
   const [items, setItems] = useState<IkigaiItems>({});
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(true); 
   const [user, setUser] = useState<UserInDB>();
   const router = useRouter();
   const { ikigaiId } = router.query;
+
+  console.log("rendering Ikigai component again for ikigaiId: ", ikigaiId)
 
   useEffect(() => {
     const fetchIkigai = async () => {
@@ -45,6 +47,7 @@ export default function Ikigai() {
             };
           });
           
+          console.log("Here is the data from api/ikigai/ikigaiId")
           console.log(data)
           console.log(processedItems);
           setItems(processedItems);
@@ -53,6 +56,8 @@ export default function Ikigai() {
         } finally {
           setIsLoading(false); 
         }
+      } else {
+        setIsLoading(false);
       }
     };
 

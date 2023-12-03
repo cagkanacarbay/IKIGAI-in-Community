@@ -45,6 +45,7 @@ const IkigaiImage: React.FC<IkigaiImageProps> = ({
   };
 
   React.useEffect(() => {
+    console.log("Mounted a new image: ", itemId)
     document.addEventListener('mousedown', closeModal);
     return () => {
       document.removeEventListener('mousedown', closeModal);
