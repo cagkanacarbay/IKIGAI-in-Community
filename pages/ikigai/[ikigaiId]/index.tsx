@@ -62,7 +62,7 @@ export default function Ikigai() {
     };
 
     fetchIkigai();
-  }, [ikigaiId]);
+  }, []);
   
 
   return (
