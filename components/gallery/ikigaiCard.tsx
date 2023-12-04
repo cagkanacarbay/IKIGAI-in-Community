@@ -15,6 +15,8 @@ interface IkigaiCardProps {
 const IkigaiCard: React.FC<IkigaiCardProps> = ({ ikigaiId, userName, images, tags }) => {
   const router = useRouter();
 
+  console.log("Rendering the ikigai card with id: ", ikigaiId)
+
   // Click handler to navigate to the Ikigai details page
   const handleCardClick = () => {
     router.push(`/ikigai/${ikigaiId}`);

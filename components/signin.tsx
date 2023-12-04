@@ -9,7 +9,7 @@ export default function SignInForm() {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    setError(''); // Clear any existing errors
+    setError('');
 
     // Call NextAuth.js signIn method
     const result = await signIn('credentials', {
