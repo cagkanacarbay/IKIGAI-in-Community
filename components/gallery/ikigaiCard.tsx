@@ -19,7 +19,8 @@ const IkigaiCard: React.FC<IkigaiCardProps> = ({ ikigaiId, userName, images, tag
 
   // Click handler to navigate to the Ikigai details page
   const handleCardClick = () => {
-    router.push(`/ikigai/${ikigaiId}`);
+    console.log("should push to ikigaiId but its commented for now")
+    // router.push(`/ikigai/${ikigaiId}`);
   };
 
   const handleCarouselClick = (event: React.MouseEvent) => {
@@ -39,9 +40,8 @@ const IkigaiCard: React.FC<IkigaiCardProps> = ({ ikigaiId, userName, images, tag
           <div className="flex-grow border-t border-gray-700"></div>
       </CardHeader>
       <CardBody>
-        <div>yoyoyoyo should be a carousel but nonono</div>
-        {/* <Carousel className="rounded-md shadow-md rounded-xl bg-blue-gray-100" onClick={handleCarouselClick}> */}
-          {/* {images.map((image, index) => (
+        <Carousel className="rounded-md shadow-md rounded-xl bg-blue-gray-100" onClick={handleCarouselClick}>
+          {images.map((image, index) => (
             <div key={index} className="h-48 md:h-64 w-full relative rounded-xl "> 
               <img
                 key={index}
@@ -51,8 +51,8 @@ const IkigaiCard: React.FC<IkigaiCardProps> = ({ ikigaiId, userName, images, tag
                 onClick={handleCarouselClick}
               />
             </div>
-          ))} */}
-        {/* </Carousel>   */}
+          ))}
+        </Carousel>  
 
       </CardBody>
       <CardFooter className='pt-0'>
