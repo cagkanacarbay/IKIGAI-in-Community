@@ -30,29 +30,18 @@ const IkigaiCard: React.FC<IkigaiCardProps> = ({ ikigaiId, userName, images, tag
 
     <Card className="max-w-sm mx-auto bg-blue-gray-200 hover:bg-blue-gray-300" onClick={handleCardClick}>
       <CardHeader
-            // variant="filled"
-            // color="white"
             className="flex items-center justify-center px-6 shadow-md bg-blue-gray-100"
             floated={false}
             shadow={false}
           >
           <div className="flex-grow border-t border-gray-700"></div>
-          {/* <Avatar
-            size="sm"
-            variant="circular"
-            alt={userName}
-            src={userAvatar}
-            className="border-2 border-white hover:z-10"
-          /> */}
-          <Typography variant="h5" color="black" className='px-2'>
-            {userName}
-          </Typography>
+          <Typography variant="h5" color="black" className='px-2'>{userName}</Typography>
           <div className="flex-grow border-t border-gray-700"></div>
       </CardHeader>
-      <CardBody className=''>
+      <CardBody>
         <Carousel className="rounded-md shadow-md rounded-xl bg-blue-gray-100" onClick={handleCarouselClick}>
-          {images.map((image, index) => (
-            <div key={index} className="h-48 md:h-64 w-full relative rounded-xl "> {/* Adjust the height here */}
+          {/* {images.map((image, index) => (
+            <div key={index} className="h-48 md:h-64 w-full relative rounded-xl "> 
               <img
                 key={index}
                 src={image}
@@ -61,7 +50,7 @@ const IkigaiCard: React.FC<IkigaiCardProps> = ({ ikigaiId, userName, images, tag
                 onClick={handleCarouselClick}
               />
             </div>
-          ))}
+          ))} */}
         </Carousel>  
 
       </CardBody>
