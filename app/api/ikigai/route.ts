@@ -3,6 +3,7 @@ import type { IkigaiItem, Position } from '@/lib/types';
 import prisma from '@/prisma/client';
 import { Prisma } from '@prisma/client';
 import { getToken } from 'next-auth/jwt';
+import { useId } from 'react';
 
 interface IkigaiData {
   [key: string]: {
@@ -46,214 +47,6 @@ export async function GET() {
   }
 }
 
-interface IkigaiRequestBody {
-  ikigaiItems: Record<string, IkigaiItem>;
-  ikigaiId: number;
-  userId: number;
-}
-
-// export async function POST(req: NextRequest) {
-//   console.log("Received a request to save Ikigai in DB");
-
-//   // Retrieve the user session token
-//   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-//   console.log(token);
-
-//   // Check for user authentication
-//   if (!token) {
-//     return new Response(JSON.stringify({ message: 'Unauthorized' }), {
-//       status: 401,
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//     });
-//   }
-
-//   try {
-//     const requestBody: IkigaiRequestBody = await req.json();
-//     console.log(requestBody);
-
-//     const loggedInUserId = parseInt(token.sub as string, 10);
-
-//     // Handling the case where ikigaiId is undefined (new Ikigai creation)
-//     if (!requestBody.ikigaiId) {
-//       // Create a new Ikigai
-//       const newIkigai = await prisma.ikigai.create({
-//         data: {
-//           user: { connect: { id: loggedInUserId } },
-//           items: {
-//             create: Object.values(requestBody.ikigaiItems).map((item) => ({
-//               type: item.type,
-//               text: item.text,
-//               image_url: item.storageUrl,
-//               positions: {
-//                 create: {
-//                   x_position: item.position.x,
-//                   y_position: item.position.y,
-//                 },
-//               },
-//             })),
-//           },
-//         },
-//       });
-
-//       return new Response(JSON.stringify({ message: 'New Ikigai board created successfully', newIkigai }), {
-//         status: 201,
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//       });
-//     } else {
-//       // Updating an existing Ikigai
-//       const ikigai = await prisma.ikigai.findUnique({
-//         where: { ikigai_id: requestBody.ikigaiId },
-//       });
-
-//       // Check if the Ikigai exists and the user is the owner
-//       if (!ikigai || ikigai.user_id !== loggedInUserId) {
-//         return new Response(JSON.stringify({ message: 'Forbidden' }), {
-//           status: 403,
-//           headers: {
-//             'Content-Type': 'application/json',
-//           },
-//         });
-//       }
-
-//       // Update the existing Ikigai (this part can be expanded as needed)
-//       // ...
-
-//       return new Response(JSON.stringify({ message: 'Ikigai board updated successfully' }), {
-//         status: 200,
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//       });
-//     }
-//   } catch (error) {
-//     console.error('Error processing Ikigai board:', error);
-//     return new Response(JSON.stringify({ error: 'Internal server error' }), {
-//       status: 500,
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//     });
-//   }
-// }
-
-// export async function POST(req: NextRequest) {
-//   console.log("got  a request to save ikigai in db")
-//   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-//   console.log(token)
-
-//   if (!token) {
-//     return new Response(JSON.stringify({ message: 'Unauthorized' }), {
-//       status: 401,
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//     });
-//   }
-
-//   try {
-//     const requestBody: IkigaiRequestBody = await req.json();
-//     console.log(requestBody)
-//     console.log("request body here: ", requestBody.ikigaiId)
-//     const loggedInUserId = parseInt(token.sub as string, 10);
-
-//     // Fetch the Ikigai to check ownership. Only owners can make updates to their Ikigai.
-//     const ikigai = await prisma.ikigai.findUnique({
-//       where: { ikigai_id: requestBody.ikigaiId },
-//     });
-
-//     // Check if the Ikigai exists and the user is the owner
-//     if (!ikigai || ikigai.user_id !== loggedInUserId) {
-//       return new Response(JSON.stringify({ message: 'Forbidden' }), {
-//         status: 403,
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//       });
-//     }
-
-//     const result = await prisma.$transaction(async (prisma) => {
-//       const newIkigai = await prisma.ikigai.create({
-//         data: {
-//           user: { connect: { id: loggedInUserId } },
-//           items: {
-//             create: Object.values(requestBody.ikigaiItems).map((item) => ({
-//               type: item.type,
-//               text: item.text,
-//               image_url: item.storageUrl,
-//               positions: {
-//                 create: {
-//                   x_position: item.position.x,
-//                   y_position: item.position.y,
-//                 },
-//               },
-//             })),
-//           },
-//         },
-//       });
-
-//       return newIkigai;
-//     });
-
-//     return new Response(JSON.stringify({ message: 'Ikigai board saved successfully', result }), {
-//       status: 200,
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//     });
-//   } catch (error) {
-//     console.error('Error saving Ikigai board:', error);
-//     return new Response(JSON.stringify({ error: 'Internal server error' }), {
-//       status: 500,
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//     });
-//   }
-// }
-
-// export async function POST(req: NextRequest) {
-//   try {
-//     const ikigaiItems: Record<string, IkigaiItem> = await req.json();
-
-//     const result = await prisma.$transaction(async (prisma) => {
-//       const testUserId = 1; // TODO: Replace with the actual user ID
-
-//       const newIkigai = await prisma.ikigai.create({
-//         data: {
-//           user: { connect: { id: testUserId } },
-//           items: {
-//             create: Object.values(ikigaiItems).map((item) => ({
-//               type: item.type,
-//               text: item.text,
-//               image_url: item.storageUrl,
-//               positions: {
-//                 create: {
-//                   x_position: item.position.x,
-//                   y_position: item.position.y,
-//                 },
-//               },
-//             })),
-//           },
-//         },
-//       });
-
-//       return newIkigai;
-//     });
-
-//     return NextResponse.json({ message: 'Ikigai board saved successfully', result }, { status: 200 });
-//   } catch (error) {
-//     console.error('Error saving Ikigai board:', error);
-//     return NextResponse.json({ error }, { status: 500 });
-//   }
-// }
-
-
-// ========= LATEST BELOW 15:20 =======
-
 export async function POST(req: NextRequest) {
   // Retrieve the user session token
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
@@ -272,11 +65,14 @@ export async function POST(req: NextRequest) {
     const userId = parseInt(token.sub as string, 10); // Assuming the user ID is stored in the token's 'sub' field
     const ikigaiItems: Record<string, IkigaiItem> = requestBody.items;
 
+    console.log("this is the userId:", userId)
+    console.log(requestBody)
+
     const result = await prisma.$transaction(async (prisma) => {
       // Create new Ikigai
       const newIkigai = await prisma.ikigai.create({
         data: {
-          user: { connect: { id: userId } },
+          user: { connect: { id: requestBody.userId } },
         },
       });
 

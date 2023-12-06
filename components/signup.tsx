@@ -3,11 +3,12 @@ import { Card, Typography } from "@material-tailwind/react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
+import { useRouter } from "next/router";
 
 export function RegistrationForm() {
   const [formData, setFormData] = useState({ username: '', email: '', password: '' });
   const [validationMsg, setValidationMsg] = useState({ username: '', email: '', password: '' });
+  const router = useRouter();
 
   const validateInput = (name: string, value: string) => {
     let msg = '';
@@ -52,7 +53,7 @@ export function RegistrationForm() {
   
       if (response.ok) {
         alert('User registered successfully');
-        // Additional logic after successful registration, like redirecting
+        router.push(`/signin`);
       } else {
         alert(`Registration failed: ${data.message}`);
       }

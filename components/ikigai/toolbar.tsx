@@ -7,7 +7,6 @@ interface ToolbarProps {
 }
 
 const Toolbar: React.FC<ToolbarProps> = ({ handleSaveBoard }) => {
-  console.log("rendering toolbar")
   return (
     <div>
       <Button className="absolute top-1 left-1" onClick={handleSaveBoard}>Save Board</Button>

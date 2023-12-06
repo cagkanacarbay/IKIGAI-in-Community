@@ -13,7 +13,6 @@ export default function Ikigai() {
   const router = useRouter();
   const { ikigaiId } = router.query;
 
-  console.log("rendering Ikigai component for ikigaiId: ", ikigaiId)
 
   useEffect(() => {
     const fetchIkigai = async () => {
