@@ -45,6 +45,7 @@ const IkigaiImage: React.FC<IkigaiImageProps> = ({
   };
 
   React.useEffect(() => {
+    console.log("Mounted a new image: ", itemId)
     document.addEventListener('mousedown', closeModal);
     return () => {
       document.removeEventListener('mousedown', closeModal);
@@ -64,7 +65,7 @@ const IkigaiImage: React.FC<IkigaiImageProps> = ({
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       // Using current mouse position for new image's position
-      handleReplaceIkigaiImage({imageUrl, position: {x: xCoordinateInPixel, y: yCoordinateInPixel}, replacedImageId: itemId}); 
+      handleReplaceIkigaiImage({imageUrl, position: {x: xCoordinateInPixel, y: yCoordinateInPixel}, id: itemId}); 
     }
   };
   

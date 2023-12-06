@@ -34,6 +34,7 @@ const IkigaiTag: React.FC<IkigaiTagProps> = ({
     isNew, handleNewTagRegistered}
   ) => {
 
+    console.log("rendering tag:", itemId)
   const inputRef = useRef<HTMLInputElement>(null);
   const tagDivRef = useRef<HTMLDivElement>(null);
   const [editableText, setEditableText] = useState<string>(tagItem.text || "");

@@ -1,5 +1,12 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+/** 
+/**
+ * @type {import('@types/tailwindcss/tailwind-config').TailwindConfig}
+ */
+
+import withMT from "@material-tailwind/react/utils/withMT";
+
+
+module.exports = withMT({
   darkMode: ["class"],
   content: [
     './pages/**/*.{ts,tsx}',
@@ -25,6 +32,15 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: 0 },
         },
+        transitionDuration: {
+          '1500': '1500ms',
+          '2000': '2000ms',
+          '3000': '3000ms',
+        },
+        backdropFilter: {
+          'none': 'none',
+          'blur': 'blur(15px)',
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -32,5 +48,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-}
+  plugins: [require("tailwindcss-animate"), require('@tailwindcss/forms')],
+});

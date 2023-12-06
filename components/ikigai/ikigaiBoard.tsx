@@ -9,6 +9,9 @@ import { computeBoardPositionFromRects, computeBoardPositionFromPixelPosition } 
 import debounce from '@/lib/debounce';
 import { saveIkigaiBoardItems } from "@/lib/saveBoard"
 import Toolbar from './toolbar';
+import { UserInDB } from '@/lib/types';
+import { useSession } from 'next-auth/react';
+
 
 type ZoomUpdateParams = {
   x: number;
@@ -20,10 +23,12 @@ interface IkigaiBoardProps {
   // items?: IkigaiItems;
   ikigaiItems: IkigaiItems,
   setIkigaiItems: React.Dispatch<React.SetStateAction<IkigaiItems>>;
+  ownerUser?: UserInDB;
+  ikigaiId?: String;
 };
 
 
-const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }) => {
+const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems, ownerUser, ikigaiId }) => {
 
   const mainContainerRef = useRef<HTMLDivElement | null>(null);
   const ikigaiBoardRef = useRef<HTMLDivElement | null>(null);
@@ -45,6 +50,8 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
 
   // Set newTagId when a new tag is created so we can set focus on it for user to edit tag
   const [newTagId, setNewTagId] = useState<string | null>(null);
+
+  const { data: session } = useSession();
 
   const handleNewTagRegistered = () => {
     // when a new tag is registered (the user types something or presses ESC), 
@@ -131,12 +138,12 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
   const handleAddIkigaiImage = ({
     imageUrl,
     position,
-    replacedImageId
+    id
   }: HandleAddIkigaiImageArgs) => {
     console.log(position)
       if (mainContainerRef.current) {
       const computedPosition = computeBoardPositionFromPixelPosition(position, mainContainerRef);
-      const imageId = replacedImageId || `image ${Date.now()}`; // Use provided imageId or generate one
+      const imageId = id || `image ${Date.now()}`; // Use provided imageId or generate one
 
       const newImage: IkigaiItem = {
         type: 'image',
@@ -151,6 +158,18 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
 
     }
   };
+
+  const updateIkigaiImageStorageUrl = (id: string, storageUrl: string) => {
+    setIkigaiItems(prevItems => {
+      const updatedItems = { ...prevItems };
+      if (updatedItems[id]) {
+        updatedItems[id] = { ...updatedItems[id], storageUrl };
+      }
+      console.log(updatedItems[id])
+
+      return updatedItems;
+    });
+  };  
 
   const handleItemDragEnd = (itemId: string) => {
     setTimeout(() => {
@@ -189,13 +208,113 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
     }
   }
 
-  const handleSaveBoard = async () => {
-      // Saves ikigaiItems in a zip file with a JSON that refers to items prop
-      // Images are also saved in the zip to images/...
-      const updatedIkigaiItems = JSON.parse(JSON.stringify(ikigaiItems));
-      await saveIkigaiBoardItems(updatedIkigaiItems);
-  };
+  // const handleSaveBoardLocally = async () => {
+  //     // Saves ikigaiItems in a zip file with a JSON that refers to items prop
+  //     // Images are also saved in the zip to images/...
+  //     const updatedIkigaiItems = JSON.parse(JSON.stringify(ikigaiItems));
+  //     await saveIkigaiBoardItems(updatedIkigaiItems);
+  // };
 
+  const handleSaveBoard = async () => {
+    // Check if there's a logged-in user
+    if (!session || !session.user) {
+      alert('You must be logged in to save an Ikigai.');
+      return;
+    }
+  
+    // If there's a user prop, check if it matches the logged-in user
+    if (ownerUser && Number(session.user.id) !== ownerUser.id) {
+      alert('You can only save your own Ikigai.');
+      return;
+    }
+  
+    // Determine the API endpoint and method based on the presence of ikigaiId
+    const endpoint = '/api/ikigai';
+    const method = ikigaiId ? 'PATCH' : 'POST';
+  
+    // Prepare data to send to the API
+    const dataToSend = {
+      items: ikigaiItems,
+      userId: Number(session.user.id), // Sending the logged-in user ID
+      ikigaiId: ikigaiId, // This can be undefined for a new Ikigai
+    };
+  
+    // Upload the board to the database
+    const response = await fetch(endpoint, {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include', // Needed for sessions/cookies to work
+      body: JSON.stringify(dataToSend),
+    });
+  
+    const result = await response.json();
+    if (!response.ok) {
+      console.error('Failed to save Ikigai:', result.message);
+      alert("Failed to save IKIGAI. Please try again.");
+      return;
+    }
+  
+    console.log("Ikigai uploaded to the database. See below result:");
+    console.log(result);
+  };
+  
+  // const handleSaveBoard = async () => {
+  //   // Check if there's a logged-in user
+  //   if (!session || !session.user) {
+  //     alert('You must be logged in to save an Ikigai.');
+  //     return;
+  //   }
+  
+  //   // If there's a user prop, check if it matches the logged-in user
+  //   if (user && session.user.id !== user.id) {
+  //     alert('You can only save your own Ikigai.');
+  //     return;
+  //   }
+  
+  //   // Prepare data to send to the API
+  //   const dataToSend = {
+  //     items: ikigaiItems,
+  //     userId: session.user.id, // Sending the logged-in user ID
+  //     ikigaiId: ikigaiId, // This can be undefined for a new Ikigai
+  //   };
+  
+  //   // Upload the board to the database
+  //   const response = await fetch('/api/ikigai', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     credentials: 'include', // Needed for sessions/cookies to work
+  //     body: JSON.stringify(dataToSend),
+  //   });
+  
+  //   const result = await response.json();
+  //   if (!response.ok) {
+  //     console.error('Failed to save Ikigai:', result.message);
+  //     alert("Failed to save IKIGAI. Please try again. ");
+  //     return;
+  //   }
+  
+  //   console.log("Ikigai uploaded to the database. See below result:");
+  //   console.log(result);
+  // };
+  
+  // const handleSaveBoard = async () => {
+  //   // uploads the board to the database
+  //   const response = await fetch(`/api/ikigai/`, {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify(ikigaiItems),
+  //   });
+  
+  //   const result = await response.json();
+  //   console.log("Ikigai uploaded to the database. see below result")
+  //   console.log(result)
+  // };
   
 
   return (
@@ -259,6 +378,7 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
               name="What you love"
               color="red"
               handleAddTag={handleAddIkigaiTag} handleAddIkigaiImage={handleAddIkigaiImage}
+              updateIkigaiImageStorageUrl={updateIkigaiImageStorageUrl}
             />
           </div>
           <div className="absolute top-1/2 left-4 transform -translate-y-1/2 z-10 hover:z-20">
@@ -266,6 +386,7 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
               name="What you are good at"
               color="blue"
               handleAddTag={handleAddIkigaiTag} handleAddIkigaiImage={handleAddIkigaiImage}
+              updateIkigaiImageStorageUrl={updateIkigaiImageStorageUrl}
             />
           </div>
           <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10 hover:z-20">
@@ -273,6 +394,7 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
               name="What you can be paid for"
               color="yellow"
               handleAddTag={handleAddIkigaiTag} handleAddIkigaiImage={handleAddIkigaiImage}
+              updateIkigaiImageStorageUrl={updateIkigaiImageStorageUrl}
             />
           </div>
           <div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-10 hover:z-20">
@@ -280,6 +402,7 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems }
               name="What the world needs"
               color="green"
               handleAddTag={handleAddIkigaiTag} handleAddIkigaiImage={handleAddIkigaiImage}
+              updateIkigaiImageStorageUrl={updateIkigaiImageStorageUrl}
             />
           </div>
         </div>

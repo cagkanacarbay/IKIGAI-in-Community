@@ -18,6 +18,7 @@ export type IkigaiItem = {
   position: Position;
   text?: string;
   imageUrl?: string;
+  storageUrl?: string; // holds the blob URL at vercel
 };
 
 export type IkigaiItems = Record<string, IkigaiItem>;
@@ -26,5 +27,14 @@ export type IkigaiItems = Record<string, IkigaiItem>;
 export type HandleAddIkigaiImageArgs = {
   imageUrl: string;
   position: Position;
-  replacedImageId?: string;
+  id?: string;
 };
+
+
+export type UserInDB = {
+  id: number;
+  username: string;
+  email: string;
+  created_at: string; 
+  updated_at: string; 
+}

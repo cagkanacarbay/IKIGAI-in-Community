@@ -11,15 +11,17 @@ import { Position } from '@/lib/types';
 import IkigaiZoneIcon from './ikigaiZoneLogo';
 import {HandleAddIkigaiImageArgs} from "@/lib/types"
 import Icon from '@/components/icons';
+import { uploadImageToStorageProvider } from '@/lib/storage';
 
 interface IkigaiZoneProps {
   name: string;
   color: 'red' | 'green' | 'blue' | 'yellow';
   handleAddTag: (position: Position, tagText: string) => void; 
   handleAddIkigaiImage: (args: HandleAddIkigaiImageArgs) => void;
+  updateIkigaiImageStorageUrl: (id: string, storageUrl: string) => void; 
 }
 
-const IkigaiZone: React.FC<IkigaiZoneProps> = ({ name, color, handleAddTag, handleAddIkigaiImage}) => {
+const IkigaiZone: React.FC<IkigaiZoneProps> = ({ name, color, handleAddTag, handleAddIkigaiImage, updateIkigaiImageStorageUrl}) => {
 
   const colorClass = {
     red: 'bg-red-200 hover:bg-red-500',
@@ -83,13 +85,28 @@ const IkigaiZone: React.FC<IkigaiZoneProps> = ({ name, color, handleAddTag, hand
     imageUploadInputRef.current?.click();  
   }
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      if (file.size > 1048576) {
+        alert("File size should not exceed 1MB.");
+        return;
+      }
+  
+      // Create a unique ID for the image
+      const imageId = `image-${Date.now()}`;
+  
+      // Save the image as a blob on the client and put the image on the board
       const imageUrl = URL.createObjectURL(file);
-      // Using current mouse position for new image's position
-      // console.log("sending image to uplaod with pos: ", position)
-      handleAddIkigaiImage({imageUrl, position}); 
+      handleAddIkigaiImage({ imageUrl, position, id: imageId });
+    
+      // Send the image to Vercel Blob
+      const uploadedUrl = await uploadImageToStorageProvider(file);
+  
+      if (uploadedUrl) {
+        // Update the storageUrl of the existing image item
+        updateIkigaiImageStorageUrl(imageId, uploadedUrl);
+      }
     }
   };
 
