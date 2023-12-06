@@ -13,25 +13,21 @@ interface IkigaiCardProps {
 }
 
 const IkigaiCard: React.FC<IkigaiCardProps> = ({ ikigaiId, userName, images, tags }) => {
-  // const router = useRouter();
-
-  console.log("Rendering the ikigai card with id: ", ikigaiId)
+  const router = useRouter();
 
   // Click handler to navigate to the Ikigai details page
-  // const handleCardClick = () => {
-  //   console.log("should push to ikigaiId but its commented for now")
-  //   // router.push(`/ikigai/${ikigaiId}`);
-  // };
+  const handleCardClick = () => {
+    router.push(`/ikigai/${ikigaiId}`);
+  };
 
-  // const handleCarouselClick = (event: React.MouseEvent) => {
-  //   event.stopPropagation();
-  // };
+  const handleCarouselClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
+  };
 
   return (
 
-    // <div>yoyoyoyoy</div>
-    <Card className="max-w-sm mx-auto bg-blue-gray-200 hover:bg-blue-gray-300" >
-      {/* <CardHeader
+    <Card className="max-w-sm mx-auto bg-blue-gray-200 hover:bg-blue-gray-300" onClick={handleCardClick}>
+      <CardHeader
             className="flex items-center justify-center px-6 shadow-md bg-blue-gray-100"
             floated={false}
             shadow={false}
@@ -39,7 +35,7 @@ const IkigaiCard: React.FC<IkigaiCardProps> = ({ ikigaiId, userName, images, tag
           <div className="flex-grow border-t border-gray-700"></div>
           <Typography variant="h5" color="black" className='px-2'>{userName}</Typography>
           <div className="flex-grow border-t border-gray-700"></div>
-      </CardHeader> */}
+      </CardHeader>
       <CardBody>
         <Carousel className="rounded-md shadow-md rounded-xl bg-blue-gray-100" >
           {images.map((image, index) => (
@@ -49,12 +45,11 @@ const IkigaiCard: React.FC<IkigaiCardProps> = ({ ikigaiId, userName, images, tag
                 src={image}
                 alt={`Ikigai ${index}`}
                 className="h-full w-full object-contain rounded-xl"
-                // onClick={handleCarouselClick}
+                onClick={handleCarouselClick}
               />
             </div>
           ))}
         </Carousel>  
-
       </CardBody>
       <CardFooter className='pt-0'>
         <div className="flex flex-wrap justify-center gap-1">
