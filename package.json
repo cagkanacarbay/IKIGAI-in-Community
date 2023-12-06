@@ -34,7 +34,7 @@
     "eslint-config-next": "13.4.19",
     "framer-motion": "^10.16.2",
     "jszip": "^3.10.1",
-    "next": "^13.5.6",
+    "next": "^13.5.3",
     "next-auth": "^4.24.5",
     "postcss": "^8.4.31",
     "prisma": "^5.6.0",
