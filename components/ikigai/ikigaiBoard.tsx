@@ -256,8 +256,9 @@ const IkigaiBoard: React.FC<IkigaiBoardProps> = ({ ikigaiItems, setIkigaiItems, 
       return;
     }
   
-    console.log("Ikigai uploaded to the database. See below result:");
-    console.log(result);
+    // console.log("Ikigai uploaded to the database. See below result:");
+    // console.log(result);
+    alert("Saved IKIGAI successfully.");
   };
   
   // const handleSaveBoard = async () => {

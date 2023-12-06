@@ -37,7 +37,7 @@ const IkigaiCard: React.FC<IkigaiCardProps> = ({ ikigaiId, userName, images, tag
           <div className="flex-grow border-t border-gray-700"></div>
       </CardHeader>
       <CardBody>
-        <Carousel className="rounded-md shadow-md rounded-xl bg-blue-gray-100" >
+        <Carousel className="rounded-md shadow-md rounded-xl bg-blue-gray-100" onClick={handleCarouselClick}>
           {images.map((image, index) => (
             <div key={index} className="h-48 md:h-64 w-full relative rounded-xl "> 
               <img
