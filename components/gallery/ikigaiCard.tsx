@@ -6,7 +6,7 @@ import {
 import { useRouter } from 'next/router';
 
 interface IkigaiCardProps {
-  ikigaiId: string,
+  ikigaiId: number,
   userName: string;
   images: string[]; 
   tags: string[];
