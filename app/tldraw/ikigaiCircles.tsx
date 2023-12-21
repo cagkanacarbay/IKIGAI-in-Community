@@ -1,6 +1,6 @@
 import { 
   TLBaseShape, TLDefaultColorStyle, 
-  ShapeProps, T, EnumStyleProp, DefaultColorStyle,
+  ShapeProps, T, DefaultColorStyle,
   ShapeUtil, HTMLContainer, Circle2d, getDefaultColorTheme
 } from '@tldraw/tldraw';
 
@@ -13,10 +13,6 @@ export type IIkigaiCircleShape = TLBaseShape<
     color: TLDefaultColorStyle;
   }
 >;
-
-// const IkigaiCircleColor: EnumStyleProp<string> = T.enum('color', ['red-300', 'blue-300', 'yellow-300', 'green-300'], 'red-300');
-
-// const ikigaiColors = new EnumStyleProp<"red" | "blue" | "yellow" | "green">
 
 export const ikigaiCircleShapeProps: ShapeProps<IIkigaiCircleShape> = {
   x: T.number,

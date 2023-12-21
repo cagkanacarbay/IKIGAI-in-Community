@@ -1,9 +1,10 @@
-// IkigaiBoardV2.tsx
 "use client";
 import React, { useEffect } from 'react';
 import { Tldraw, useEditor, RecordId } from '@tldraw/tldraw';
 import '@tldraw/tldraw/tldraw.css';
 import IkigaiCircleShape from './ikigaiCircles';
+import { useContainer, Vec2d } from '@tldraw/tldraw';
+import { uiOverrides } from './customUi';
 
 const CustomShapes = [IkigaiCircleShape]
 
@@ -12,9 +13,12 @@ export default function IkigaiBoardV2() {
 
   return (
     <div style={{ position: 'fixed', inset: 0 }}>
-      <Tldraw shapeUtils={CustomShapes}>
+
+      <Tldraw 
+	  	shapeUtils={CustomShapes} persistenceKey="my-persistence-key" overrides={uiOverrides}>
 		<IkigaiCircles/>
       </Tldraw>
+
     </div>
   );
 }
@@ -58,26 +62,39 @@ function IkigaiCircles() {
 	return null;
 }
 
-
-// function IkigaiCircles() {
+// function SaveButton() {
 // 	const editor = useEditor()
-
-// 	useEffect(() => {
-		
-// 		const shapes = editor.getCurrentPageShapesSorted();
-// 		if (shapes.length === 0) {
-// 			editor.createShapes([
-// 				{ type: IkigaiCircleShape.type, props: { x: 200, y: 0, radius: 250, color: 'light-red' }},
-// 				{ type: IkigaiCircleShape.type, props: { x: 200, y: 400, radius: 250, color: 'yellow' }},
-// 				{ type: IkigaiCircleShape.type, props: { x: 0, y: 200, radius: 250, color: 'light-blue' }},
-// 				{ type: IkigaiCircleShape.type, props: { x: 400, y: 200, radius: 250, color: 'light-green' }},
-// 			]);
-// 			const circles = editor.getCurrentPageShapesSorted();
-// 			editor.toggleLock(circles)
-// 			editor.zoomToFit()
-
-// 		}
-// 	  }, [editor]); 
-	
-// 	return null;
+// 	return (
+// 		<button className='z-50'
+// 			onClick={() => {
+// 				const snapshot = editor.store.getSnapshot()
+// 				const stringified = JSON.stringify(snapshot)
+// 				localStorage.setItem('my-editor-snapshot', stringified)
+// 			}}
+// 		>
+// 			Save
+// 		</button>
+// 	)
 // }
+
+function SaveButton() {
+	const editor = useEditor();
+	console.log(editor)
+	return (
+	  <button className='z-50'
+		onClick={() => {
+		  if (editor && editor.store) { // Check if editor and store are defined
+			const snapshot = editor.store.getSnapshot();
+			const stringified = JSON.stringify(snapshot);
+			localStorage.setItem('my-editor-snapshot', stringified);
+		  } else {
+			console.log(editor)
+			console.error('Editor or editor.store is undefined.');
+		  }
+		}}
+	  >
+		Save
+	  </button>
+	);
+  }
+  
