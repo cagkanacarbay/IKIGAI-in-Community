@@ -1,5 +1,11 @@
-import { TLUiOverrides, findMenuItem, menuItem, toolbarItem, TLUiMenuGroup } from '@tldraw/tldraw';
+import { TLUiOverrides, findMenuItem, menuItem, toolbarItem, TLUiMenuGroup, TLUiActionItem } from '@tldraw/tldraw';
+import { saveImageAssetsAsBlobsAndUpdateMetadata } from './boardStorage';
+import { saveAsJSON } from './boardStorage';
 
+interface AssetSrc {
+  id: string;
+  src: string;
+}
 
 const toolsToRemove: string[] = []
 
@@ -8,28 +14,62 @@ const toolsToRemove: string[] = []
 * See how it all works here: https://tldraw.dev/docs/user-interface#Overrides
 */
 export const uiOverrides: TLUiOverrides = {
-  
   actions(editor, actions) {
-    // Delete actions we don't want from the UI
-    // delete actions['note']
-    // delete actions['insert-embed']
-
 
     actions['save'] = {
       id: 'save',
       label: 'Save',
       menuLabel: "Save Ikigai",
-      contextMenuLabel: "Save Ikigai",
       icon: 'save',
       readonlyOk: true,
-      onSelect(source: any) {
+      /**
+       * Save processes each asset in the store, uploads them as blobs, 
+       * updates the store with blob_urls, and saves the snapshot to the databse.
+       * @param source The source of the onSelect event.
+       */
+      onSelect: async (source: any) => {
         if (editor && editor.store) {
-          
           const snapshot = editor.store.getSnapshot();
-          const stringified = JSON.stringify(snapshot);
-          localStorage.setItem('editor-snapshot', stringified);
-          console.log("saved editor-snapshot local storage")
+          await saveImageAssetsAsBlobsAndUpdateMetadata(snapshot.store, editor);
+          const updatedSnapshot = editor.store.getSnapshot();
+
+          saveAsJSON(updatedSnapshot, 'ikigai.json');
+          console.log("Saved Ikigai snapshot with updated asset URLs.");
+        } else {
+          console.error('Editor or editor.store is undefined.');
+        }
+      },
+    },
+
+    actions['save-local'] = {
+      id: 'save-local',
+      label: 'Save',
+      menuLabel: "Save Ikigai Locally",
+      icon: 'save',
+      readonlyOk: true,
+      onSelect: (source: any) => {
+        if (editor && editor.store) {
+          const snapshot = editor.store.getSnapshot();
+          const store = snapshot.store as Record<string, any>;
           
+          const assetSrcs: AssetSrc[] = [];
+  
+          // Extract src from assets 
+          for (const key in store) {
+            if (key.startsWith('asset:')) {
+              const asset = store[key];
+              if (asset.props?.src) {
+                assetSrcs.push({ id: key, src: asset.props.src });
+                delete asset.props.src;
+              }
+            }
+          }
+  
+          // Save the modified snapshot and asset SRCs
+          saveAsJSON(snapshot, 'editor-snapshot.json');
+          console.log(snapshot)
+          saveAsJSON(assetSrcs, 'asset-srcs.json');
+          console.log(assetSrcs)
         } else {
           console.error('Editor or editor.store is undefined.');
         }
@@ -37,9 +77,8 @@ export const uiOverrides: TLUiOverrides = {
     };
     return actions;
   },
-	tools(editor, tools) {
-    console.log("tools")
-    console.log(tools)
+  
+  tools(editor, tools) {
 
     const filteredTools: Record<string, any> = {};
 
@@ -49,8 +88,7 @@ export const uiOverrides: TLUiOverrides = {
       }
     });
 
-    console.log(filteredTools)
-
+    // console.log(filteredTools)
 
     // ADD new tools like below
     
@@ -68,11 +106,14 @@ export const uiOverrides: TLUiOverrides = {
     return tools
 
 	},
+
+
 	toolbar(_app, toolbar, { tools }) {
-    console.log("toolbar")
-    console.log(toolbar)
+    // console.log("toolbar")
+    // console.log(toolbar)
+
     const filteredToolbar = toolbar.filter(item => !toolsToRemove.includes(item.id));
-    console.log(filteredToolbar)
+    // console.log(filteredToolbar)
 
     // add to toolbar like below
 		// toolbar.splice(4, 0, toolbarItem(tools.ikigaiCircle))
@@ -99,8 +140,10 @@ export const uiOverrides: TLUiOverrides = {
 		const fileMenu = findMenuItem(menu, ['menu', 'file'])
 		if (fileMenu.type === 'submenu') {
 			// add the new item to the file menu's children
-			const newMenuItem = menuItem(actions['save'])
-			fileMenu.children.unshift(newMenuItem)
+			const saveMenuItem = menuItem(actions['save'])
+      const saveLocalMenuItem = menuItem(actions['save-local'])
+			fileMenu.children.unshift(saveMenuItem)
+      fileMenu.children.unshift(saveLocalMenuItem)
 		}
 		return menu;
 	},
