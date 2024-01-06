@@ -6,6 +6,7 @@ import Link from 'next/link';
 const Navbar = () => {
   const router = useRouter();
   const { data: session } = useSession();
+  console.log("sesssion in navbar:", session)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 

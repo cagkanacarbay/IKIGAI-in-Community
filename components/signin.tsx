@@ -1,6 +1,7 @@
 import { signIn } from 'next-auth/react';
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function SignInForm() {
   const [username, setUsername] = useState('');
@@ -10,8 +11,6 @@ export default function SignInForm() {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError('');
-
-    // Call NextAuth.js signIn method
     const result = await signIn('credentials', {
       redirect: false, // Set to true if you want to redirect to the callback URL
       username,
@@ -19,22 +18,22 @@ export default function SignInForm() {
     });
 
     if (result?.error) {
-      // Handle error messages (result.error) here
       setError('The username and password combination is incorrect.');
     } else {
-      // Redirect or do something else on successful sign in
-      window.location.href = '/gallery';
+      console.log(result)
+      window.location.href = '/signup';
     }
   };
     return (
       <>
-        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+        <div className="flex min-h-full fle
+        x-1 flex-col justify-center px-6 py-12 lg:px-8">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-            <img
+            {/* <Image
               className="mx-auto h-10 w-auto"
               src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
               alt="Ikigai in Community"
-            />
+            /> */}
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
               Sign in to your account
             </h2>

@@ -1,27 +1,34 @@
 "use client";
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Tldraw, useEditor, createShapeId } from '@tldraw/tldraw';
 import '@tldraw/tldraw/tldraw.css';
 import IkigaiCircleShape from './ikigaiCircles';
 import { uiOverrides } from './customUi';
-import { SessionProvider } from 'next-auth/react';
-
+import { useSession } from 'next-auth/react';
 
 const CustomShapes = [IkigaiCircleShape]
 
 
 export default function IkigaiBoardV2() {
+	const { data: session } = useSession();
+  const isLoggedIn = Boolean(session);
+	const editor = useEditor()
+
+	console.log("Am i logged in:", isLoggedIn)
+	console.log(session)
+
+
+	const customUiOverrides = uiOverrides(isLoggedIn, editor);
+
 
   return (
-	<SessionProvider>
 
 		<div style={{ position: 'fixed', inset: 0 }}>
 				<Tldraw 
-					shapeUtils={CustomShapes} persistenceKey="persistence-key" overrides={uiOverrides}>
+					shapeUtils={CustomShapes} persistenceKey="persistence-key" overrides={customUiOverrides}>
 					<IkigaiCircles/>
 				</Tldraw>
 		</div>
-	</SessionProvider>
 
   );
 }

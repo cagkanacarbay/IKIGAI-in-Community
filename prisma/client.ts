@@ -18,7 +18,7 @@ import { createClient } from '@libsql/client';
 
 let prisma: PrismaClient;
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.VERCEL_ENV === 'production') {
   // Production environment (Turso)
   const libsql = createClient({
     url: `${process.env.TURSO_DATABASE_URL}`,
