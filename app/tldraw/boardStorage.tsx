@@ -1,6 +1,8 @@
 import { uploadImageToStorageProviderTldraw } from "@/lib/storage";
-import { TLBaseAsset, TLAssetPartial } from "@tldraw/tldraw";
+import { TLBaseAsset, TLAssetPartial, TLStoreSnapshot } from "@tldraw/tldraw";
 import { Editor } from "@tldraw/editor";
+import { useSession } from "next-auth/react";
+
 
 type ImageAssetProps = {
   w: number;
@@ -78,3 +80,31 @@ export function convertBase64ToFile(base64Data: string, fileNameNoType: string):
   return new File([blob], fileName, { type: mimeType });
 }
 
+
+export async function uploadSnapshot(snapshot: TLStoreSnapshot) {
+
+  const response = await fetch('/api/storage/snapshot', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ snapshotData: snapshot }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error while uploading your IKIGAI snapshot. Status: ${response.status}`);
+  }
+
+  const result = await response.json();
+
+  return result
+}
+
+export function isUserLoggedIn() {
+  const { data: session } = useSession();
+  if (!session || !session.user) {
+    return false;
+  } else {
+    return true;
+  }
+}

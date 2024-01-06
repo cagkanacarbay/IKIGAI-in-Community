@@ -11,38 +11,29 @@ datasource db {
   
 }
 
-model ikigai {
-  ikigai_id Int     @id @default(autoincrement())
-  user_id   Int     // Foreign key to reference User
+model ikigai_snapshot {
+  id Int    @id @default(autoincrement())
+  data      String
+  user_id   Int     
   user      user    @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  items     items[]
+  // items     items[]
 }
 
-model items {
-  item_id   Int       @id @default(autoincrement())
-  type      String
-  text      String?
-  image_url String?
-  ikigai_id Int?
-  ikigai    ikigai?   @relation(fields: [ikigai_id], references: [ikigai_id], onDelete: NoAction, onUpdate: NoAction)
-  positions positions[]
-}
-
-model positions {
-  position_id Int      @id @default(autoincrement())
-  item_id     Int
-  x_position  Float
-  y_position  Float
-  timestamp   DateTime? @default(now())
-  items       items    @relation(fields: [item_id], references: [item_id], onDelete: NoAction, onUpdate: NoAction)
-}
+// model items {
+//   item_id   Int       @id @default(autoincrement())
+//   type      String
+//   text      String?
+//   image_url String?
+//   ikigai_id Int?
+//   ikigai    ikigai?   @relation(fields: [ikigai_id], references: [ikigai_id], onDelete: NoAction, onUpdate: NoAction)
+// }
 
 model user {
-  id           Int       @id @default(autoincrement())
-  username     String    @unique
-  email        String    @unique
-  password_hash String
-  created_at   DateTime  @default(now())
-  updated_at   DateTime  @updatedAt
-  ikigais      ikigai[]
+  id              Int       @id @default(autoincrement())
+  username        String    @unique
+  email           String    @unique
+  password_hash   String
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+  snapshots       ikigai_snapshot[]
 }

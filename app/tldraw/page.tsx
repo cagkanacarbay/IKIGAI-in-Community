@@ -4,6 +4,8 @@ import { Tldraw, useEditor, createShapeId } from '@tldraw/tldraw';
 import '@tldraw/tldraw/tldraw.css';
 import IkigaiCircleShape from './ikigaiCircles';
 import { uiOverrides } from './customUi';
+import { SessionProvider } from 'next-auth/react';
+
 
 const CustomShapes = [IkigaiCircleShape]
 
@@ -11,14 +13,16 @@ const CustomShapes = [IkigaiCircleShape]
 export default function IkigaiBoardV2() {
 
   return (
-    <div style={{ position: 'fixed', inset: 0 }}>
+	<SessionProvider>
 
-      <Tldraw 
-	  	shapeUtils={CustomShapes} persistenceKey="persistence-key" overrides={uiOverrides}>
-		<IkigaiCircles/>
-      </Tldraw>
+		<div style={{ position: 'fixed', inset: 0 }}>
+				<Tldraw 
+					shapeUtils={CustomShapes} persistenceKey="persistence-key" overrides={uiOverrides}>
+					<IkigaiCircles/>
+				</Tldraw>
+		</div>
+	</SessionProvider>
 
-    </div>
   );
 }
 

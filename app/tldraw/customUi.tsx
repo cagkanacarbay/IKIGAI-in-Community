@@ -1,6 +1,6 @@
 import { TLUiOverrides, findMenuItem, menuItem, toolbarItem, TLUiMenuGroup, TLUiActionItem } from '@tldraw/tldraw';
-import { saveImageAssetsAsBlobsAndUpdateMetadata } from './boardStorage';
-import { saveAsJSON } from './boardStorage';
+import { saveImageAssetsAsBlobsAndUpdateMetadata, saveAsJSON, uploadSnapshot } from './boardStorage';
+import { useAuth } from '../authContext';
 
 interface AssetSrc {
   id: string;
@@ -14,8 +14,10 @@ const toolsToRemove: string[] = []
 * See how it all works here: https://tldraw.dev/docs/user-interface#Overrides
 */
 export const uiOverrides: TLUiOverrides = {
-  actions(editor, actions) {
 
+  
+  actions(editor, actions) {
+    
     actions['save'] = {
       id: 'save',
       label: 'Save',
@@ -28,17 +30,35 @@ export const uiOverrides: TLUiOverrides = {
        * @param source The source of the onSelect event.
        */
       onSelect: async (source: any) => {
+        // if (!isUserLoggedIn) {
+        //   if (window.confirm("You need to be signed in to save your IKIGAI. Sign up now?")) {
+        //     window.location.href = '/signup';
+        //   }
+        //   return;
+        // }
+        const { isLoggedIn } = useAuth();
+        if (!isLoggedIn) {
+          if (window.confirm("You need to be signed in to save your IKIGAI. Sign up now?")) {
+            window.location.href = '/signup';
+          }
+          return;
+        }
+
         if (editor && editor.store) {
           const snapshot = editor.store.getSnapshot();
           await saveImageAssetsAsBlobsAndUpdateMetadata(snapshot.store, editor);
           const updatedSnapshot = editor.store.getSnapshot();
+                
+          try {
+            const uploadResult = await uploadSnapshot(updatedSnapshot);
+            console.log("Saved Ikigai snapshot with updated asset URLs.");
+            console.log(uploadResult)
 
-          saveAsJSON(updatedSnapshot, 'ikigai.json');
-          console.log("Saved Ikigai snapshot with updated asset URLs.");
-        } else {
-          console.error('Editor or editor.store is undefined.');
+          } catch (error) {
+            alert("Failed to save the snapshot to the database. Please try again.");
+          }
         }
-      },
+      }
     },
 
     actions['save-local'] = {

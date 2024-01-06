@@ -5,8 +5,7 @@ import prisma from '@/prisma/client';
 
 
 export default async function signup(req: NextApiRequest, res: NextApiResponse) {
-    console.log("Got a new signup req")
-    console.log(req)
+    
   if (req.method === 'POST') {
     const { username, email, password } = req.body;
 
