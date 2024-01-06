@@ -1,4 +1,3 @@
-// pages/api/auth/[...nextauth].ts
 import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 import prisma from '@/prisma/client';
@@ -14,7 +13,6 @@ export default NextAuth({
         password:  { label: "Password", type: "password" }
       },
       authorize: async (credentials, req) => {
-        console.log(credentials)
 
         if (!credentials) return null;
         

@@ -20,8 +20,7 @@ export default function SignInForm() {
     if (result?.error) {
       setError('The username and password combination is incorrect.');
     } else {
-      console.log(result)
-      window.location.href = '/signup';
+      window.location.href = '/tldraw';
     }
   };
     return (

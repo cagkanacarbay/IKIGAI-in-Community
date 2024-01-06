@@ -5,6 +5,7 @@ import '@tldraw/tldraw/tldraw.css';
 import IkigaiCircleShape from './ikigaiCircles';
 import { uiOverrides } from './customUi';
 import { useSession } from 'next-auth/react';
+import { loadSnapshot } from './boardStorage';
 
 const CustomShapes = [IkigaiCircleShape]
 
@@ -13,15 +14,19 @@ export default function IkigaiBoardV2() {
 	const { data: session } = useSession();
   const isLoggedIn = Boolean(session);
 	const editor = useEditor()
-
-	console.log("Am i logged in:", isLoggedIn)
-	console.log(session)
-
-
 	const customUiOverrides = uiOverrides(isLoggedIn, editor);
 
 
-  return (
+	useEffect(() => {
+		async function fetchSnapshot() {
+			const snapshot = await loadSnapshot("6");
+			console.log(snapshot);
+		}
+	
+		fetchSnapshot();
+	}, []);
+		
+	return (
 
 		<div style={{ position: 'fixed', inset: 0 }}>
 				<Tldraw 

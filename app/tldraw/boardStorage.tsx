@@ -1,5 +1,5 @@
 import { uploadImageToStorageProviderTldraw } from "@/lib/storage";
-import { TLBaseAsset, TLAssetPartial, TLStoreSnapshot } from "@tldraw/tldraw";
+import { TLBaseAsset, TLAssetPartial, TLStoreSnapshot, SerializedStore, TLRecord } from "@tldraw/tldraw";
 import { Editor } from "@tldraw/editor";
 import { useSession } from "next-auth/react";
 
@@ -16,8 +16,10 @@ type ImageAssetProps = {
 type ImageAssetWithBlobUrl = TLBaseAsset<'image', ImageAssetProps> & { meta: { blob_url?: string } };
 
 /**
- * Processes each base64 Image Asset in the store by converting them to files, uploading them,
- * and updating their metadata with the uploaded URL.
+ * Processes each base64 Image Asset in the store by 
+ *  - converting them to files, 
+ *  - uploading them as blobs to vercel storage,
+ *  - updating their metadata with the uploaded URL.
  * @param storeSnapshot Snapshot of the editor's store.
  * @param editor The tldraw editor instance.
  */
@@ -81,30 +83,84 @@ export function convertBase64ToFile(base64Data: string, fileNameNoType: string):
 }
 
 
+// export async function uploadSnapshot(snapshot: TLStoreSnapshot) {
+
+//   const response = await fetch('/api/storage/snapshot', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify({ snapshotData: snapshot }),
+//   });
+
+//   if (!response.ok) {
+//     throw new Error(`Error while uploading your IKIGAI snapshot. Status: ${response.status}`);
+//   }
+
+//   const result = await response.json();
+
+//   return result
+// }
+
+
 export async function uploadSnapshot(snapshot: TLStoreSnapshot) {
+  const cleanedSnapshot = cleanSnapshot(snapshot);
+  console.log(cleanedSnapshot.store)
 
   const response = await fetch('/api/storage/snapshot', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ snapshotData: snapshot }),
+    body: JSON.stringify({ snapshotData: cleanedSnapshot }),
   });
 
   if (!response.ok) {
     throw new Error(`Error while uploading your IKIGAI snapshot. Status: ${response.status}`);
   }
 
-  const result = await response.json();
-
-  return result
+  return await response.json();
 }
 
-export function isUserLoggedIn() {
-  const { data: session } = useSession();
-  if (!session || !session.user) {
-    return false;
-  } else {
-    return true;
+
+
+function cleanSnapshot(snapshot: TLStoreSnapshot): TLStoreSnapshot {
+  const cleanedStore: SerializedStore<TLRecord> = {};
+
+  Object.keys(snapshot.store).forEach(key => {
+    // Clone the record from the snapshot
+    const record = snapshot.store[key as keyof typeof snapshot.store];
+
+    // Exclude default shapes
+    if (!key.includes("ikigaiCircle")) {
+      // Check if the key is an asset
+      if (key.includes("asset") && 'props' in record) {
+        // Assuming props is an object with a potential 'src' property
+        const { src, ...restProps } = record.props as { src?: string, [key: string]: any };
+        cleanedStore[key as keyof typeof cleanedStore] = { ...record, props: restProps } as TLRecord;
+      } else {
+        cleanedStore[key as keyof typeof cleanedStore] = record;
+      }
+    }
+  });
+
+  return { ...snapshot, store: cleanedStore };
+}
+
+
+export async function loadSnapshot(snapshotId: string) {
+  
+  const response = await fetch(`/api/storage/snapshot/${snapshotId}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error while loading your Ikigai snapshot Id ${snapshotId}. Status: ${response.status}`);
   }
+
+  return await response.json();
 }
+
