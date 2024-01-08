@@ -14,4 +14,3 @@ export async function POST(request: Request): Promise<NextResponse> {
     return NextResponse.json({ error }, { status: 500 });
   }
 }
-// return NextResponse.json({ "act as if i've uploaded": file }, { status: 200 });

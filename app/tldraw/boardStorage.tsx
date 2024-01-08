@@ -1,5 +1,5 @@
 import { uploadImageToStorageProviderTldraw } from "@/lib/storage";
-import { TLBaseAsset, TLAssetPartial, TLStoreSnapshot, SerializedStore, TLRecord } from "@tldraw/tldraw";
+import { TLBaseAsset, TLAssetPartial, TLStoreSnapshot, SerializedStore, TLRecord, TLAsset, TLImageAsset } from "@tldraw/tldraw";
 import { Editor } from "@tldraw/editor";
 import { useSession } from "next-auth/react";
 
@@ -123,7 +123,12 @@ export async function uploadSnapshot(snapshot: TLStoreSnapshot) {
 }
 
 
-
+/**
+ * Takes the snapsjpt store from tldraw and modifies it prior to an upload
+ *  - removes IKIGAI circles from the store,
+ *  - removes base64 src of assets (these are uploaded as blobs instead)
+ * @param snapshot Snapshot of the editor.
+ */
 function cleanSnapshot(snapshot: TLStoreSnapshot): TLStoreSnapshot {
   const cleanedStore: SerializedStore<TLRecord> = {};
 
@@ -148,8 +153,7 @@ function cleanSnapshot(snapshot: TLStoreSnapshot): TLStoreSnapshot {
 }
 
 
-export async function loadSnapshot(snapshotId: string) {
-  
+export async function downloadSnapshot(snapshotId: string) {
   const response = await fetch(`/api/storage/snapshot/${snapshotId}`, {
     method: 'GET',
     headers: {
@@ -161,6 +165,74 @@ export async function loadSnapshot(snapshotId: string) {
     throw new Error(`Error while loading your Ikigai snapshot Id ${snapshotId}. Status: ${response.status}`);
   }
 
-  return await response.json();
+  const result = await response.json();
+
+  // Check if the 'data' key exists and is a string
+  if (result.data && typeof result.data === 'string') {
+    // Parse the 'data' string as JSON
+    try {
+      result.data = JSON.parse(result.data);
+    } catch (error) {
+      console.error('Failed to parse snapshot data:', error);
+      throw new Error('Failed to parse snapshot data');
+    }
+  }
+
+  console.log(result);
+  return result;
+}
+
+
+export async function updateDatabaseSnapshotWithBlobSrc(snapshotData: any): Promise<any> {
+  const updatedStore: { [key: string]: any } = {};
+
+  if (!snapshotData || typeof snapshotData !== 'object' || !snapshotData.store) {
+    throw new Error('Invalid snapshot data');
+  }
+
+  for (const key of Object.keys(snapshotData.store)) {
+    const record = snapshotData.store[key];
+
+    if (record && typeof record === 'object' && record.typeName === 'asset') {
+      const blobUrl = record.meta?.blob_url;
+
+      if (blobUrl) {
+        const src = await fetchAssetSrcFromBlobStorage(blobUrl);
+        updatedStore[key] = {
+          ...record,
+          props: { ...record.props, src }
+        };
+
+      } else {
+        updatedStore[key] = record;
+      }
+
+    } else {
+      updatedStore[key] = record;
+    }
+  }
+
+  return { ...snapshotData, store: updatedStore };
+}
+
+
+async function fetchAssetSrcFromBlobStorage(blobUrl: string): Promise<string> {
+  try {
+    const response = await fetch(blobUrl);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch blob: ${response.statusText}`);
+    }
+    const blob = await response.blob();
+
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  } catch (error) {
+    console.error('Error fetching asset SRC:', error);
+    throw error;
+  }
 }
 
