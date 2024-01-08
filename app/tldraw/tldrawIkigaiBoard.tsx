@@ -44,8 +44,8 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
         shapeUtils={CustomShapes} 
         // persistenceKey="persistence-key"
         >
-        {/* <IkigaiCircles/> */}
-        {storeWithStatus?.status === 'synced-remote' && <IkigaiCircles />}
+        <IkigaiCircles/>
+        {/* {storeWithStatus?.status === 'synced-remote' && <IkigaiCircles />} */}
 
       </Tldraw>
     </div>
