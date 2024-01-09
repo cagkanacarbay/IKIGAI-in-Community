@@ -6,7 +6,31 @@ interface AssetSrc {
   src: string;
 }
 
-const toolsToRemove: string[] = []
+const toolsToRemove: string[] = [
+  "draw",
+  "eraser",
+  "ellipse",
+  "diamond",
+  "rectangle",
+  "triangle",
+  "trapezoid",
+  "text",
+  "rhombus",
+  "hexagon",
+  "x-box",
+  "check-box",
+  "oval",
+  "star",
+  "cloud",
+  "arrow-left",
+  "arrow-up",
+  "arrow-right",
+  "arrow-down",
+  "line",
+  "highlight",
+  "frame",
+  "laser"
+]
 
 /**
 * Override the UI elements, add new things, remove any calls, do whatever. 
