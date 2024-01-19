@@ -54,7 +54,7 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
         shapeUtils={CustomShapes} 
         components={components}
         autoFocus
-        // persistenceKey="persistence-key"
+        persistenceKey="persistence-key"
         >
         <IkigaiCircles/>
         {/* {storeWithStatus?.status === 'synced-remote' && <IkigaiCircles />} */}

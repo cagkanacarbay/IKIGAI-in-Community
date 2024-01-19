@@ -70,7 +70,7 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
                 const asset = store[key];
                 if (asset.props?.src) {
                   assetSrcs.push({ id: key, src: asset.props.src });
-                  delete asset.props.src;
+                  // delete asset.props.src;
                 }
               }
             }
