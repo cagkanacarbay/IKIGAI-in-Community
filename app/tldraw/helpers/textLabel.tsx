@@ -36,6 +36,13 @@ export const TEXT_PROPS = {
 	padding: '0px',
 }
 
+export const FONT_FAMILIES: Record<TLDefaultFontStyle, string> = {
+	draw: 'var(--tl-font-draw)',
+	sans: 'var(--tl-font-sans)',
+	serif: 'var(--tl-font-serif)',
+	mono: 'var(--tl-font-mono)',
+}
+
 export const TextLabel = React.memo(function TextLabel<
 	T extends Extract<TLShape, { props: { text: string } }>
 >({
@@ -86,7 +93,7 @@ export const TextLabel = React.memo(function TextLabel<
 
 	return (
 		<div
-			className="tl-text-label"
+			className="tl-text-label m-6 overflow-hidden"
 			data-font={font}
 			data-align={align}
 			data-hastext={!isEmpty}
