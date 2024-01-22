@@ -17,12 +17,12 @@ import {
   EnumStyleProp, 
 } from '@tldraw/tldraw';
 import { useEffect } from 'react';
-import Image from 'next/image';
 import { TextLabel } from '../helpers/textLabel';
 import { ShapePropsType } from '../helpers/deepTldraw';
+import { AspectIcon, ZoneIcon} from './aspectIcons';
 
 
-const BASE_ASPECT_HEIGHT = 40
+const BASE_ASPECT_HEIGHT = 32
 const MIN_ASPECT_WIDTH = 120
 
 export declare const aspectShapeProps: {
@@ -35,6 +35,8 @@ export declare const aspectShapeProps: {
   text: T.Validator<string>;
   w: T.Validator<number>;
   h: T.Validator<number>;
+  aspectTypes: T.ArrayOfValidator<"skill" | "knowledge" | "expertise" | "strength" | "interest" | "value" | "dream" | "influence" | "global" | "societal" | "communal" | "personal" | "business idea" | "career" | "freelance" | "industry">;
+  zone: EnumStyleProp<"heart" | "craft" | "path" | "cause">;
 };
 
 declare type IAspectShape = TLBaseShape<'aspect', AspectShapeProps>;
@@ -70,9 +72,10 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
       growY: 0,
       w: MIN_ASPECT_WIDTH,
       h: BASE_ASPECT_HEIGHT,
+      aspectTypes: ['skill'],
+      zone: "heart"
     };
   }
-
 
   getGeometry(shape: IAspectShape) {
     console.log("heres the geometry: ", shape)
@@ -84,32 +87,42 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
     });
   }
 
-  
+  getMinHeight(shape: IAspectShape) {
+    const {props: {aspectTypes}} = shape;
+    const minHeight = BASE_ASPECT_HEIGHT * aspectTypes.length;
+    return minHeight;
+  }
 
   component(shape: IAspectShape) {
     // const bounds = this.editor.getShapeGeometry(shape).bounds
 
     const {
-      id, type, props: { w, h, color, text } 
+      id, props: { w, h, color, text, aspectTypes, zone }
     } = shape;
     const { x, y } = shape;
+    console.log(shape)
+    console.log("here are the aspect types", aspectTypes)
     // const theme = getDefaultColorTheme({ isDarkMode: this.editor.user.getIsDarkMode() });
     // const fillColor = theme[color].semi;     
+
+    // minHeight is BASE_ASPECT_HEIGHT times the number of aspect types in px    
+    const minHeight = `${this.getMinHeight(shape)}px`;
+    console.log('here is minheight: ', minHeight)
   
     return (
       <HTMLContainer 
-        style={{width: w, height: h}} 
+        style={{width: w, height: h, minHeight}} 
         className={`grid grid-cols-[auto,1fr,auto] items-center
           text-xs font-bold
           bg-red-100 bg-opacity-60 
           rounded-lg shadow-inner shadow-md
-          min-w-[120px] min-h-[40px]
-          `}
+          min-w-[120px]
+        `}
       >
           <div className="flex flex-col justify-center items-center ml-1 mr-2 mb-1">
-            <img src='/icons/aspects/belief.png' alt="belief icon" className="w-5 h-5 mt-1"/>
-            <img src='/icons/aspects/career-options.png' alt="belief icon" className="w-5 h-5 mt-1"/> 
-            <img src='/icons/aspects/open-book.png' alt="belief icon" className="w-5 h-5 mt-1"/>
+            {aspectTypes && aspectTypes.map((type) => (
+              <AspectIcon key={type} type={type} />
+            ))}
           </div>
           <div className="flex justify-center items-center p-2">
             <TextLabel 
@@ -125,7 +138,7 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
 						/>
           </div>
           <div className="flex justify-center items-center mr-1 mb-1">
-            <img src='/icons/zones/craft.png' alt="craft icon" className="w-5 h-5 mt-1"/>
+            <ZoneIcon zone={zone}/>
           </div>
       </HTMLContainer>
     );
@@ -133,7 +146,7 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
 
   indicator(shape: IAspectShape) {
     const width = Math.max(shape.props.w, MIN_ASPECT_WIDTH);
-    const height = Math.max(shape.props.h, BASE_ASPECT_HEIGHT);
+    const height = Math.max(shape.props.h, this.getMinHeight(shape));
     return <rect width={width} height={height} />
   }
 }

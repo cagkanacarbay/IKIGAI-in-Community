@@ -100,9 +100,14 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
           editor.createShape({
             id: aspectId,
             type: AspectShape.type,
-            props: {w: 160, h: 40, text: "..."},
+            props: {
+              w: 160, h: 40, 
+              text: "...", 
+              zone: "craft",
+              aspectTypes: ['knowledge', 'skill', 'career']
+            },
             x: x,
-            y: y
+            y: y,
           });
         },
       };
