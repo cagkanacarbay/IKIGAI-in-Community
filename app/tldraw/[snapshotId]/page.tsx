@@ -60,7 +60,7 @@
 import React, { useState, useEffect } from 'react';
 import IkigaiBoardV2 from '../tldrawIkigaiBoard';
 import { createTLStore, defaultShapeUtils, TLStore, TLStoreOptions, TLStoreWithStatus } from '@tldraw/tldraw';
-import IkigaiCircleShape from '../ikigaiCircles';
+import IkigaiCircleShape from '../shapes/ikigaiCircles';
 import { downloadSnapshot, updateDatabaseSnapshotWithBlobSrc } from '../boardStorage';
 import { Spinner } from "@material-tailwind/react";
 
