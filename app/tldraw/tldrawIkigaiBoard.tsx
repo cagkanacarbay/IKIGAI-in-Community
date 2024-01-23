@@ -37,31 +37,10 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
   // const [aspectIds, setAspectIds] = useState<string[]>([]); // TODO: this should be checed with tldraw state
 
 
-  // const handleAddAspect = () => {
-  //   const aspectId = createShapeId(`aspect-${ulid()}`);
-
-  //   console.log("new aspect ID: ", aspectId)
-
-  //   // Define the properties of the new aspect shape
-  //   const newAspect = {
-  //     aspectId: aspectId,
-  //     x: 600, // Example position
-  //     y: 600, // Example position
-  //     tag: 'New aspect with a long name ',
-  //     color: 'blue',
-  //     w: 160,
-  //     h: 40
-  //   };
-  //   setAspects(prevAspects => [...prevAspects, newAspect]);
-  //   console.log(aspects)
-  // };
 
   return (
     <div style={{ position: 'fixed', inset: 0 }}>
-              {/* <button  
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" 
-      onClick={handleAddAspect}>Add Aspect
-    </button> */}
+
       <Tldraw 
         // hideUi
         store={storeWithStatus}
@@ -72,11 +51,8 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
         persistenceKey="persistence-key"
         >
 
-        {/* <IkigaiCircles/> */}
-        {/* Render an Aspect component for each item in the aspects array */}
-        {/* {aspects.map((aspect, index) => (
-          <Aspect key={index} {...aspect} />
-        ))} */}
+        <IkigaiCircles/>
+
 
       </Tldraw>
     </div>

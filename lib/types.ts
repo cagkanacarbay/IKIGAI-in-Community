@@ -38,3 +38,27 @@ export type UserInDB = {
   created_at: string; 
   updated_at: string; 
 }
+
+export type AspectType = "skill" | "knowledge" | "expertise" | "strength" | "interest" | "value" | "dream" | "influence" | "global" | "societal" | "communal" | "personal" | "business-idea" | "career" | "freelance" | "industry";
+
+export const aspectTypes: AspectType[] = ["skill", "knowledge", "expertise", "strength", "interest", "value", "dream", "influence", "global", "societal", "communal", "personal", "business-idea", "career", "freelance", "industry"];
+
+export type ZoneName = "The Heart" | "The Craft" | "The Path" | "The Mission";
+
+type ZoneAspectTypes = {
+  [key in ZoneName]: AspectType[];
+}
+
+export const zoneAspectTypes: ZoneAspectTypes = {
+  "The Heart": ["interest", "value", "dream", "influence"],
+  "The Craft": ["skill", "knowledge", "expertise", "strength"], 
+  "The Mission": ["global", "societal", "communal", "personal"], 
+  "The Path": ["business-idea", "career", "freelance", "industry"]
+}
+
+export const getZoneName = (aspectType: AspectType): ZoneName | undefined => {
+  const zoneName = Object.keys(zoneAspectTypes).find((zoneName) => {
+    return zoneAspectTypes[zoneName as ZoneName].includes(aspectType);
+  });
+  return zoneName as ZoneName | undefined;
+}

@@ -13,20 +13,37 @@ import {
   useEditor, 
   resizeBox,
   TLOnResizeHandler,
-  TextShapeUtil,
+  TLEventHandlers,
   EnumStyleProp, 
+  TLOnTranslateEndHandler,
 } from '@tldraw/tldraw';
-import { useEffect } from 'react';
 import { TextLabel } from '../helpers/textLabel';
 import { ShapePropsType } from '../helpers/deepTldraw';
 import { AspectIcon, ZoneIcon} from './aspectIcons';
+import { AspectType } from '@/lib/types';
 
 
 const BASE_ASPECT_HEIGHT = 32
 const MIN_ASPECT_WIDTH = 120
+const bgColors = {
+  "blue": "bg-blue-100",
+  "green": "bg-green-100",
+  "red": "bg-red-100",
+  "yellow": "bg-yellow-100",
+  "teal": "bg-teal-100",
+  "purple": "bg-purple-50",
+  "lime": "bg-lime-100",
+  "amber": "bg-amber-100",
+  "purple-strong": "bg-purple-200",
+  "orange": "bg-orange-200",
+  "yellow-strong": "bg-yellow-200",
+  "emerald": "bg-emerald-200",
+  "amber-strong": "bg-amber-400",
+
+}
 
 export declare const aspectShapeProps: {
-  color: EnumStyleProp<"black" | "blue" | "green" | "grey" | "light-blue" | "light-green" | "light-red" | "light-violet" | "orange" | "red" | "violet" | "yellow">;
+  color: EnumStyleProp<"blue" | "green" | "red" | "yellow" | "teal" | "purple" | "lime" | "amber" | "purple-strong" | "orange" | "yellow-strong" | "emerald" | "amber-strong">;
   size: EnumStyleProp<"l" | "m" | "s" | "xl">;
   font: EnumStyleProp<"draw" | "mono" | "sans" | "serif">;
   align: EnumStyleProp<"end-legacy" | "end" | "middle-legacy" | "middle" | "start-legacy" | "start">;
@@ -35,7 +52,7 @@ export declare const aspectShapeProps: {
   text: T.Validator<string>;
   w: T.Validator<number>;
   h: T.Validator<number>;
-  aspectTypes: T.ArrayOfValidator<"skill" | "knowledge" | "expertise" | "strength" | "interest" | "value" | "dream" | "influence" | "global" | "societal" | "communal" | "personal" | "business idea" | "career" | "freelance" | "industry">;
+  aspectTypes: T.ArrayOfValidator<AspectType>;
   zone: EnumStyleProp<"heart" | "craft" | "path" | "cause">;
 };
 
@@ -57,6 +74,61 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
 		return resizeBox(shape, info)
 	}
 
+  override onTranslateEnd: TLOnTranslateEndHandler<IAspectShape> = (initial: IAspectShape, current: IAspectShape) => {
+
+    console.log("initial shape: ", initial)
+    console.log("current shape: ", current)
+
+   
+    const shapes = this.editor.getCurrentPageShapes()
+    const ikigaiCircles = shapes.filter(shape => shape.type === 'ikigaiCircle');
+
+    const ikigaiCircleMap = ikigaiCircles.reduce((acc, shape) => {
+      const key = shape.id.split('-')[1]; // get the last part of the id
+      acc[key] = shape; // add the shape to the object with the key
+      return acc;
+    }, {} as Record<string, typeof ikigaiCircles[0]>);
+    
+    console.log(ikigaiCircleMap);
+
+
+    const inTheHeart = this.editor.isPointInShape(ikigaiCircleMap['theHeart'], { x: current.x, y: current.y })
+    const inTheCraft = this.editor.isPointInShape(ikigaiCircleMap['theCraft'], { x: current.x, y: current.y })
+    const inTheMission = this.editor.isPointInShape(ikigaiCircleMap['theMission'], { x: current.x, y: current.y })
+    const inThePath = this.editor.isPointInShape(ikigaiCircleMap['thePath'], { x: current.x, y: current.y })
+
+    console.log("Aspect is in: ", 
+      inTheHeart ? "theHeart" : "", 
+      inTheCraft ? "theCraft" : "", 
+      inTheMission ? "theMission" : "", 
+      inThePath ? "thePath" : ""
+    );    
+  
+    const color = 
+      inTheHeart && inTheCraft && inTheMission && inThePath ? "amber-strong" : 
+      inTheHeart && inTheCraft && inTheMission ? "orange" :
+      inTheHeart && inTheCraft && inThePath ? "purple-strong" :
+      inTheHeart && inTheMission && inThePath ? "emerald" :
+      inTheCraft && inTheMission && inThePath ? "yellow-strong" :
+      inTheHeart && inTheCraft ? "purple" : 
+      inTheHeart && inTheMission ? "amber" : 
+      inThePath && inTheMission ? "lime" : 
+      inThePath && inTheCraft ? "teal" : 
+      inTheHeart ? "red" : 
+      inTheCraft ? "blue" :
+      inTheMission ? "green" : 
+      inThePath ? "yellow" : 
+      "default"; // default color
+
+    console.log("The color is:", color)
+
+    this.editor.updateShape({
+      id: current.id, type: current.type, 
+      props: {...current.props, color: color}
+    })
+
+  };
+
   onDoubleClick = (shape: IAspectShape) => {
     console.log("double click: ", shape)
   }
@@ -64,7 +136,7 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
   getDefaultProps(): IAspectShape['props'] {
     return {
       text: "...",
-      color: 'black', 
+      color: 'red', 
       size: 'm',
       font: 'mono',
       align: 'middle',
@@ -78,7 +150,6 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
   }
 
   getGeometry(shape: IAspectShape) {
-    console.log("heres the geometry: ", shape)
     // This method should return a Rectangle2d instance with the shape's geometry
     return new Rectangle2d({
       width: shape.props.w,
@@ -94,27 +165,19 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
   }
 
   component(shape: IAspectShape) {
-    // const bounds = this.editor.getShapeGeometry(shape).bounds
 
     const {
       id, props: { w, h, color, text, aspectTypes, zone }
     } = shape;
-    const { x, y } = shape;
-    console.log(shape)
-    console.log("here are the aspect types", aspectTypes)
-    // const theme = getDefaultColorTheme({ isDarkMode: this.editor.user.getIsDarkMode() });
-    // const fillColor = theme[color].semi;     
 
-    // minHeight is BASE_ASPECT_HEIGHT times the number of aspect types in px    
     const minHeight = `${this.getMinHeight(shape)}px`;
-    console.log('here is minheight: ', minHeight)
-  
+
     return (
       <HTMLContainer 
         style={{width: w, height: h, minHeight}} 
         className={`grid grid-cols-[auto,1fr,auto] items-center
           text-xs font-bold
-          bg-red-100 bg-opacity-60 
+          ${bgColors[color]} bg-opacity-60 
           rounded-lg shadow-inner shadow-md
           min-w-[120px]
         `}
@@ -129,7 +192,7 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
 							id={id}
 							type="text"
 							font="mono"
-							size="m"
+							size="s"
 							align="middle"
 							verticalAlign="middle"
 							text={text}
@@ -150,32 +213,3 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
     return <rect width={width} height={height} />
   }
 }
-
-
-// export interface AspectProps {
-//   aspectId: TLShapeId;
-//   x: number;
-//   y: number;
-//   tag: string;
-//   color: string; 
-// }
-
-// export const Aspect: React.FC<AspectProps> = ({ aspectId, x, y, tag, color }) => {
-//   const editor = useEditor();
-
-//   useEffect(() => {
-//     // Run only once to create the shape
-//     editor.createShape({
-//       id: aspectId,
-//       type: AspectShape.type,
-//       props: { x, y, color, tag, width: 400, height: 400 },
-//     });
-
-//     // Cleanup function to remove the shape if the component is unmounted
-//     return () => {
-//       editor.deleteShape(aspectId);
-//     };
-//   }, [editor, aspectId, x, y, tag, color]); // Re-run this effect if the props change
-
-//   return null; // This component does not render anything itself
-// };

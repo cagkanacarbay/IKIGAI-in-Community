@@ -1,6 +1,6 @@
 import { 
   TLBaseShape, TLDefaultColorStyle, 
-  ShapeProps, T, DefaultColorStyle,
+  ShapeProps, T, DefaultColorStyle, TLOnDragHandler,
   ShapeUtil, HTMLContainer, Circle2d, getDefaultColorTheme, createShapeId, useEditor
 } from '@tldraw/tldraw';
 import { useEffect } from 'react';
@@ -26,22 +26,26 @@ export const ikigaiCircleShapeProps: ShapeProps<IIkigaiCircleShape> = {
 export default class IkigaiCircleShape extends ShapeUtil<IIkigaiCircleShape> {
   static override type = 'ikigaiCircle' as const;
 
-  override hideResizeHandles = () => {
-    return true;
-  }
-  override hideRotateHandle = () => {
-    return true;
-  }
-  override hideSelectionBoundsFg = () => {
-    return true;
-  }
-  override canScroll = () => {
-    return false;
-  }
+  override hideResizeHandles = () => true
+  override hideRotateHandle = () => true
+  override hideSelectionBoundsFg = () => true
+  override canScroll = () => false
+  isLocked = () => true
 
-  isLocked  = () => {
-    return true;
-  }
+  // override onDropShapesOver: TLOnDragHandler<IIkigaiCircleShape> = (shape, shapes) => {
+  //   // DOESNT FIRE for some reason
+
+  //   console.log("we got new shapess: ", shapes)
+
+  //   shapes.forEach(droppedShape => {
+  //     if (droppedShape.type === 'aspect') {
+  //       // Implement logic to notify AspectShape of the drop event
+  //       // This could involve updating a shared state, emitting an event, or directly invoking a method on AspectShape
+        
+  //       console.log("I got a new aspect woop: ", droppedShape)
+  //     }
+  //   });
+  // };
 
   getDefaultProps(): IIkigaiCircleShape['props'] {
     return {
@@ -103,19 +107,19 @@ export function IkigaiCircles() {
 
 
       const ikigaiCircleIds = {
-        love: createShapeId('ikigaiCircle-love'),
-        goodAt: createShapeId('ikigaiCircle-goodAt'),
-        need: createShapeId('ikigaiCircle-need'),
-        worldNeeds: createShapeId('ikigaiCircle-worldNeeds')
+        heart: createShapeId('ikigaiCircle-theHeart'),
+        craft: createShapeId('ikigaiCircle-theCraft'),
+        mission: createShapeId('ikigaiCircle-theMission'),
+        path: createShapeId('ikigaiCircle-thePath')
       };
 
       localStorage.setItem('ikigaiCircleIds', JSON.stringify(ikigaiCircleIds));
 
       editor.createShapes([
-        { id: ikigaiCircleIds.love, type: IkigaiCircleShape.type, props: { x: xMid, y: yTop, radius: radius, color: 'light-red' } },
-        { id: ikigaiCircleIds.goodAt, type: IkigaiCircleShape.type, props: { x: xMid, y: yBottom, radius: radius, color: 'yellow' } },
-        { id: ikigaiCircleIds.need, type: IkigaiCircleShape.type, props: { x: xLeft, y: yMid, radius: radius, color: 'light-blue' } },
-        { id: ikigaiCircleIds.worldNeeds, type: IkigaiCircleShape.type, props: { x: xRight, y: yMid, radius: radius, color: 'light-green' } },
+        { id: ikigaiCircleIds.heart, type: IkigaiCircleShape.type, props: { x: xMid, y: yTop, radius: radius, color: 'light-red' } },
+        { id: ikigaiCircleIds.path, type: IkigaiCircleShape.type, props: { x: xMid, y: yBottom, radius: radius, color: 'yellow' } },
+        { id: ikigaiCircleIds.craft, type: IkigaiCircleShape.type, props: { x: xLeft, y: yMid, radius: radius, color: 'light-blue' } },
+        { id: ikigaiCircleIds.mission, type: IkigaiCircleShape.type, props: { x: xRight, y: yMid, radius: radius, color: 'light-green' } },
       ]);
 
       const circles = editor.getCurrentPageShapesSorted();

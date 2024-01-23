@@ -1,7 +1,8 @@
-import { TLUiOverrides, findMenuItem, menuItem, toolbarItem, TLUiMenuGroup, TLUiActionItem, createShapeId } from '@tldraw/tldraw';
+import { TLUiOverrides, findMenuItem, menuItem, Editor, toolbarItem, TLUiMenuGroup, TLUiActionItem, createShapeId, menuGroup, menuSubmenu } from '@tldraw/tldraw';
 import { saveImageAssetsAsBlobsAndUpdateMetadata, saveAsJSON, uploadSnapshot } from './boardStorage';
 import { ulid } from 'ulid';
 import AspectShape from './shapes/aspect';
+import { AspectType, ZoneName, aspectTypes, getZoneName } from '@/lib/types';
 
 interface AssetSrc {
   id: string;
@@ -9,6 +10,50 @@ interface AssetSrc {
 }
 
 const toolsToRemove: string[] = []
+
+function getZoneColor(zoneName: ZoneName) {
+  switch (zoneName) {
+    case 'The Heart':
+      return 'red';
+    case 'The Craft':
+      return 'blue';
+    case 'The Mission':
+      return 'green';
+    case 'The Path':
+      return 'yellow';
+    default:
+      return 'black';
+  }
+}
+
+function createAspectAction(editor: Editor, aspectType: AspectType, zoneName: ZoneName) {
+
+  return {
+    id: `add-${aspectType}`,
+    label: `${aspectType}`,
+    // kbd: '$u',
+    icon: "chevron-right",
+    readonlyOk: true,
+    onSelect(source: any) {
+      const {x, y} = editor.inputs.currentPagePoint // last left click xy
+      const aspectId = createShapeId(`aspect-${ulid()}`);
+
+      editor.createShape({
+        id: aspectId,
+        type: AspectShape.type,
+        props: {
+          w: 160, h: 40, 
+          text: "...", 
+          zone: zoneName,
+          aspectTypes: [aspectType],
+          color: getZoneColor(zoneName),
+        },
+        x: x,
+        y: y,
+      });
+    },
+  };
+}
 
 /**
 * Override the UI elements, add new things, remove any calls, do whatever. 
@@ -57,7 +102,7 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
         id: 'save-local',
         label: 'Save',
         menuLabel: "Save Ikigai Locally",
-        icon: 'save',
+        icon: 'check',
         readonlyOk: true,
         onSelect: (source: any) => {
           if (editor && editor.store) {
@@ -88,33 +133,16 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
         },
       };
 
-      actions['create-aspect'] = {
-        id: 'create-aspect',
-        label: 'Create an aspect',
-        readonlyOk: true,
-        // kbd: '$u',
-        onSelect(source: any) {
-          const {x, y} = editor.inputs.currentPagePoint // last left click xy
-          const aspectId = createShapeId(`aspect-${ulid()}`);
-
-          editor.createShape({
-            id: aspectId,
-            type: AspectShape.type,
-            props: {
-              w: 160, h: 40, 
-              text: "...", 
-              zone: "craft",
-              aspectTypes: ['knowledge', 'skill', 'career']
-            },
-            x: x,
-            y: y,
-          });
-        },
-      };
-
+      // Create a new action for each type of aspect. 
+      aspectTypes.forEach((aspectType) => {
+        const zoneName = getZoneName(aspectType);
+        if (zoneName) {
+          actions[`add-${aspectType}`] = createAspectAction(editor, aspectType, zoneName);
+        }
+      });
+      
       return actions;
     },
-
 
 
     tools: (editor, tools) => {
@@ -161,8 +189,47 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
     },
 
     contextMenu(editor, contextMenu, { actions }) {
-      const newMenuItem = menuItem(actions['create-aspect'])
-      contextMenu.unshift(newMenuItem)
+      // const newMenuItem = menuItem(actions['create-aspect'])
+      
+      const createAspectMenu: TLUiMenuGroup = menuGroup(
+        'create-aspect-group',
+        menuSubmenu(
+          'create-aspect',
+          'Create an Aspect',
+          menuGroup(
+            'heart-aspects',
+            menuItem(actions['add-interest']),
+            menuItem(actions['add-value']),
+            menuItem(actions['add-dream']),
+            menuItem(actions['add-influence']),
+          ),
+          menuGroup(
+            'craft-aspects',
+            menuItem(actions['add-skill']),
+            menuItem(actions['add-knowledge']),
+            menuItem(actions['add-expertise']),
+            menuItem(actions['add-strength']),
+          ),
+          menuGroup(
+            'mission-aspects',
+            menuItem(actions['add-global']),
+            menuItem(actions['add-communal']),
+            menuItem(actions['add-societal']),
+            menuItem(actions['add-personal']),
+          ),
+          menuGroup(
+            'path-aspects',
+            menuItem(actions['add-business-idea']),
+            menuItem(actions['add-career']),
+            menuItem(actions['add-freelance']),
+            menuItem(actions['add-industry']),
+          ),
+        )
+      ) as TLUiMenuGroup; 
+
+
+      // console.log("context menu: ", contextMenu)
+      contextMenu.unshift(createAspectMenu)
       return contextMenu
     },
 

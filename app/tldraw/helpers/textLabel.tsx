@@ -22,10 +22,10 @@ export function isLegacyAlign(align: TLDefaultHorizontalAlignStyle | string): bo
 }
 
 export const LABEL_FONT_SIZES: Record<TLDefaultSizeStyle, number> = {
-	s: 18,
-	m: 22,
-	l: 26,
-	xl: 32,
+	s: 12,
+	m: 14,
+	l: 18,
+	xl: 22,
 }
 
 export const TEXT_PROPS = {
@@ -93,7 +93,7 @@ export const TextLabel = React.memo(function TextLabel<
 
 	return (
 		<div
-			className="tl-text-label m-6 overflow-hidden"
+			className="tl-text-label mr-6 ml-6 overflow-hidden"
 			data-font={font}
 			data-align={align}
 			data-hastext={!isEmpty}
@@ -118,7 +118,7 @@ export const TextLabel = React.memo(function TextLabel<
 				style={{
 					fontSize: LABEL_FONT_SIZES[size],
 					lineHeight: LABEL_FONT_SIZES[size] * TEXT_PROPS.lineHeight + 'px',
-					minHeight: TEXT_PROPS.lineHeight + 32,
+					minHeight: TEXT_PROPS.lineHeight + 0,
 					minWidth: 0,
 					color: theme[labelColor].solid,
 				}}

@@ -1,3 +1,4 @@
+// Some stuff I took from deep inside tldraw's repo to make my life easier.
 import { T } from "@tldraw/tldraw";
 
 
