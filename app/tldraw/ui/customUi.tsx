@@ -1,8 +1,14 @@
-import { TLUiOverrides, findMenuItem, menuItem, Editor, toolbarItem, TLUiMenuGroup, TLUiActionItem, createShapeId, menuGroup, menuSubmenu } from '@tldraw/tldraw';
-import { saveImageAssetsAsBlobsAndUpdateMetadata, saveAsJSON, uploadSnapshot } from './boardStorage';
-import { ulid } from 'ulid';
-import AspectShape from './shapes/aspect';
-import { AspectType, ZoneName, aspectTypes, getZoneName } from '@/lib/types';
+import { 
+  TLUiOverrides, findMenuItem, menuItem, 
+  Editor, toolbarItem, TLUiMenuGroup, 
+  TLUiActionItem, menuGroup, 
+  menuSubmenu, JsonObject
+} from '@tldraw/tldraw';
+import { saveImageAssetsAsBlobsAndUpdateMetadata, saveAsJSON, uploadSnapshot } from '../boardStorage';
+import { AspectShapeMeta, IAspectShape } from '../shapes/aspect';
+import { ZoneName, aspectTypes, getZoneName } from '@/lib/types';
+import { createAspectAction } from './actions';
+import { addAspectActionToSelectedAspects } from './actions';
 
 interface AssetSrc {
   id: string;
@@ -11,7 +17,7 @@ interface AssetSrc {
 
 const toolsToRemove: string[] = []
 
-function getZoneColor(zoneName: ZoneName) {
+export function getZoneColor(zoneName: ZoneName) {
   switch (zoneName) {
     case 'The Heart':
       return 'red';
@@ -26,33 +32,10 @@ function getZoneColor(zoneName: ZoneName) {
   }
 }
 
-function createAspectAction(editor: Editor, aspectType: AspectType, zoneName: ZoneName) {
-
-  return {
-    id: `add-${aspectType}`,
-    label: `${aspectType}`,
-    // kbd: '$u',
-    icon: "chevron-right",
-    readonlyOk: true,
-    onSelect(source: any) {
-      const {x, y} = editor.inputs.currentPagePoint // last left click xy
-      const aspectId = createShapeId(`aspect-${ulid()}`);
-
-      editor.createShape({
-        id: aspectId,
-        type: AspectShape.type,
-        props: {
-          w: 160, h: 40, 
-          text: "...", 
-          zone: zoneName,
-          aspectTypes: [aspectType],
-          color: getZoneColor(zoneName),
-        },
-        x: x,
-        y: y,
-      });
-    },
-  };
+export function getShapeTypes(editor: Editor, shapeTypes: string[]) {
+  const selectedShapes = editor.getSelectedShapes();
+  const matchedShapes = selectedShapes.filter(shape => shapeTypes.includes(shape.type));
+  return matchedShapes;
 }
 
 /**
@@ -133,11 +116,19 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
         },
       };
 
-      // Create a new action for each type of aspect. 
+      // "create-aspectType": Creates a new aspect with a type of aspectType
       aspectTypes.forEach((aspectType) => {
         const zoneName = getZoneName(aspectType);
         if (zoneName) {
-          actions[`add-${aspectType}`] = createAspectAction(editor, aspectType, zoneName);
+          actions[`create-${aspectType}`] = createAspectAction(editor, aspectType, zoneName);
+        }
+      });
+
+      // "add-aspectType": Adds a new aspectType to an existing aspect
+      aspectTypes.forEach((aspectType) => {
+        const zoneName = getZoneName(aspectType);
+        if (zoneName) {
+          actions[`add-${aspectType}`] = addAspectActionToSelectedAspects(editor, aspectType, zoneName);
         }
       });
       
@@ -189,16 +180,78 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
     },
 
     contextMenu(editor, contextMenu, { actions }) {
-      // const newMenuItem = menuItem(actions['create-aspect'])
+      // const newMenuItem = menuItem(actions['add-aspect'])
+
+      const REMOVED_CONTEXT_MENU_OPTIONS = [
+        'selection',          // Duplicate and Toggle Locked.         TODO: add Toggle Locked back 
+        'modify',             // Reorder and Move to page.            TODO: add reorder back
+        // 'clipboard-group', // Cut copy paste
+        'conversions',        // Copy as SVG, PNG, JSON, Export as SVG, PNG, JSON
+        // 'delete-group',    // Delete
+        'set-selection-group' // Select all, select none
+      ];
+
+      contextMenu = contextMenu.filter(group => {
+        return !REMOVED_CONTEXT_MENU_OPTIONS.includes(group.id);
+      });
       
+      console.log(contextMenu);
+
+      const CUSTOM_TYPES = ['aspect'];
+
+      const selectedShapes = editor.getSelectedShapes()
+      const selectedAspects = selectedShapes.filter(shape => CUSTOM_TYPES.includes(shape.type));
+
+      const aspectSelected = selectedShapes.some(shape => CUSTOM_TYPES.includes(shape.type));
+
+      console.log("Selected Aspects: ", selectedAspects)
+      console.log("Has aspect: ", aspectSelected);
+      console.log("selected shapes are: ", selectedShapes)
+
       const createAspectMenu: TLUiMenuGroup = menuGroup(
         'create-aspect-group',
-        menuSubmenu(
+        !aspectSelected && menuSubmenu(
           'create-aspect',
           'Create an Aspect',
           menuGroup(
             'heart-aspects',
-            menuItem(actions['add-interest']),
+            menuItem(actions['create-interest']),
+            menuItem(actions['create-value']),
+            menuItem(actions['create-dream']),
+            menuItem(actions['create-influence']),
+          ),
+          menuGroup(
+            'craft-aspects',
+            menuItem(actions['create-skill']),
+            menuItem(actions['create-knowledge']),
+            menuItem(actions['create-expertise']),
+            menuItem(actions['create-strength']),
+          ),
+          menuGroup(
+            'mission-aspects',
+            menuItem(actions['create-global']),
+            menuItem(actions['create-communal']),
+            menuItem(actions['create-societal']),
+            menuItem(actions['create-personal']),
+          ),
+          menuGroup(
+            'path-aspects',
+            menuItem(actions['create-business-idea']),
+            menuItem(actions['create-career']),
+            menuItem(actions['create-freelance']),
+            menuItem(actions['create-industry']),
+          ),
+        )
+      ) as TLUiMenuGroup; 
+
+      const editAspectMenu: TLUiMenuGroup = menuGroup(
+        'Add-aspect-group',
+        aspectSelected && menuSubmenu(
+          'edit-aspect',
+          'Edit an Aspect',
+          menuGroup(
+            'heart-aspects',
+            menuItem(actions['add-interest'], {checked: true}),
             menuItem(actions['add-value']),
             menuItem(actions['add-dream']),
             menuItem(actions['add-influence']),
@@ -227,9 +280,8 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
         )
       ) as TLUiMenuGroup; 
 
-
       // console.log("context menu: ", contextMenu)
-      contextMenu.unshift(createAspectMenu)
+      contextMenu.unshift(createAspectMenu, editAspectMenu)
       return contextMenu
     },
 

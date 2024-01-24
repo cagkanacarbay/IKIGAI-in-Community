@@ -16,6 +16,7 @@ import {
   TLEventHandlers,
   EnumStyleProp, 
   TLOnTranslateEndHandler,
+  
 } from '@tldraw/tldraw';
 import { TextLabel } from '../helpers/textLabel';
 import { ShapePropsType } from '../helpers/deepTldraw';
@@ -52,11 +53,16 @@ export declare const aspectShapeProps: {
   text: T.Validator<string>;
   w: T.Validator<number>;
   h: T.Validator<number>;
-  aspectTypes: T.ArrayOfValidator<AspectType>;
+  // aspectTypes: T.ArrayOfValidator<AspectType>;
   zone: EnumStyleProp<"heart" | "craft" | "path" | "cause">;
 };
 
-declare type IAspectShape = TLBaseShape<'aspect', AspectShapeProps>;
+export interface AspectShapeMeta {
+  aspectTypes: AspectType[];
+}
+
+export declare type IAspectShape = TLBaseShape<'aspect', AspectShapeProps> & { meta: AspectShapeMeta };
+// declare type IAspectShape = TLBaseShape<'aspect', AspectShapeProps>;
 
 declare type AspectShapeProps = ShapePropsType<typeof aspectShapeProps>;
 
@@ -75,11 +81,7 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
 	}
 
   override onTranslateEnd: TLOnTranslateEndHandler<IAspectShape> = (initial: IAspectShape, current: IAspectShape) => {
-
-    console.log("initial shape: ", initial)
-    console.log("current shape: ", current)
-
-   
+    // todo: create a test for onTranslateEnd
     const shapes = this.editor.getCurrentPageShapes()
     const ikigaiCircles = shapes.filter(shape => shape.type === 'ikigaiCircle');
 
@@ -89,20 +91,10 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
       return acc;
     }, {} as Record<string, typeof ikigaiCircles[0]>);
     
-    console.log(ikigaiCircleMap);
-
-
     const inTheHeart = this.editor.isPointInShape(ikigaiCircleMap['theHeart'], { x: current.x, y: current.y })
     const inTheCraft = this.editor.isPointInShape(ikigaiCircleMap['theCraft'], { x: current.x, y: current.y })
     const inTheMission = this.editor.isPointInShape(ikigaiCircleMap['theMission'], { x: current.x, y: current.y })
     const inThePath = this.editor.isPointInShape(ikigaiCircleMap['thePath'], { x: current.x, y: current.y })
-
-    console.log("Aspect is in: ", 
-      inTheHeart ? "theHeart" : "", 
-      inTheCraft ? "theCraft" : "", 
-      inTheMission ? "theMission" : "", 
-      inThePath ? "thePath" : ""
-    );    
   
     const color = 
       inTheHeart && inTheCraft && inTheMission && inThePath ? "amber-strong" : 
@@ -119,8 +111,6 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
       inTheMission ? "green" : 
       inThePath ? "yellow" : 
       "default"; // default color
-
-    console.log("The color is:", color)
 
     this.editor.updateShape({
       id: current.id, type: current.type, 
@@ -144,10 +134,14 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
       growY: 0,
       w: MIN_ASPECT_WIDTH,
       h: BASE_ASPECT_HEIGHT,
-      aspectTypes: ['skill'],
+      // aspectTypes: ['skill'],
       zone: "heart"
     };
   }
+
+  getInitialMetaForShape(): IAspectShape['meta'] {
+    return { aspectTypes: [] };
+  };
 
   getGeometry(shape: IAspectShape) {
     // This method should return a Rectangle2d instance with the shape's geometry
@@ -159,7 +153,10 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
   }
 
   getMinHeight(shape: IAspectShape) {
-    const {props: {aspectTypes}} = shape;
+    const {meta: {aspectTypes}} = shape;
+    console.log(shape)
+    return 40;
+    console.log("aspectTypes: ", aspectTypes)
     const minHeight = BASE_ASPECT_HEIGHT * aspectTypes.length;
     return minHeight;
   }
@@ -167,7 +164,7 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
   component(shape: IAspectShape) {
 
     const {
-      id, props: { w, h, color, text, aspectTypes, zone }
+      id, props: { w, h, color, text, zone }, meta: { aspectTypes }
     } = shape;
 
     const minHeight = `${this.getMinHeight(shape)}px`;

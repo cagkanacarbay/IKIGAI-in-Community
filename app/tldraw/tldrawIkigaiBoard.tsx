@@ -4,7 +4,7 @@ import { Tldraw, TLEditorComponents, useEditor, defaultShapeTools, defaultShapeU
 import '@tldraw/tldraw/tldraw.css';
 import IkigaiCircleShape, { IkigaiCircles } from './shapes/ikigaiCircles';
 import AspectShape from './shapes/aspect';
-import { uiOverrides } from './customUi';
+import { uiOverrides } from './ui/customUi';
 import { useSession } from 'next-auth/react';
 import { downloadSnapshot, updateDatabaseSnapshotWithBlobSrc } from './boardStorage';
 import { Spinner } from '@material-tailwind/react';
