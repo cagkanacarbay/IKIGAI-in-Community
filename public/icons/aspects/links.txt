@@ -1,0 +1,16 @@
+interest: https://www.flaticon.com/free-icon/world-book-day_4212480
+value: https://www.flaticon.com/free-icon/belief_6420052
+dream: https://www.flaticon.com/free-icon/dream_4697945
+expertise: https://www.flaticon.com/free-icon/imagination_1700511
+strength: https://www.flaticon.com/free-icon/strength_9571346?term=strengths&page=1&position=16&origin=search&related_id=9571346
+skill: https://www.flaticon.com/free-icon/skills_3080443?term=skills&page=1&position=39&origin=search&related_id=3080443
+knowledge: https://www.flaticon.com/free-icon/thought_775619
+influence: https://www.flaticon.com/free-icon/connections_4337533
+global: https://www.flaticon.com/free-icon/earth_5828682?term=global&page=1&position=71&origin=search&related_id=5828682
+societal: https://www.flaticon.com/free-icon/team_6967748
+communal: https://www.flaticon.com/free-icon/equality_12182969?term=community&page=1&position=47&origin=search&related_id=12182969
+personal: https://www.flaticon.com/free-icon/user_1077012?term=personal&page=1&position=5&origin=search&related_id=1077012
+business idea: https://www.flaticon.com/free-icon/design-thinking_2857527?term=business+idea&related_id=2857527
+career: https://www.flaticon.com/free-icon/leadership_9088759?term=career+path&page=1&position=68&origin=search&related_id=9088759
+freelance: https://www.flaticon.com/free-icon/laptop_7758995?term=beach+work&page=1&position=2&origin=search&related_id=7758995
+industry: https://www.flaticon.com/free-icon/innovation_2258269
