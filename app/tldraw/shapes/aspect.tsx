@@ -154,9 +154,6 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
 
   getMinHeight(shape: IAspectShape) {
     const {meta: {aspectTypes}} = shape;
-    console.log(shape)
-    return 40;
-    console.log("aspectTypes: ", aspectTypes)
     const minHeight = BASE_ASPECT_HEIGHT * aspectTypes.length;
     return minHeight;
   }

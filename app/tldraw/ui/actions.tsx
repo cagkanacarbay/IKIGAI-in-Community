@@ -37,21 +37,16 @@ export function createAspectAction(editor: Editor, aspectType: AspectType, zoneN
   };
 }
 
-export function addAspectActionToSelectedAspects(editor: Editor, aspectType: AspectType, zoneName: ZoneName) {
+export function addAspectTypeAction(editor: Editor, aspectType: AspectType, zoneName: ZoneName) {
 
   return {
     id: `add-${aspectType}`,
     label: `${aspectType}`,
-    // kbd: '$u',
-    // icon: "chevron-right",
     readonlyOk: true,
     onSelect(source: any) {
-      const { x, y } = editor.inputs.currentPagePoint; // last left click xy
 
-      // const aspectId = createShapeId(`aspect-${ulid()}`);
       const selectedAspects = getShapeTypes(editor, ['aspect']);
       console.log(`ADDING ${aspectType} to selected aspects:`, selectedAspects);
-
 
       const updatedAspects = selectedAspects
         .filter(aspect => aspect.type === 'aspect')
@@ -62,11 +57,10 @@ export function addAspectActionToSelectedAspects(editor: Editor, aspectType: Asp
             : [];
           
                       
-          // TODO: Add toast to notify user that aspect type already exists
-          // if (initialAspectTypes.includes(aspectType)) {
-          //   console.log(`Aspect type ${aspectType} already exists in the selected aspect.`);
-          //   return aspect;
-          // }
+          // TODO: Turn this into a nice toast
+          if (initialAspectTypes.includes(aspectType)) {
+            alert("Aspect type already exists in the selected aspect.");
+          }
 
           const newMeta = {
             aspectTypes: initialAspectTypes.includes(aspectType) ? initialAspectTypes : [...initialAspectTypes, aspectType],
@@ -83,42 +77,38 @@ export function addAspectActionToSelectedAspects(editor: Editor, aspectType: Asp
 }
 
 
-// export function addAspectActionToSelectedAspects(editor: Editor, aspectType: AspectType, zoneName: ZoneName, addToast: (toast: Omit<TLUiToast, 'id'> & { id?: string }) => string) {
+export function removeAspectTypeAction(editor: Editor, aspectType: AspectType, zoneName: ZoneName) {
+  return {
+    id: `remove-${aspectType}`,
+    label: `Remove ${aspectType}`,
+    readonlyOk: true,
+    onSelect(source: any) {
+      const selectedAspects = getShapeTypes(editor, ['aspect']);
+      console.log(`REMOVING ${aspectType} from selected aspects:`, selectedAspects);
 
-//   return {
-//     id: `add-${aspectType}`,
-//     label: `${aspectType}`,
-//     readonlyOk: true,
-//     onSelect(source: any) {
-//       const selectedAspects = getShapeTypes(editor, ['aspect']);
-//       console.log(`ADDING ${aspectType} to selected aspects:`, selectedAspects);
+      const updatedAspects = selectedAspects
+        .filter(aspect => aspect.type === 'aspect')
+        .map(aspect => {
+          // Ensure that initialAspectTypes is an array of strings
+          const initialAspectTypes = Array.isArray(aspect.meta.aspectTypes) && aspect.meta.aspectTypes.every(type => typeof type === 'string')
+            ? aspect.meta.aspectTypes
+            : [];
 
-//       const updatedAspects = selectedAspects
-//         .filter(aspect => aspect.type === 'aspect')
-//         .map(aspect => {
-//           // Ensure that initialAspectTypes is an array of strings
-//           const initialAspectTypes = Array.isArray(aspect.meta.aspectTypes) && aspect.meta.aspectTypes.every(type => typeof type === 'string')
-//             ? aspect.meta.aspectTypes
-//             : [];
+          // TODO: Turn this into a nice toast
+          if (!initialAspectTypes.includes(aspectType)) {
+            alert("Aspect type does not exist in the selected aspect.");
+            return aspect; // Return the aspect without any changes
+          }
 
-//           if (initialAspectTypes.includes(aspectType)) {
-//             addToast({
-//               id: `aspectType-${aspectType}-exists`,
-//               title: 'Error',
-//               description: `Aspect type ${aspectType} already exists in the selected aspect.`,
-//             });
-//             return aspect;
-//           }
+          const newMeta = {
+            aspectTypes: initialAspectTypes.filter(type => type !== aspectType), // Remove the aspectType
+          };
 
-//           const newMeta = {
-//             aspectTypes: [...initialAspectTypes, aspectType],
-//           };
+          // Return a new aspect with the updated meta
+          return {...aspect, meta: newMeta};
+        });
 
-//           // Return a new aspect with the updated meta
-//           return {...aspect, meta: newMeta};
-//         });
-
-//       editor.updateShapes(updatedAspects);
-//     },
-//   };
-// }
+      editor.updateShapes(updatedAspects);
+    },
+  };
+}

@@ -5,10 +5,8 @@ import {
   menuSubmenu, JsonObject
 } from '@tldraw/tldraw';
 import { saveImageAssetsAsBlobsAndUpdateMetadata, saveAsJSON, uploadSnapshot } from '../boardStorage';
-import { AspectShapeMeta, IAspectShape } from '../shapes/aspect';
 import { ZoneName, aspectTypes, getZoneName } from '@/lib/types';
-import { createAspectAction } from './actions';
-import { addAspectActionToSelectedAspects } from './actions';
+import { createAspectAction, addAspectTypeAction, removeAspectTypeAction } from './actions';
 
 interface AssetSrc {
   id: string;
@@ -128,7 +126,15 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
       aspectTypes.forEach((aspectType) => {
         const zoneName = getZoneName(aspectType);
         if (zoneName) {
-          actions[`add-${aspectType}`] = addAspectActionToSelectedAspects(editor, aspectType, zoneName);
+          actions[`add-${aspectType}`] = addAspectTypeAction(editor, aspectType, zoneName);
+        }
+      });
+
+      // "add-aspectType": Adds a new aspectType to an existing aspect
+      aspectTypes.forEach((aspectType) => {
+        const zoneName = getZoneName(aspectType);
+        if (zoneName) {
+          actions[`remove-${aspectType}`] = removeAspectTypeAction(editor, aspectType, zoneName);
         }
       });
       
@@ -201,7 +207,6 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
 
       const selectedShapes = editor.getSelectedShapes()
       const selectedAspects = selectedShapes.filter(shape => CUSTOM_TYPES.includes(shape.type));
-
       const aspectSelected = selectedShapes.some(shape => CUSTOM_TYPES.includes(shape.type));
 
       console.log("Selected Aspects: ", selectedAspects)
@@ -244,14 +249,14 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
         )
       ) as TLUiMenuGroup; 
 
-      const editAspectMenu: TLUiMenuGroup = menuGroup(
-        'Add-aspect-group',
+      const addAspectTypeMenu: TLUiMenuGroup = menuGroup(
+        'edit-aspect-type-group',
         aspectSelected && menuSubmenu(
-          'edit-aspect',
-          'Edit an Aspect',
+          'add-aspect-type',
+          'Add an Aspect Type',
           menuGroup(
             'heart-aspects',
-            menuItem(actions['add-interest'], {checked: true}),
+            menuItem(actions['add-interest'],),
             menuItem(actions['add-value']),
             menuItem(actions['add-dream']),
             menuItem(actions['add-influence']),
@@ -277,11 +282,45 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
             menuItem(actions['add-freelance']),
             menuItem(actions['add-industry']),
           ),
+        ),
+        aspectSelected && menuSubmenu(
+          'remove-aspect-type',
+          'Remove Aspect Type',
+          menuGroup(
+            'heart-aspects',
+            menuItem(actions['remove-interest']),
+            menuItem(actions['remove-value']),
+            menuItem(actions['remove-dream']),
+            menuItem(actions['remove-influence']),
+          ),
+          menuGroup(
+            'craft-aspects',
+            menuItem(actions['remove-skill']),
+            menuItem(actions['remove-knowledge']),
+            menuItem(actions['remove-expertise']),
+            menuItem(actions['remove-strength']),
+          ),
+          menuGroup(
+            'mission-aspects',
+            menuItem(actions['remove-global']),
+            menuItem(actions['remove-communal']),
+            menuItem(actions['remove-societal']),
+            menuItem(actions['remove-personal']),
+          ),
+          menuGroup(
+            'path-aspects',
+            menuItem(actions['remove-business-idea']),
+            menuItem(actions['remove-career']),
+            menuItem(actions['remove-freelance']),
+            menuItem(actions['remove-industry'], { disabled: false, checked: true }),
+          ),
         )
       ) as TLUiMenuGroup; 
 
+
+
       // console.log("context menu: ", contextMenu)
-      contextMenu.unshift(createAspectMenu, editAspectMenu)
+      contextMenu.unshift(createAspectMenu, addAspectTypeMenu)
       return contextMenu
     },
 
