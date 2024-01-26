@@ -30,6 +30,7 @@ import { ShapePropsType } from '../helpers/deepTldraw';
 import { AspectIcon, ZoneIcon} from './aspectIcons';
 import { AspectType } from '@/lib/types';
 import { TextLabel, TEXT_PROPS, FONT_FAMILIES, LABEL_FONT_SIZES } from '../helpers/textLabel';
+import { motion } from 'framer-motion';
 
 
 const BASE_ASPECT_HEIGHT = 32
@@ -51,11 +52,7 @@ const bgColors = {
   "default": "bg-gray-100"
 }
 
-
-
-// Assuming you have a way to incorporate these into a runtime object structure
 export const aspectShapeProps = {
-  // Directly use the imported default styles
   color: T.setEnum(new Set(["blue", "green", "red", "yellow", "teal", "purple", "lime", "amber", "purple-strong", "orange", "yellow-strong", "emerald", "amber-strong", "default"])),
   size: DefaultSizeStyle,
   font: DefaultFontStyle,
@@ -84,8 +81,9 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
 
   override isAspectRatioLocked = (_shape: IAspectShape) => false
 	override canResize = (_shape: IAspectShape) => true
-	override hideSelectionBoundsFg = (_shape: IAspectShape) => true
   override canEdit = () => true
+
+  override hideSelectionBoundsFg = (_shape: IAspectShape) => true
   // override hideResizeHandles = () => true
   
   override onResize: TLOnResizeHandler<IAspectShape> = (shape, info) => {
@@ -143,7 +141,7 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
       font: 'mono',
       align: 'middle',
       verticalAlign: 'middle',
-      growY: 0,
+      growY: 6,
       w: MIN_ASPECT_WIDTH,
       h: BASE_ASPECT_HEIGHT,
       // aspectTypes: ['skill'],
@@ -189,50 +187,56 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
     const minWidth = `${MIN_ASPECT_WIDTH}px`
 
     return (
-      <HTMLContainer 
-        style={{width: w, height: h, minHeight}} 
-        className={`grid grid-cols-[auto,1fr,auto] items-center
-          text-xs font-bold
-          ${colorClass} bg-opacity-60 
-          rounded-lg shadow-inner shadow-md
-          min-w-[${minWidth}]
-        `}
-      >
-          <div className="flex flex-col justify-center items-center ml-1 mr-2 mb-1">
-            {aspectTypes && aspectTypes.map((type) => (
-              <AspectIcon key={type} type={type} />
-            ))}
-          </div>
-          <div className="flex justify-center items-center p-2">
-            <TextLabel 
-							id={id}
-							type="text"
-							font={font}
-							size={size}
-							align={align}
-							verticalAlign={verticalAlign}
-							text={text}
-							labelColor="black"
-							wrap
-						/>
-          </div>
-          <div className="flex justify-center items-center mr-1 mb-1">
-            <ZoneIcon zone={zone}/>
-          </div>
-      </HTMLContainer>
+        <motion.div 
+          whileTap={{ scale: 0.8, transition:{ duration: 0.25}}}
+          style={{width: w, height: h, minHeight}} 
+          className={`grid grid-cols-[auto,1fr,auto] items-center
+            text-xs font-bold
+            ${colorClass} bg-opacity-60 
+            rounded-lg shadow-inner shadow-md
+            min-w-[${minWidth}]
+          `}
+        >
+            <div className="flex flex-col justify-center items-center ml-1 mr-2 mb-1">
+              {aspectTypes && aspectTypes.map((type) => (
+                <AspectIcon key={type} type={type} />
+              ))}
+            </div>
+            <div className="flex justify-center items-center p-2">
+              <TextLabel 
+                id={id}
+                type="text"
+                font={font}
+                size={size}
+                align={align}
+                verticalAlign={verticalAlign}
+                text={text}
+                labelColor="black"
+                wrap
+              />
+            </div>
+            <div className="flex justify-center items-center mr-1 mb-1">
+              <ZoneIcon zone={zone}/>
+            </div>
+        </motion.div>
     );
   }
 
   indicator(shape: IAspectShape) {
-    // return null
+    return null
     const width = Math.max(shape.props.w, MIN_ASPECT_WIDTH);
     const height = Math.max(shape.props.h, this.getHeight(shape));
-    return <rect width={width} height={height} />
+    return <rect width={width * 1.2} height={height * 1.2}/>
+    return <motion.div
+      whileHover={{ scale: 1.2 }}
+    >                
+      <rect width={width} height={height}/>
+    </motion.div>
   }
 
-  // override onBeforeCreate = (next: IAspectShape) => {
-	// 	return updateGrowYProp(this.editor, next, next.props.growY)
-	// }
+  override onBeforeCreate = (next: IAspectShape) => {
+		return updateGrowYProp(this.editor, next, next.props.growY)
+	}
 
 	override onBeforeUpdate = (prev: IAspectShape, next: IAspectShape) => {
 		if (
@@ -276,16 +280,16 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
  * @returns {IAspectShape} - The updated shape.
  */
 function updateGrowYProp(editor: Editor, shape: IAspectShape, prevGrowY = 0) {
-  const PADDING = 0
+  const PADDING = 80  // Calculated this with trial and error
 
   const nextTextSize = editor.textMeasure.measureText(shape.props.text, {
     ...TEXT_PROPS,
     fontFamily: FONT_FAMILIES[shape.props.font],
     fontSize: LABEL_FONT_SIZES[shape.props.size],
-    maxWidth: shape.props.w - PADDING * 2,
+    maxWidth: shape.props.w - PADDING,
   })
   
-  const textHeight = nextTextSize.h + PADDING * 2
+  const textHeight = nextTextSize.h 
 
   let growY: number | null = null
 
