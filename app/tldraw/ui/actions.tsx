@@ -4,6 +4,7 @@ import { Editor, createShapeId, TLUiToast } from '@tldraw/tldraw';
 import { ulid } from 'ulid';
 import AspectShapeUtil from '../shapes/aspect';
 import { getShapeTypes } from './customUi';
+import { toast } from "sonner"
 
 
 export function createAspectAction(editor: Editor, aspectType: AspectType, zoneName: ZoneName) {
@@ -59,7 +60,8 @@ export function addAspectTypeAction(editor: Editor, aspectType: AspectType, zone
                       
           // TODO: Turn this into a nice toast
           if (initialAspectTypes.includes(aspectType)) {
-            alert("Aspect type already exists in the selected aspect.");
+            toast("Aspect type already exists in the selected aspect.")
+            // alert("Aspect type already exists in the selected aspect.");
           }
 
           const newMeta = {
@@ -80,7 +82,7 @@ export function addAspectTypeAction(editor: Editor, aspectType: AspectType, zone
 export function removeAspectTypeAction(editor: Editor, aspectType: AspectType, zoneName: ZoneName) {
   return {
     id: `remove-${aspectType}`,
-    label: `Remove ${aspectType}`,
+    label: `${aspectType}`,
     readonlyOk: true,
     onSelect(source: any) {
       const selectedAspects = getShapeTypes(editor, ['aspect']);
@@ -94,10 +96,10 @@ export function removeAspectTypeAction(editor: Editor, aspectType: AspectType, z
             ? aspect.meta.aspectTypes
             : [];
 
-          // TODO: Turn this into a nice toast
-          if (!initialAspectTypes.includes(aspectType)) {
-            alert("Aspect type does not exist in the selected aspect.");
-            return aspect; // Return the aspect without any changes
+          // If the aspectType being removed is the only one, show a toast and return the aspect without any changes
+          if (initialAspectTypes.length === 1 && initialAspectTypes.includes(aspectType)) {
+            toast("The last aspect type can't be removed.");
+            return aspect;
           }
 
           const newMeta = {

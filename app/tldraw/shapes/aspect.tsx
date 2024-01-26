@@ -166,11 +166,11 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
 
   getHeight(shape: IAspectShape) {
     console.log("shape height: ", BASE_ASPECT_HEIGHT + shape.props.growY)
-		return BASE_ASPECT_HEIGHT + shape.props.growY
+		return Math.max(BASE_ASPECT_HEIGHT + shape.props.growY, this.getMinHeight(shape))
 	}
 
   getMinHeight(shape: IAspectShape) {
-    return this.getHeight(shape);
+    // return this.getHeight(shape);
     const {meta: {aspectTypes}} = shape;
     const minHeight = BASE_ASPECT_HEIGHT * aspectTypes.length;
     return minHeight;
@@ -224,14 +224,9 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
 
   indicator(shape: IAspectShape) {
     return null
-    const width = Math.max(shape.props.w, MIN_ASPECT_WIDTH);
-    const height = Math.max(shape.props.h, this.getHeight(shape));
-    return <rect width={width * 1.2} height={height * 1.2}/>
-    return <motion.div
-      whileHover={{ scale: 1.2 }}
-    >                
-      <rect width={width} height={height}/>
-    </motion.div>
+    // const width = Math.max(shape.props.w, MIN_ASPECT_WIDTH);
+    // const height = Math.max(shape.props.h, this.getHeight(shape));
+    // return <rect width={width} height={height}/>
   }
 
   override onBeforeCreate = (next: IAspectShape) => {
@@ -252,6 +247,13 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
     // Width is never allowed to be below MIN_ASPECT_WIDTH
     if (next.props.w < MIN_ASPECT_WIDTH) {
       next.props.w = MIN_ASPECT_WIDTH;
+    }
+
+    
+    const minHeight = BASE_ASPECT_HEIGHT * next.meta.aspectTypes.length;
+    console.log("min height according ti icon number: ", minHeight)
+    if (next.props.h < minHeight) {
+      next.props.h = minHeight;
     }
 
 		return updateGrowYProp(this.editor, next, prev.props.growY)

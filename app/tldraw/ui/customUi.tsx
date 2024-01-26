@@ -143,6 +143,7 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
 
 
     tools: (editor, tools) => {
+      console.log("here are the tools: ", tools)
       const filteredTools: Record<string, any> = {};
 
       Object.keys(tools).forEach(key => {
@@ -265,6 +266,9 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
           ),
         )
       ) as TLUiMenuGroup; 
+      
+
+      const selectedAspectTypes = selectedAspects.flatMap(shape => shape.meta.aspectTypes);
 
       const addAspectTypeMenu: TLUiMenuGroup = menuGroup(
         'edit-aspect-type-group',
@@ -305,41 +309,54 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
           'Remove Aspect Type',
           menuGroup(
             'heart-aspects',
-            menuItem(actions['remove-interest']),
-            menuItem(actions['remove-value']),
-            menuItem(actions['remove-dream']),
-            menuItem(actions['remove-influence']),
+            ...removeAspectTypeMenuItems(selectedAspectTypes, 
+              ['interest', 'value', 'dream', 'influence'], 
+              actions
+            ),
           ),
           menuGroup(
             'craft-aspects',
-            menuItem(actions['remove-skill']),
-            menuItem(actions['remove-knowledge']),
-            menuItem(actions['remove-expertise']),
-            menuItem(actions['remove-strength']),
+            ...removeAspectTypeMenuItems(selectedAspectTypes, 
+              ['skill', 'knowledge', 'expertise', 'strength'], 
+              actions
+            ),
+
           ),
           menuGroup(
             'mission-aspects',
-            menuItem(actions['remove-global']),
-            menuItem(actions['remove-communal']),
-            menuItem(actions['remove-societal']),
-            menuItem(actions['remove-personal']),
+            ...removeAspectTypeMenuItems(selectedAspectTypes, 
+              ['global', 'communal', 'societal', 'personal'], 
+              actions
+            ),
           ),
           menuGroup(
             'path-aspects',
-            menuItem(actions['remove-business-idea']),
-            menuItem(actions['remove-career']),
-            menuItem(actions['remove-freelance']),
-            menuItem(actions['remove-industry'], { disabled: false, checked: true }),
+            ...removeAspectTypeMenuItems(selectedAspectTypes, 
+              ['business-idea', 'career', 'freelance', 'industry'], 
+              actions
+            ),
+
           ),
         )
       ) as TLUiMenuGroup; 
 
 
-
-      // console.log("context menu: ", contextMenu)
       contextMenu.unshift(createAspectMenu, addAspectTypeMenu)
       return contextMenu
     },
 
   };
 };
+
+
+const removeAspectTypeMenuItems = (selectedAspectTypes: any, aspectTypes: string[], actions: any) => {
+  return aspectTypes
+    .map(type => {
+      // Only create a menu item if the aspectType exists in the selectedAspectTypes
+      if (selectedAspectTypes.includes(type)) {
+        return menuItem(actions[`remove-${type}`]);
+      }
+      return false; // Return false instead of undefined
+    })
+    .filter(item => item !== false); // Filter out false items
+}

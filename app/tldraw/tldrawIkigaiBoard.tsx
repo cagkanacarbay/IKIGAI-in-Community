@@ -7,6 +7,7 @@ import AspectShapeUtil from './shapes/aspect';
 import { uiOverrides } from './ui/customUi';
 import { useSession } from 'next-auth/react';
 import { CardShapeTool, CardShapeUtil } from './shapes/try';
+import { Toaster } from "@/components/ui/sonner"
 
 
 // const components: TLEditorComponents = {
@@ -32,7 +33,7 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
 
   return (
     <div style={{ position: 'fixed', inset: 0 }}>
-
+      <Toaster />
       <Tldraw 
         // hideUi
         store={storeWithStatus}
