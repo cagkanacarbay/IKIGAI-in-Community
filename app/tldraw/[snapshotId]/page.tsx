@@ -60,7 +60,7 @@
 import React, { useState, useEffect } from 'react';
 import IkigaiBoardV2 from '../tldrawIkigaiBoard';
 import { createTLStore, defaultShapeUtils, TLStore, TLStoreOptions, TLStoreWithStatus } from '@tldraw/tldraw';
-import IkigaiCircleShape from '../shapes/ikigaiCircles';
+import IkigaiCircleShapeUtil from '../shapes/ikigaiCircles';
 import { downloadSnapshot, updateDatabaseSnapshotWithBlobSrc } from '../boardStorage';
 import { Spinner } from "@material-tailwind/react";
 
@@ -75,7 +75,7 @@ export default function LoadSnapshotId({ params }: { params: { snapshotId: strin
     async function loadRemoteSnapshot() {
       
       const newStore = createTLStore({
-        shapeUtils: [...defaultShapeUtils, IkigaiCircleShape],
+        shapeUtils: [...defaultShapeUtils, IkigaiCircleShapeUtil],
       });
 
       if (params.snapshotId) {

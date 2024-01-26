@@ -2,7 +2,7 @@ import { getZoneColor } from './customUi';
 import { AspectType, ZoneName } from '@/lib/types';
 import { Editor, createShapeId, TLUiToast } from '@tldraw/tldraw';
 import { ulid } from 'ulid';
-import AspectShape from '../shapes/aspect';
+import AspectShapeUtil from '../shapes/aspect';
 import { getShapeTypes } from './customUi';
 
 
@@ -20,7 +20,7 @@ export function createAspectAction(editor: Editor, aspectType: AspectType, zoneN
 
       editor.createShape({
         id: aspectId,
-        type: AspectShape.type,
+        type: AspectShapeUtil.type,
         meta: {
           aspectTypes: [aspectType],
         },

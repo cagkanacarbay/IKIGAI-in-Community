@@ -23,7 +23,7 @@ export const ikigaiCircleShapeProps: ShapeProps<IIkigaiCircleShape> = {
 };
 
 
-export default class IkigaiCircleShape extends ShapeUtil<IIkigaiCircleShape> {
+export default class IkigaiCircleShapeUtil extends ShapeUtil<IIkigaiCircleShape> {
   static override type = 'ikigaiCircle' as const;
 
   override hideResizeHandles = () => true
@@ -116,10 +116,10 @@ export function IkigaiCircles() {
       localStorage.setItem('ikigaiCircleIds', JSON.stringify(ikigaiCircleIds));
 
       editor.createShapes([
-        { id: ikigaiCircleIds.heart, type: IkigaiCircleShape.type, props: { x: xMid, y: yTop, radius: radius, color: 'light-red' } },
-        { id: ikigaiCircleIds.path, type: IkigaiCircleShape.type, props: { x: xMid, y: yBottom, radius: radius, color: 'yellow' } },
-        { id: ikigaiCircleIds.craft, type: IkigaiCircleShape.type, props: { x: xLeft, y: yMid, radius: radius, color: 'light-blue' } },
-        { id: ikigaiCircleIds.mission, type: IkigaiCircleShape.type, props: { x: xRight, y: yMid, radius: radius, color: 'light-green' } },
+        { id: ikigaiCircleIds.heart, type: IkigaiCircleShapeUtil.type, props: { x: xMid, y: yTop, radius: radius, color: 'light-red' } },
+        { id: ikigaiCircleIds.path, type: IkigaiCircleShapeUtil.type, props: { x: xMid, y: yBottom, radius: radius, color: 'yellow' } },
+        { id: ikigaiCircleIds.craft, type: IkigaiCircleShapeUtil.type, props: { x: xLeft, y: yMid, radius: radius, color: 'light-blue' } },
+        { id: ikigaiCircleIds.mission, type: IkigaiCircleShapeUtil.type, props: { x: xRight, y: yMid, radius: radius, color: 'light-green' } },
       ]);
 
       const circles = editor.getCurrentPageShapesSorted();

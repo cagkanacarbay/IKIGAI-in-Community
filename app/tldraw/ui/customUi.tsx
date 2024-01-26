@@ -153,12 +153,29 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
 
       // ... additional tool configuration ...
 
-      return tools;
+      filteredTools.card = {
+        id: 'card',
+        icon: 'color',
+        label: 'Card',
+        kbd: 'c',
+        readonlyOk: false,
+        onSelect: () => {
+          editor.setCurrentTool('card')
+        },
+      }
+
+      console.log(filteredTools)
+
+      return filteredTools;
     },
 
     toolbar: (_app, toolbar, { tools }) => {
       const filteredToolbar = toolbar.filter(item => !toolsToRemove.includes(item.id));
       // ... additional toolbar configuration ...
+      console.log(tools)
+      console.log("logging tools card:", tools.card)
+      filteredToolbar.splice(3, 0, toolbarItem(tools.card))
+
       return filteredToolbar;
     },
 

@@ -14,14 +14,22 @@ import {
   resizeBox,
   TLOnResizeHandler,
   TLEventHandlers,
-  EnumStyleProp, 
+  // EnumStyleProp, 
   TLOnTranslateEndHandler,
+  DefaultSizeStyle,
+  DefaultVerticalAlignStyle,
+  DefaultHorizontalAlignStyle,
+  TLDefaultHorizontalAlignStyle,
+  TLDefaultVerticalAlignStyle,
+  EnumStyleProp,
+  DefaultFontStyle,
+  Editor
   
 } from '@tldraw/tldraw';
-import { TextLabel } from '../helpers/textLabel';
 import { ShapePropsType } from '../helpers/deepTldraw';
 import { AspectIcon, ZoneIcon} from './aspectIcons';
 import { AspectType } from '@/lib/types';
+import { TextLabel, TEXT_PROPS, FONT_FAMILIES, LABEL_FONT_SIZES } from '../helpers/textLabel';
 
 
 const BASE_ASPECT_HEIGHT = 32
@@ -40,35 +48,39 @@ const bgColors = {
   "yellow-strong": "bg-yellow-200",
   "emerald": "bg-emerald-200",
   "amber-strong": "bg-amber-400",
-
+  "default": "bg-gray-100"
 }
 
-export declare const aspectShapeProps: {
-  color: EnumStyleProp<"blue" | "green" | "red" | "yellow" | "teal" | "purple" | "lime" | "amber" | "purple-strong" | "orange" | "yellow-strong" | "emerald" | "amber-strong">;
-  size: EnumStyleProp<"l" | "m" | "s" | "xl">;
-  font: EnumStyleProp<"draw" | "mono" | "sans" | "serif">;
-  align: EnumStyleProp<"end-legacy" | "end" | "middle-legacy" | "middle" | "start-legacy" | "start">;
-  verticalAlign: EnumStyleProp<"end" | "middle" | "start">;
-  growY: T.Validator<number>;
-  text: T.Validator<string>;
-  w: T.Validator<number>;
-  h: T.Validator<number>;
-  // aspectTypes: T.ArrayOfValidator<AspectType>;
-  zone: EnumStyleProp<"heart" | "craft" | "path" | "cause">;
+
+
+// Assuming you have a way to incorporate these into a runtime object structure
+export const aspectShapeProps = {
+  // Directly use the imported default styles
+  color: T.setEnum(new Set(["blue", "green", "red", "yellow", "teal", "purple", "lime", "amber", "purple-strong", "orange", "yellow-strong", "emerald", "amber-strong", "default"])),
+  size: DefaultSizeStyle,
+  font: DefaultFontStyle,
+  align: DefaultHorizontalAlignStyle,
+  verticalAlign: DefaultVerticalAlignStyle,
+  growY: T.positiveNumber,
+  text: T.string,
+  w: T.nonZeroNumber,
+  h: T.nonZeroNumber,
+  zone: T.setEnum(new Set(["The Heart", "The Craft", "The Path", "The Cause"])), 
 };
+
 
 export interface AspectShapeMeta {
   aspectTypes: AspectType[];
 }
 
-export declare type IAspectShape = TLBaseShape<'aspect', AspectShapeProps> & { meta: AspectShapeMeta };
-// declare type IAspectShape = TLBaseShape<'aspect', AspectShapeProps>;
-
 declare type AspectShapeProps = ShapePropsType<typeof aspectShapeProps>;
+export declare type IAspectShape = TLBaseShape<'aspect', AspectShapeProps> & { meta: AspectShapeMeta };
+
 
 
 export default class AspectShape extends ShapeUtil<IAspectShape> {
   static override type = 'aspect' as const;
+  static override props = aspectShapeProps;
 
   override isAspectRatioLocked = (_shape: IAspectShape) => false
 	override canResize = (_shape: IAspectShape) => true
@@ -110,7 +122,7 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
       inTheCraft ? "blue" :
       inTheMission ? "green" : 
       inThePath ? "yellow" : 
-      "default"; // default color
+      "default"; 
 
     this.editor.updateShape({
       id: current.id, type: current.type, 
@@ -145,14 +157,22 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
 
   getGeometry(shape: IAspectShape) {
     // This method should return a Rectangle2d instance with the shape's geometry
+    const height = this.getHeight(shape)
     return new Rectangle2d({
       width: shape.props.w,
-      height: shape.props.h,
+      // height: shape.props.h,
+      height: height,
       isFilled: true,
     });
   }
 
+  getHeight(shape: IAspectShape) {
+    console.log("shape height: ", BASE_ASPECT_HEIGHT + shape.props.growY)
+		return BASE_ASPECT_HEIGHT + shape.props.growY
+	}
+
   getMinHeight(shape: IAspectShape) {
+    return this.getHeight(shape);
     const {meta: {aspectTypes}} = shape;
     const minHeight = BASE_ASPECT_HEIGHT * aspectTypes.length;
     return minHeight;
@@ -161,19 +181,21 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
   component(shape: IAspectShape) {
 
     const {
-      id, props: { w, h, color, text, zone }, meta: { aspectTypes }
+      id, props: { w, h, color, text, zone, verticalAlign, align, font, size}, meta: { aspectTypes }
     } = shape;
 
     const minHeight = `${this.getMinHeight(shape)}px`;
+    const colorClass = bgColors[color as keyof typeof bgColors]; 
+    const minWidth = `${MIN_ASPECT_WIDTH}px`
 
     return (
       <HTMLContainer 
         style={{width: w, height: h, minHeight}} 
         className={`grid grid-cols-[auto,1fr,auto] items-center
           text-xs font-bold
-          ${bgColors[color]} bg-opacity-60 
+          ${colorClass} bg-opacity-60 
           rounded-lg shadow-inner shadow-md
-          min-w-[120px]
+          min-w-[${minWidth}]
         `}
       >
           <div className="flex flex-col justify-center items-center ml-1 mr-2 mb-1">
@@ -185,10 +207,10 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
             <TextLabel 
 							id={id}
 							type="text"
-							font="mono"
-							size="s"
-							align="middle"
-							verticalAlign="middle"
+							font={font}
+							size={size}
+							align={align}
+							verticalAlign={verticalAlign}
 							text={text}
 							labelColor="black"
 							wrap
@@ -202,8 +224,115 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
   }
 
   indicator(shape: IAspectShape) {
+    // return null
     const width = Math.max(shape.props.w, MIN_ASPECT_WIDTH);
-    const height = Math.max(shape.props.h, this.getMinHeight(shape));
+    const height = Math.max(shape.props.h, this.getHeight(shape));
     return <rect width={width} height={height} />
   }
+
+  // override onBeforeCreate = (next: IAspectShape) => {
+	// 	return updateGrowYProp(this.editor, next, next.props.growY)
+	// }
+
+	override onBeforeUpdate = (prev: IAspectShape, next: IAspectShape) => {
+		if (
+			prev.props.text === next.props.text &&
+			prev.props.font === next.props.font &&
+			prev.props.size === next.props.size &&
+      prev.props.w == next.props.w &&
+      prev.props.h == next.props.h
+		) {
+			return
+		} 
+
+    if (next.props.w < MIN_ASPECT_WIDTH) {
+      next.props.w = MIN_ASPECT_WIDTH;
+    }
+
+		return computeGrowYProp(this.editor, next, prev.props.growY)
+
+	}
 }
+
+
+function computeGrowYProp(editor: Editor, shape: IAspectShape, prevGrowY = 0) {
+  const PADDING = 0
+
+
+  const nextTextSize = editor.textMeasure.measureText(shape.props.text, {
+    ...TEXT_PROPS,
+    fontFamily: FONT_FAMILIES[shape.props.font],
+    fontSize: LABEL_FONT_SIZES[shape.props.size],
+    maxWidth: shape.props.w - PADDING * 2,
+  })
+  
+  const textHeight = nextTextSize.h + PADDING * 2
+
+  let growY: number | null = null
+
+  if (shape.props.h > textHeight) {
+    growY = shape.props.h - BASE_ASPECT_HEIGHT
+    console.log("prop.h larger than textHeight | growY: ", growY)
+
+  } else if (textHeight > BASE_ASPECT_HEIGHT) {
+    growY = textHeight - BASE_ASPECT_HEIGHT
+
+    console.log("textHeight larger than BASE_ASPECT_HEIGHT | growY: ", growY)
+
+  } else {
+    growY = 0
+    console.log("in else")
+    if (prevGrowY) {
+      console.log("prevGrowY: ", prevGrowY)
+      growY = 0
+    }
+  }
+
+  if (growY < 0) {
+    growY = 0;
+  } 
+
+  if (growY !== null) {
+    return {
+      ...shape,
+      props: {
+        ...shape.props,
+        growY,
+      },
+    }
+  }
+}
+
+// function computeGrowYProp(editor: Editor, shape: IAspectShape, prevGrowY = 0) {
+// 	const PADDING = 17
+
+// 	const nextTextSize = editor.textMeasure.measureText(shape.props.text, {
+// 		...TEXT_PROPS,
+// 		fontFamily: FONT_FAMILIES[shape.props.font],
+// 		fontSize: LABEL_FONT_SIZES[shape.props.size],
+// 		maxWidth: BASE_ASPECT_HEIGHT - PADDING * 2,
+// 	})
+
+// 	const nextHeight = nextTextSize.h + PADDING * 2
+
+// 	let growY: number | null = null
+
+// 	if (nextHeight > BASE_ASPECT_HEIGHT) {
+// 		growY = nextHeight - BASE_ASPECT_HEIGHT
+// 	} else {
+// 		if (prevGrowY) {
+// 			growY = 0
+// 		}
+// 	}
+
+// 	if (growY !== null) {
+// 		return {
+// 			...shape,
+// 			props: {
+// 				...shape.props,
+// 				growY,
+// 			},
+// 		}
+// 	}
+// }
+
