@@ -249,15 +249,14 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
       next.props.w = MIN_ASPECT_WIDTH;
     }
 
-		return computeGrowYProp(this.editor, next, prev.props.growY)
+		return updateGrowYProp(this.editor, next, prev.props.growY)
 
 	}
 }
 
 
-function computeGrowYProp(editor: Editor, shape: IAspectShape, prevGrowY = 0) {
+function updateGrowYProp(editor: Editor, shape: IAspectShape, prevGrowY = 0) {
   const PADDING = 0
-
 
   const nextTextSize = editor.textMeasure.measureText(shape.props.text, {
     ...TEXT_PROPS,
@@ -272,35 +271,25 @@ function computeGrowYProp(editor: Editor, shape: IAspectShape, prevGrowY = 0) {
 
   if (shape.props.h > textHeight) {
     growY = shape.props.h - BASE_ASPECT_HEIGHT
-    console.log("prop.h larger than textHeight | growY: ", growY)
-
   } else if (textHeight > BASE_ASPECT_HEIGHT) {
     growY = textHeight - BASE_ASPECT_HEIGHT
 
-    console.log("textHeight larger than BASE_ASPECT_HEIGHT | growY: ", growY)
-
   } else {
     growY = 0
-    console.log("in else")
-    if (prevGrowY) {
-      console.log("prevGrowY: ", prevGrowY)
-      growY = 0
-    }
   }
 
   if (growY < 0) {
     growY = 0;
   } 
 
-  if (growY !== null) {
-    return {
-      ...shape,
-      props: {
-        ...shape.props,
-        growY,
-      },
-    }
+  return {
+    ...shape,
+    props: {
+      ...shape.props,
+      growY,
+    },
   }
+  
 }
 
 // function computeGrowYProp(editor: Editor, shape: IAspectShape, prevGrowY = 0) {
