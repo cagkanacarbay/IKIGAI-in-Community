@@ -245,6 +245,7 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
 			return
 		} 
 
+    // Width is never allowed to be below MIN_ASPECT_WIDTH
     if (next.props.w < MIN_ASPECT_WIDTH) {
       next.props.w = MIN_ASPECT_WIDTH;
     }
@@ -254,7 +255,26 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
 	}
 }
 
-
+/**
+ * Updates the `growY` property of a shape based on its text content and dimensions.
+ *
+ * The `growY` property determines how much extra vertical space is needed for the shape
+ * to accommodate its text content. It's calculated based on the height of the text and
+ * the current height of the shape.
+ *
+ * If the shape's height is greater than the height of the text, `growY` is set to the
+ * difference between the shape's height and the base height.
+ *
+ * If the height of the text is greater than the base height, `growY` is set to the
+ * difference between the text height and the base height.
+ *
+ * If neither of these conditions are met, `growY` is set to 0.
+ *
+ * @param {Editor} editor - The editor instance.
+ * @param {IAspectShape} shape - The shape to update.
+ * @param {number} prevGrowY - The previous `growY` value.
+ * @returns {IAspectShape} - The updated shape.
+ */
 function updateGrowYProp(editor: Editor, shape: IAspectShape, prevGrowY = 0) {
   const PADDING = 0
 
@@ -272,6 +292,7 @@ function updateGrowYProp(editor: Editor, shape: IAspectShape, prevGrowY = 0) {
   if (shape.props.h > textHeight) {
     growY = shape.props.h - BASE_ASPECT_HEIGHT
   } else if (textHeight > BASE_ASPECT_HEIGHT) {
+    // TODO: fix min height as calculated here. IKI-62
     growY = textHeight - BASE_ASPECT_HEIGHT
 
   } else {
@@ -291,37 +312,3 @@ function updateGrowYProp(editor: Editor, shape: IAspectShape, prevGrowY = 0) {
   }
   
 }
-
-// function computeGrowYProp(editor: Editor, shape: IAspectShape, prevGrowY = 0) {
-// 	const PADDING = 17
-
-// 	const nextTextSize = editor.textMeasure.measureText(shape.props.text, {
-// 		...TEXT_PROPS,
-// 		fontFamily: FONT_FAMILIES[shape.props.font],
-// 		fontSize: LABEL_FONT_SIZES[shape.props.size],
-// 		maxWidth: BASE_ASPECT_HEIGHT - PADDING * 2,
-// 	})
-
-// 	const nextHeight = nextTextSize.h + PADDING * 2
-
-// 	let growY: number | null = null
-
-// 	if (nextHeight > BASE_ASPECT_HEIGHT) {
-// 		growY = nextHeight - BASE_ASPECT_HEIGHT
-// 	} else {
-// 		if (prevGrowY) {
-// 			growY = 0
-// 		}
-// 	}
-
-// 	if (growY !== null) {
-// 		return {
-// 			...shape,
-// 			props: {
-// 				...shape.props,
-// 				growY,
-// 			},
-// 		}
-// 	}
-// }
-
