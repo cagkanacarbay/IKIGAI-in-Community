@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Tldraw, useEditor, TLStoreWithStatus } from '@tldraw/tldraw';
+import { Tldraw, useEditor, TLStoreWithStatus, TLEditorComponents } from '@tldraw/tldraw';
 import '@tldraw/tldraw/tldraw.css';
 import IkigaiCircleShapeUtil, { IkigaiCircles } from './shapes/ikigaiCircles';
 import AspectShapeUtil from './shapes/aspect';
@@ -9,13 +9,16 @@ import { useSession } from 'next-auth/react';
 import { CardShapeTool, CardShapeUtil } from './shapes/try';
 import { Toaster } from "@/components/ui/sonner"
 import { fileFromPath } from 'openai';
+import { GuidedTour } from './onboarding';
 
-// const components: TLEditorComponents = {
-// 	InFrontOfTheCanvas: () => {
-// 		const assistant = useMemo(() => new IkigaiAssistant(), [])
-// 		return <UserPrompt assistant={assistant} />
-// 	},
-// }
+const components: TLEditorComponents = {
+  // OnTheCanvas: GuidedTour,
+	InFrontOfTheCanvas: GuidedTour,
+	// InFrontOfTheCanvas: () => {
+	// 	const assistant = useMemo(() => new IkigaiAssistant(), [])
+	// 	return <UserPrompt assistant={assistant} />
+	// },
+}
 
 const customTools = [CardShapeTool]
 const customShapeUtils = [IkigaiCircleShapeUtil, AspectShapeUtil, CardShapeUtil]
@@ -30,8 +33,6 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
   const editor = useEditor();
   const customUiOverrides = uiOverrides(isLoggedIn, editor);
 
-  
-
   return (
     <div style={{ position: 'fixed', inset: 0 }}>
       <Toaster />
@@ -41,12 +42,14 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
         overrides={customUiOverrides}
         shapeUtils={customShapeUtils} 
         tools={customTools}
-        // components={components}
+        components={components}
         autoFocus
         persistenceKey="persistence-key"
+        
         >
 
         <IkigaiCircles/>
+        <GuidedTour/>
 
 
       </Tldraw>

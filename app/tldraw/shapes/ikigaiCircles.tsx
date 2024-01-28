@@ -4,6 +4,12 @@ import {
   ShapeUtil, HTMLContainer, Circle2d, getDefaultColorTheme, createShapeId, useEditor
 } from '@tldraw/tldraw';
 import { useEffect } from 'react';
+import { ZoneName } from '@/lib/types';
+import { ikigaiCircleIds } from './shapeIds';
+
+export interface IkigaiCircleShapeMeta {
+  zone: ZoneName;
+}
 
 export type IIkigaiCircleShape = TLBaseShape<
   'ikigaiCircle',
@@ -13,7 +19,7 @@ export type IIkigaiCircleShape = TLBaseShape<
     radius: number;
     color: TLDefaultColorStyle;
   }
->;
+> & { meta: IkigaiCircleShapeMeta };;
 
 export const ikigaiCircleShapeProps: ShapeProps<IIkigaiCircleShape> = {
   x: T.number,
@@ -56,6 +62,10 @@ export default class IkigaiCircleShapeUtil extends ShapeUtil<IIkigaiCircleShape>
     };
   }
 
+  getInitialMetaForShape(): IIkigaiCircleShape['meta'] {
+    return { zone: "The Craft" };
+  };
+
   getGeometry(shape: IIkigaiCircleShape) {
     return new Circle2d({
       x: shape.props.x,
@@ -71,10 +81,11 @@ export default class IkigaiCircleShapeUtil extends ShapeUtil<IIkigaiCircleShape>
     const fillColor = theme[shape.props.color].semi; 
     
     const fillOpacity = 0.60;
+    console.log("the meta: ", shape.meta.zone)
   
     return (
       <HTMLContainer>
-        <svg width={radius * 2} height={radius * 2} style={{ overflow: 'visible', position: 'absolute', left: x , top: y }}>
+        <svg id={shape.meta.zone} width={radius * 2} height={radius * 2} style={{ overflow: 'visible', position: 'absolute', left: x , top: y }}>
           <circle cx={radius} cy={radius} r={radius} fill={fillColor} fillOpacity={fillOpacity}/>
         </svg>
       </HTMLContainer>
@@ -90,12 +101,7 @@ export default class IkigaiCircleShapeUtil extends ShapeUtil<IIkigaiCircleShape>
 export function IkigaiCircles() {
   const editor = useEditor();
   useEffect(() => {
-    const ikigaiCircleIds = {
-      heart: createShapeId('ikigaiCircle-theHeart'),
-      craft: createShapeId('ikigaiCircle-theCraft'),
-      mission: createShapeId('ikigaiCircle-theMission'),
-      path: createShapeId('ikigaiCircle-thePath')
-    };
+
   
     const existingShapes = editor.getCurrentPageShapesSorted();
     const existingShapeIds = existingShapes.map(shape => shape.id);
@@ -135,6 +141,7 @@ export function IkigaiCircles() {
         shapesToCreate.push({
           id: ikigaiCircleIds[key as keyof typeof ikigaiCircleIds],
           type: IkigaiCircleShapeUtil.type,
+          meta: { zone: key as ZoneName},
           props: { x, y, radius, color }
         });
       }
