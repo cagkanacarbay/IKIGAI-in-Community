@@ -63,6 +63,9 @@ import { createTLStore, defaultShapeUtils, TLStore, TLStoreOptions, TLStoreWithS
 import IkigaiCircleShapeUtil from '../shapes/ikigaiCircles';
 import { downloadSnapshot, updateDatabaseSnapshotWithBlobSrc } from '../boardStorage';
 import { Spinner } from "@material-tailwind/react";
+import { loadBoardGuideSnapshot } from '../boardStorage';
+import { customShapeUtils } from '../shapes/customShapes';
+
 
 
 export default function LoadSnapshotId({ params }: { params: { snapshotId: string } }) {
@@ -75,16 +78,20 @@ export default function LoadSnapshotId({ params }: { params: { snapshotId: strin
     async function loadRemoteSnapshot() {
       
       const newStore = createTLStore({
-        shapeUtils: [...defaultShapeUtils, IkigaiCircleShapeUtil],
+        shapeUtils: customShapeUtils,
       });
 
       if (params.snapshotId) {
         try {
-          const snapshot = await downloadSnapshot(params.snapshotId);
-          const snapshotWithAssetSrcs = await updateDatabaseSnapshotWithBlobSrc(snapshot.data);
+          // const snapshot = await downloadSnapshot(params.snapshotId);
+          // const snapshotWithAssetSrcs = await updateDatabaseSnapshotWithBlobSrc(snapshot.data);
+
+          const snapshot = await loadBoardGuideSnapshot();
+          console.log("snapshot:", snapshot)
           if (cancelled) return;
 
-          newStore.loadSnapshot(snapshotWithAssetSrcs);
+          // newStore.loadSnapshot(snapshotWithAssetSrcs);
+          newStore.loadSnapshot(snapshot);
         } catch (error) {
           console.error('Error loading snapshot:', error);
           if (cancelled) return;

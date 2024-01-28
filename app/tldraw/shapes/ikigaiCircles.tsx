@@ -89,44 +89,62 @@ export default class IkigaiCircleShapeUtil extends ShapeUtil<IIkigaiCircleShape>
 
 export function IkigaiCircles() {
   const editor = useEditor();
-
   useEffect(() => {
-
-    const shapes = editor.getCurrentPageShapesSorted();
-    if (shapes.length === 0) {
-
-      const radius = 800;
-
-      const xLeft = 0;
-      const xMid = (radius / 5) * 4;
-      const xRight = xMid * 2;
-
-      const yTop = 0;
-      const yMid = xMid;
-      const yBottom = yMid * 2;
-
-
-      const ikigaiCircleIds = {
-        heart: createShapeId('ikigaiCircle-theHeart'),
-        craft: createShapeId('ikigaiCircle-theCraft'),
-        mission: createShapeId('ikigaiCircle-theMission'),
-        path: createShapeId('ikigaiCircle-thePath')
-      };
-
-      localStorage.setItem('ikigaiCircleIds', JSON.stringify(ikigaiCircleIds));
-
-      editor.createShapes([
-        { id: ikigaiCircleIds.heart, type: IkigaiCircleShapeUtil.type, props: { x: xMid, y: yTop, radius: radius, color: 'light-red' } },
-        { id: ikigaiCircleIds.path, type: IkigaiCircleShapeUtil.type, props: { x: xMid, y: yBottom, radius: radius, color: 'yellow' } },
-        { id: ikigaiCircleIds.craft, type: IkigaiCircleShapeUtil.type, props: { x: xLeft, y: yMid, radius: radius, color: 'light-blue' } },
-        { id: ikigaiCircleIds.mission, type: IkigaiCircleShapeUtil.type, props: { x: xRight, y: yMid, radius: radius, color: 'light-green' } },
-      ]);
-
+    const ikigaiCircleIds = {
+      heart: createShapeId('ikigaiCircle-theHeart'),
+      craft: createShapeId('ikigaiCircle-theCraft'),
+      mission: createShapeId('ikigaiCircle-theMission'),
+      path: createShapeId('ikigaiCircle-thePath')
+    };
+  
+    const existingShapes = editor.getCurrentPageShapesSorted();
+    const existingShapeIds = existingShapes.map(shape => shape.id);
+  
+    const shapesToCreate = [];
+  
+    for (let key in ikigaiCircleIds) {
+      if (!existingShapeIds.includes(ikigaiCircleIds[key as keyof typeof ikigaiCircleIds])) {
+        let x, y, color;
+        const radius = 800;
+  
+        switch (key) {
+          case 'heart':
+            x = (radius / 5) * 4;
+            y = 0;
+            color = 'light-red';
+            break;
+          case 'path':
+            x = (radius / 5) * 4;
+            y = (radius / 5) * 4 * 2;
+            color = 'yellow';
+            break;
+          case 'craft':
+            x = 0;
+            y = (radius / 5) * 4;
+            color = 'light-blue';
+            break;
+          case 'mission':
+            x = (radius / 5) * 4 * 2;
+            y = (radius / 5) * 4;
+            color = 'light-green';
+            break;
+          default:
+            break;
+        }
+  
+        shapesToCreate.push({
+          id: ikigaiCircleIds[key as keyof typeof ikigaiCircleIds],
+          type: IkigaiCircleShapeUtil.type,
+          props: { x, y, radius, color }
+        });
+      }
+    }
+  
+    if (shapesToCreate.length > 0) {
+      editor.createShapes(shapesToCreate);
       const circles = editor.getCurrentPageShapesSorted();
       editor.toggleLock(circles);
       editor.zoomToFit({ duration: 500 });
-
-      // editor.zoomIn()
     }
   }, [editor]);
 

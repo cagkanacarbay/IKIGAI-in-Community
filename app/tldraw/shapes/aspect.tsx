@@ -188,7 +188,7 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
 
     return (
         <motion.div 
-          whileTap={{ scale: 0.8, transition:{ duration: 0.25}}}
+          whileTap={{ scale: 0.8, transition:{ duration: 0.275}}}
           style={{width: w, height: h, minHeight}} 
           className={`grid grid-cols-[auto,1fr,auto] items-center
             text-xs font-bold

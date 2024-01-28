@@ -14,3 +14,6 @@ business idea: https://www.flaticon.com/free-icon/design-thinking_2857527?term=b
 career: https://www.flaticon.com/free-icon/leadership_9088759?term=career+path&page=1&position=68&origin=search&related_id=9088759
 freelance: https://www.flaticon.com/free-icon/laptop_7758995?term=beach+work&page=1&position=2&origin=search&related_id=7758995
 industry: https://www.flaticon.com/free-icon/innovation_2258269
+
+path: https://www.flaticon.com/free-icon/digital-currency_1068533
+heart: 

@@ -8,7 +8,7 @@ import { uiOverrides } from './ui/customUi';
 import { useSession } from 'next-auth/react';
 import { CardShapeTool, CardShapeUtil } from './shapes/try';
 import { Toaster } from "@/components/ui/sonner"
-
+import { fileFromPath } from 'openai';
 
 // const components: TLEditorComponents = {
 // 	InFrontOfTheCanvas: () => {
@@ -30,6 +30,7 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
   const editor = useEditor();
   const customUiOverrides = uiOverrides(isLoggedIn, editor);
 
+  
 
   return (
     <div style={{ position: 'fixed', inset: 0 }}>

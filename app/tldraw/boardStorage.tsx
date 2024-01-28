@@ -1,5 +1,8 @@
 import { uploadImageToStorageProviderTldraw } from "@/lib/storage";
-import { TLBaseAsset, TLAssetPartial, TLStoreSnapshot, SerializedStore, TLRecord, TLAsset, TLImageAsset } from "@tldraw/tldraw";
+import { 
+  TLBaseAsset, TLAssetPartial, TLStoreSnapshot, 
+  SerializedStore, TLRecord, TLAsset, TLImageAsset, 
+} from "@tldraw/tldraw";
 import { Editor } from "@tldraw/editor";
 import { useSession } from "next-auth/react";
 
@@ -236,3 +239,18 @@ async function fetchAssetSrcFromBlobStorage(blobUrl: string): Promise<string> {
   }
 }
 
+
+
+export async function loadBoardGuideSnapshot() {
+  try {
+    // Fetch the snapshot from the API route
+    const response = await fetch('/api/storage/snapshot/board-guide');
+    const snapshot = await response.json();
+
+    // Return the store
+    return snapshot;
+  } catch (error) {
+    console.error('Error loading board guide:', error);
+    throw error;
+  }
+}

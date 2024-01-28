@@ -207,10 +207,10 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
       // const newMenuItem = menuItem(actions['add-aspect'])
 
       const REMOVED_CONTEXT_MENU_OPTIONS = [
-        'selection',          // Duplicate and Toggle Locked.         TODO: add Toggle Locked back 
+        // 'selection',          // Duplicate and Toggle Locked.         TODO: add Toggle Locked back 
         'modify',             // Reorder and Move to page.            TODO: add reorder back
         // 'clipboard-group', // Cut copy paste
-        'conversions',        // Copy as SVG, PNG, JSON, Export as SVG, PNG, JSON
+        // 'conversions',        // Copy as SVG, PNG, JSON, Export as SVG, PNG, JSON
         // 'delete-group',    // Delete
         'set-selection-group' // Select all, select none
       ];
