@@ -9,7 +9,7 @@ import { useSession } from 'next-auth/react';
 import { CardShapeTool, CardShapeUtil } from './shapes/try';
 import { Toaster } from "@/components/ui/sonner"
 import { fileFromPath } from 'openai';
-import { GuidedTour } from './onboarding';
+import { GuidedTour } from './onboarding/onboarding';
 
 const components: TLEditorComponents = {
   // OnTheCanvas: GuidedTour,
