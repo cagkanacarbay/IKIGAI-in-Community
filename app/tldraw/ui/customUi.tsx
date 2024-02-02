@@ -13,7 +13,7 @@ interface AssetSrc {
   src: string;
 }
 
-const toolsToRemove: string[] = ["triangle"]
+const toolsToRemove: string[] = []
 
 export function getZoneColor(zoneName: ZoneName) {
   switch (zoneName) {

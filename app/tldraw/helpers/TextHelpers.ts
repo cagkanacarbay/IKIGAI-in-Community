@@ -40,7 +40,6 @@ export class TextHelpers {
 			field.focus()
 		}
 
-		// eslint-disable-next-line deprecation/deprecation
 		if (!document.execCommand('insertText', false, text)) {
 			TextHelpers.insertTextFirefox(field, text)
 		}
@@ -57,7 +56,7 @@ export class TextHelpers {
 	 * firing the input event.
 	 */
 	static set(field: HTMLTextAreaElement | HTMLInputElement, text: string): void {
-		field.select()
+	field.select
 		TextHelpers.insert(field, text)
 	}
 

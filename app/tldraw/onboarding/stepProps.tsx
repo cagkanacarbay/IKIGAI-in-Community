@@ -286,7 +286,7 @@ export const steps: OnboardingStep[] = [
       bgColor: 'bg-red-100',
       iconPath: '/icons/aspects/interest.png',
       icon: "/icons/zones/heart.png",
-      size: 'w-[550px] h-[600px]',
+      size: 'w-[550px] h-[620px]',
 
       aspectType: "interest",
       explanation: (
@@ -297,6 +297,7 @@ export const steps: OnboardingStep[] = [
       questions: [
         "Are there any ideas you like to think about?",
         "What topics or subjects are you curious about?",
+        "What subject could you read about or study for hours on end?",
         "How do you like to express yourself creatively or artistically?",
         "What do you like to talk about?",
         "What captures your attention and sparks your imagination?",
@@ -350,7 +351,7 @@ export const steps: OnboardingStep[] = [
       bgColor: 'bg-red-100',
       iconPath: '/icons/aspects/influence.png',
       icon: "/icons/zones/heart.png",
-      size: 'w-[550px] h-[600px]',
+      size: 'w-[550px] h-[620px]',
   
       aspectType: "influence",
       explanation: (
@@ -360,12 +361,12 @@ export const steps: OnboardingStep[] = [
       ),
       questions: [
         "Who do you consider your biggest role model?",
-        "Who inspires you the most?",
         "What ideas or philosophies that have influenced you?",
         "Name a book or movie that changed or formed your perspective.",
+        "Who inspires you the most?",
         "What's a piece of advice that has stayed with you?",
         "Who in your life has had the biggest impact on your way of thinking?",
-        "Who do you turn to for wisdom or guidance?",
+        "What have documentaries or books introduced to you that has changed the way you think?"
       ],
     },
   },
@@ -423,12 +424,9 @@ export const steps: OnboardingStep[] = [
         </>
       ),
       questions: [
-        "What skill do you find yourself using most often?",
-        "Which of your skills are you most proud of?",
-        "What software or tools are you proficient in?",
-        "What technical skills dou you have? eg. what software tools you know how to use, programming languages you know, or technical capabilities of any sort.",
-        "Is there a skill you're currently working on improving?",
-        "Which skills do you find most useful in your day-to-day life?",
+        "What software, tools, technologies or technical methodologies are you proficient in?",
+        "What skills do you have that set you apart from others?",
+        "What social skills or soft skills do you consider your strongest?",
         "What leadership or management skills do you bring to a project or team?",
         "Which communication skills do you consider your strongest—public speaking, writing, or another?"
       ],
@@ -447,7 +445,7 @@ export const steps: OnboardingStep[] = [
       subTitleColor: 'text-blue-300',
       bgColor: 'bg-blue-100',
       iconPath: '/icons/aspects/knowledge.png',
-      size: 'w-[550px] h-[600px]',
+      size: 'w-[550px] h-[700px]',
       aspectType: "knowledge",
       explanation: (
         <>
@@ -455,43 +453,81 @@ export const steps: OnboardingStep[] = [
         </>
       ),
       questions: [
-        "What area of knowledge are you often consulted for?",
-        "What subject could you read about or study for hours on end?",
-        "How do you like to acquire new knowledge?",
-        "What's an interesting fact or concept you've learned recently?",
-        "How do you apply your knowledge to solve problems?",
+        "What unique insights have you gained from your current or past job roles?",
+        "What languages do you know?",
+        "Do you any mental models or frameworks that you find particularly useful?",
+        "What specialized knowledge do you have that you believe is rare in your industry or area of study?",
+        "What's a concept or idea you've come to understand that you wish more people knew about?",
+        "What's an unconventional source of wisdom or knowledge in your life?",
+        "What's a lesson you've learned from a failure or mistake that you feel is beneficial?",
       ],
     },
   },
   {
-    id: 'aspect-expertise',
+    id: 'aspect-tools',
     zoom: {
       ids: [ikigaiCircleIds.craft],
       targetZoom: 3
     },
     component: AspectTypeWithQuestionsStep,
     props: {
-      title: "Expertise",
-      subtitle: "Your specialization",
+      title: "Tools",
+      subtitle: "What's in your toolbox?",
       subTitleColor: 'text-blue-300',
       bgColor: 'bg-blue-100',
-      iconPath: '/icons/aspects/expertise.png',
-      size: 'w-[550px] h-[600px]',
-      aspectType: "expertise",
+      iconPath: '/icons/aspects/tools.png',
+      size: 'w-[550px] h-[680px]',
+      aspectType: "tool",
       explanation: (
         <>
-          <strong>Expertise</strong>: Areas where you have a depth of experience or specialized training.
+          <strong>Tools</strong>: The comprehensive suite of tools, languages, apps, platforms, and equipment that you leverage in your life.
         </>
       ),
       questions: [
-        "What's an area of expertise that you're known for?",
-        "How did you come to develop this expertise?",
-        "What does having this expertise allow you to do?",
-        "In what ways do you share or utilize your expertise?",
-        "What's the next level of expertise you're aiming for?",
+        "From software applications to hardware gadgets, what are your must-have tools for enhancing productivity, creativity, and well-being?",
+        "Can you name an AI tool or resource that significantly improves your workflow or creative process?",
+        "Are there any niche or unconventional tools that you have expertise in using?",
+        "Can you name the tools that significantly enhance your creative projects?",
+        "Are there any tools you use regularly in a hobby or craft?",
+        "What's an underappreciated asset in your toolbox that you believe more people should know about?",
       ],
     },
   },
+  // {
+  //   id: 'aspect-expertise',
+  //   zoom: {
+  //     ids: [ikigaiCircleIds.craft],
+  //     targetZoom: 3
+  //   },
+  //   component: AspectTypeWithQuestionsStep,
+  //   props: {
+  //     title: "Expertise",
+  //     subtitle: "Your specialization",
+  //     subTitleColor: 'text-blue-300',
+  //     bgColor: 'bg-blue-100',
+  //     iconPath: '/icons/aspects/expertise.png',
+  //     size: 'w-[550px] h-[600px]',
+  //     aspectType: "expertise",
+  //     explanation: (
+  //       <>
+  //         <strong>Expertise</strong>: Areas where you have a depth of experience or specialized training.
+  //       </>
+  //     ),
+  //     questions: [
+  //       "What's an area of expertise that you're known for?",
+  //       "How do you apply your unique expertise to solve complex problems in your field?",
+  //       "What's an area within your expertise that you're currently exploring or expanding into?",
+  //       "What area of expertise are you developing not for work, but purely for personal satisfaction?",
+
+
+
+  //       "How did you come to develop this expertise?",
+  //       "What does having this expertise allow you to do?",
+  //       "In what ways do you share or utilize your expertise?",
+  //       "What's the next level of expertise you're aiming for?",
+  //     ],
+  //   },
+  // },
   {
     id: 'aspect-strength',
     zoom: {
@@ -505,19 +541,21 @@ export const steps: OnboardingStep[] = [
       subTitleColor: 'text-blue-300',
       bgColor: 'bg-blue-100',
       iconPath: '/icons/aspects/strength.png',
-      size: 'w-[550px] h-[600px]',
+      size: 'w-[550px] h-[660px]',
       aspectType: "strength",
       explanation: (
         <>
-          <strong>Strengths</strong>: Natural talents or abilities that give you an edge.
+          <strong>Strengths</strong>: Natural talents, abilities, or qualities that give you an edge over others.
         </>
       ),
       questions: [
-        "What personal strengths do you rely on the most?",
-        "Can you share a time when your strengths came in handy?",
+        "What is something you find easy to do that others might struggle with?",
+        "What unique personal quality do you believe has contributed most to your successes?",
         "How do others benefit from your strengths?",
         "What strength do you wish to cultivate or enhance?",
-        "How do your strengths shape your goals and actions?",
+        "What innate talent do you have that you're most proud of?",
+        "What strength do you possess that people often commend you for?",
+        "What aspect of your personality sets you apart in team environments or collaborative projects?",
       ],
     },
   },
@@ -529,8 +567,8 @@ export const steps: OnboardingStep[] = [
     },
     component: AspectTypeWithQuestionsStep,
     props: {
-      title: "Global Issues",
-      subtitle: "Worldwide impact",
+      title: "Global Challenges",
+      subtitle: "Issues that affect us all",
       subTitleColor: 'text-green-300',
       bgColor: 'bg-green-100',
       iconPath: '/icons/aspects/global.png',
@@ -539,15 +577,15 @@ export const steps: OnboardingStep[] = [
       aspectType: "global",
       explanation: (
         <>
-          <strong>Global Issues</strong>: Challenges facing the entire planet that you feel drawn to address.
+          <strong>Global Challenges</strong>: Challenges facing the entire planet that you feel has to be addressed.
         </>
       ),
       questions: [
-        "Which global challenge resonates with you the most?",
+        "What's a global issue you believe is critical for the future?",
         "How can individual efforts contribute to global solutions?",
         "What's a global issue you feel is not getting enough attention?",
-        "How do you stay informed and involved with global issues?",
         "If you could advocate for one global cause, what would it be?",
+        "What do we need to solve the biggest challenges of today?",
       ],
     },
   },
@@ -559,8 +597,8 @@ export const steps: OnboardingStep[] = [
     },
     component: AspectTypeWithQuestionsStep,
     props: {
-      title: "Societal Issues",
-      subtitle: "Cultural and social impact",
+      title: "Societal Challenges",
+      subtitle: "Where impact is needed in our societies",
       subTitleColor: 'text-green-300',
       bgColor: 'bg-green-100',
       iconPath: '/icons/aspects/societal.png',
@@ -569,15 +607,15 @@ export const steps: OnboardingStep[] = [
       aspectType: "societal",
       explanation: (
         <>
-          <strong>Societal Issues</strong>: Social and cultural problems you&apos;re motivated to solve.
+          <strong>Societal Challenges</strong>: Social, cultural, technological, ecological problems you think are important for your society.
         </>
       ),
       questions: [
-        "What societal issue do you feel most connected to?",
+        "What do you perceive as the most pressing social or cultural problems in your society today?",
+        "What do we need more of to combat social challenges?",
         "In what ways can people make a positive impact on societal issues?",
-        "Is there a social cause you believe is critical for the future?",
-        "How does your background or experience influence your view on societal issues?",
         "What societal change would you like to see in your lifetime?",
+        "Are there any initiatives or movements you know of that are addressing important social problems?",
       ],
     },
   },
@@ -590,7 +628,7 @@ export const steps: OnboardingStep[] = [
     component: AspectTypeWithQuestionsStep,
     props: {
       title: "Communal Issues",
-      subtitle: "Local and community focus",
+      subtitle: "What needs to be done in our communities",
       subTitleColor: 'text-green-300',
       bgColor: 'bg-green-100',
       iconPath: '/icons/aspects/communal.png',
@@ -599,7 +637,8 @@ export const steps: OnboardingStep[] = [
       aspectType: "communal",
       explanation: (
         <>
-          <strong>Communal Issues</strong>: Local community challenges that you are passionate about improving.
+          <strong>Communal Challenges</strong>: The challenges unique to any of the communities you are a part of: 
+          your online group, your city, your neighborhood, ...
         </>
       ),
       questions: [
