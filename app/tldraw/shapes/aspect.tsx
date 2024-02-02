@@ -103,22 +103,22 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
     
     const inTheHeart = this.editor.isPointInShape(ikigaiCircleMap['theHeart'], { x: current.x, y: current.y })
     const inTheCraft = this.editor.isPointInShape(ikigaiCircleMap['theCraft'], { x: current.x, y: current.y })
-    const inTheMission = this.editor.isPointInShape(ikigaiCircleMap['theMission'], { x: current.x, y: current.y })
+    const inTheCause = this.editor.isPointInShape(ikigaiCircleMap['theCause'], { x: current.x, y: current.y })
     const inThePath = this.editor.isPointInShape(ikigaiCircleMap['thePath'], { x: current.x, y: current.y })
   
     const color = 
-      inTheHeart && inTheCraft && inTheMission && inThePath ? "amber-strong" : 
-      inTheHeart && inTheCraft && inTheMission ? "orange" :
+      inTheHeart && inTheCraft && inTheCause && inThePath ? "amber-strong" : 
+      inTheHeart && inTheCraft && inTheCause ? "orange" :
       inTheHeart && inTheCraft && inThePath ? "purple-strong" :
-      inTheHeart && inTheMission && inThePath ? "emerald" :
-      inTheCraft && inTheMission && inThePath ? "yellow-strong" :
+      inTheHeart && inTheCause && inThePath ? "emerald" :
+      inTheCraft && inTheCause && inThePath ? "yellow-strong" :
       inTheHeart && inTheCraft ? "purple" : 
-      inTheHeart && inTheMission ? "amber" : 
-      inThePath && inTheMission ? "lime" : 
+      inTheHeart && inTheCause ? "amber" : 
+      inThePath && inTheCause ? "lime" : 
       inThePath && inTheCraft ? "teal" : 
       inTheHeart ? "red" : 
       inTheCraft ? "blue" :
-      inTheMission ? "green" : 
+      inTheCause ? "green" : 
       inThePath ? "yellow" : 
       "default"; 
 

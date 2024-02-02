@@ -6,13 +6,14 @@ import {
   InDepthZoneStep, 
   AspectTypeWithQuestionsStep,
   AspectDemoStep,
+  ZonesOverviewStep
 } from './stepComponents';
 
 
 export interface OnboardingStep {
   id: string;
   component: React.FC<any>;
-  zoom?: { id: TLShapeId, targetZoom?: number };
+  zoom?: { ids: TLShapeId[], targetZoom?: number };
   props: any;
   skipNavButtons?: boolean;
 }
@@ -23,7 +24,7 @@ export const steps: OnboardingStep[] = [
     id: 'introduce-heart',
     component: IntroduceZoneStep,
     zoom: {
-      id: ikigaiCircleIds.heart
+      ids: [ikigaiCircleIds.heart],
     },
     props: {
       id: ikigaiCircleIds.heart,
@@ -44,7 +45,7 @@ export const steps: OnboardingStep[] = [
   {
     id: 'introduce-craft',
     zoom: {
-      id: ikigaiCircleIds.craft
+      ids: [ikigaiCircleIds.craft],
     },
     component: IntroduceZoneStep,
     props: {
@@ -66,11 +67,11 @@ export const steps: OnboardingStep[] = [
   {
     id: 'introduce-cause',
     zoom: {
-      id: ikigaiCircleIds.mission
+      ids: [ikigaiCircleIds.cause],
     },
     component: IntroduceZoneStep,
     props: {
-      id: ikigaiCircleIds.mission,
+      id: ikigaiCircleIds.cause,
       title: 'The Cause',
       subtitle: 'problems that need to be solved',
       subTitleColor: 'text-green-400',
@@ -82,14 +83,14 @@ export const steps: OnboardingStep[] = [
           Which of them will you claim?
         </>
       ),
-      iconPath: '/icons/zones/mission.png',
+      iconPath: '/icons/zones/cause.png',
       bgColor: 'bg-green-100'
     }
   },
   {
     id: 'introduce-path',
     zoom: {
-      id: ikigaiCircleIds.path
+      ids: [ikigaiCircleIds.path],
     },
     component: IntroduceZoneStep,
     props: {
@@ -110,12 +111,16 @@ export const steps: OnboardingStep[] = [
   {
     id: 'heart-aspect-types',
     zoom: {
-      id: ikigaiCircleIds.heart,
+      ids: [ikigaiCircleIds.heart],
       targetZoom: 1
     },
     component: InDepthZoneStep,
     props: {
+      intro: "The Heart is made up of these 4 aspects of who you are:",
       title: "What's in The Heart",
+      bgColor: 'bg-red-100',
+      iconPath: '/icons/zones/heart.png',
+      size: 'w-[550px] h-[580px]',
       aspects: [
         {
           icon: "/icons/aspects/interest.png",
@@ -142,15 +147,135 @@ export const steps: OnboardingStep[] = [
           description: "What are your deepest aspirations? Starting a business, writing a book, traveling the world, making a difference?"
         },
       ],
-      bgColor: 'bg-red-100',
-      iconPath: '/icons/zones/heart.png',
-      size: 'w-[550px] h-[600px]',
+    },
+  },
+  {
+    id: 'craft-aspect-types',
+    zoom: {
+      ids: [ikigaiCircleIds.craft],
+      targetZoom: 1
+    },
+    component: InDepthZoneStep,
+    props: {
+      intro: "The Craft is built on these foundational aspects:",
+      title: "Exploring The Craft",
+      bgColor: 'bg-blue-100',
+      iconPath: '/icons/zones/craft.png',
+      size: 'w-[550px] h-[580px]',
+      aspects: [
+        {
+          icon: "/icons/aspects/skill.png",
+          aspectType: "skill",
+          label: "Skills",
+          description: "What competencies do you excel at? Coding, writing, analytical thinking, or perhaps public speaking?"
+        },
+        {
+          icon: "/icons/aspects/knowledge.png",
+          aspectType: "knowledge",
+          label: "Knowledge",
+          description: "What areas do you possess deep understanding in? This could range from professional expertise to personal interests."
+        },
+        {
+          icon: "/icons/aspects/expertise.png",
+          aspectType: "expertise",
+          label: "Expertise",
+          description: "In what areas do you possess specialized knowledge or capabilities? Consider fields where you're seen as an authority."
+        },
+        {
+          icon: "/icons/aspects/strength.png",
+          aspectType: "strength",
+          label: "Strengths",
+          description: "What are your innate strengths? This includes natural talents or abilities that you’ve always found to be your strong suits."
+        },
+      ],
+    },
+  },  
+  {
+    id: 'cause-aspect-types',
+    zoom: {
+      ids: [ikigaiCircleIds.cause],
+      targetZoom: 1
+    },
+    component: InDepthZoneStep,
+    props: {
+      intro: "The Cause is centered around these types of issues:",
+      title: "Defining The Cause",
+      bgColor: 'bg-green-100',
+      iconPath: '/icons/zones/cause.png',
+      size: 'w-[550px] h-[580px]',
+      aspects: [
+        {
+          icon: "/icons/aspects/global.png",
+          aspectType: "global",
+          label: "Global Issues",
+          description: "What global challenges inspire you to seek solutions or advocate for change?"
+        },
+        {
+          icon: "/icons/aspects/societal.png",
+          aspectType: "societal",
+          label: "Societal Issues",
+          description: "Which societal problems do you feel most driven to address through your actions or advocacy?"
+        },
+        {
+          icon: "/icons/aspects/communal.png",
+          aspectType: "communal",
+          label: "Communal Issues",
+          description: "How do you envision contributing to solving issues within your local community?"
+        },
+        {
+          icon: "/icons/aspects/personal.png",
+          aspectType: "personal",
+          label: "Personal Issues",
+          description: "Are there personal challenges or issues you're passionate about that resonate on a wider scale?"
+        },
+      ],
+    },
+  },
+  {
+    id: 'path-aspect-types',
+    zoom: {
+      ids: [ikigaiCircleIds.path],
+      targetZoom: 1
+    },
+    component: InDepthZoneStep,
+    props: {
+      intro: "The Path includes these critical aspects:",
+      title: "Navigating The Path",
+      bgColor: 'bg-yellow-100',
+      iconPath: '/icons/zones/path.png',
+      size: 'w-[550px] h-[580px]',
+      aspects: [
+        {
+          icon: "/icons/aspects/business-idea.png",
+          aspectType: "business-idea",
+          label: "Business Ideas",
+          description: "What innovative business ideas do you believe could meet a need in the market?"
+        },
+        {
+          icon: "/icons/aspects/career.png",
+          aspectType: "career",
+          label: "Career",
+          description: "Considering your skills and interests, what career paths are you drawn to?"
+        },
+        {
+          icon: "/icons/aspects/freelance.png",
+          aspectType: "freelance",
+          label: "Freelance",
+          description: "Are there freelance opportunities that align with your expertise and passion?"
+        },
+        {
+          icon: "/icons/aspects/industry.png",
+          aspectType: "industry",
+          label: "Industry",
+          description: "Which industries do you see as ripe for innovation or contribution from your unique skill set?"
+        },
+      ],
     },
   },
   {
     id: 'aspect-interest',
     zoom: {
-      id: ikigaiCircleIds.heart,
+      ids: [ikigaiCircleIds.heart],
       targetZoom: 3
     },
     component: AspectTypeWithQuestionsStep,
@@ -166,7 +291,7 @@ export const steps: OnboardingStep[] = [
       aspectType: "interest",
       explanation: (
         <>
-          <strong>interests</strong>: topics, ideas, or subjects that interest and fascinate you.
+          <strong>interests</strong>: topics, ideas, activities, or subjects that interest and fascinate you.
         </>
       ),
       questions: [
@@ -181,24 +306,460 @@ export const steps: OnboardingStep[] = [
     },
   },
   {
-    id: 'aspect-dream',
+    id: 'aspect-value',
     zoom: {
-      id: ikigaiCircleIds.heart,
+      ids: [ikigaiCircleIds.heart],
       targetZoom: 3
     },
     component: AspectTypeWithQuestionsStep,
     props: {
+      title: "Values",
+      subtitle: "What guides your decisions",
+      subTitleColor: 'text-red-300',
+      bgColor: 'bg-red-100',
+      iconPath: '/icons/aspects/value.png',
+      icon: "/icons/zones/heart.png",
+      size: 'w-[550px] h-[600px]',
+  
+      aspectType: "value",
+      explanation: (
+        <>
+          <strong>Values</strong>: the principles that you hold dear and that influence how you live your life.
+        </>
+      ),
+      questions: [
+        "What values are most important to you?",
+        "How do these values influence your daily actions?",
+        "Can you share a time when your values guided a significant decision?",
+        "How do you feel when you are able to live according to your values?",
+        "Are there any values you wish to cultivate more deeply?",
+      ],
+    },
+  },
+  {
+    id: 'aspect-influence',
+    zoom: {
+      ids: [ikigaiCircleIds.heart],
+      targetZoom: 3
+    },
+    component: AspectTypeWithQuestionsStep,
+    props: {
+      title: "Influences",
+      subtitle: "Who and what shapes you",
+      subTitleColor: 'text-red-300',
+      bgColor: 'bg-red-100',
+      iconPath: '/icons/aspects/influence.png',
+      icon: "/icons/zones/heart.png",
+      size: 'w-[550px] h-[600px]',
+  
+      aspectType: "influence",
+      explanation: (
+        <>
+          <strong>Influences</strong>: People, books, experiences, or events that have shaped your perspectives and life path.
+        </>
+      ),
+      questions: [
+        "Who do you consider your biggest role model?",
+        "Who inspires you the most?",
+        "What ideas or philosophies that have influenced you?",
+        "Name a book or movie that changed or formed your perspective.",
+        "What's a piece of advice that has stayed with you?",
+        "Who in your life has had the biggest impact on your way of thinking?",
+        "Who do you turn to for wisdom or guidance?",
+      ],
+    },
+  },
+  {
+    id: 'aspect-dream',
+    zoom: {
+      ids: [ikigaiCircleIds.heart],
+      targetZoom: 3,
+    },
+    component: AspectTypeWithQuestionsStep,
+    props: {
       title: "Dreams",
-      subtitle: "Your deepest aspirations",
+      subtitle: "Your aspirations and goals",
       subTitleColor: 'text-red-300',
       bgColor: 'bg-red-100',
       iconPath: '/icons/aspects/dream.png',
+      icon: "/icons/zones/heart.png",
       size: 'w-[550px] h-[600px]',
-
+  
       aspectType: "dream",
-      explanation: "Your dreams are your deepest aspirations. They are the things you want to achieve and the things you want to experience.",
-      questions: ["What are your deepest aspirations?", "Starting a business, writing a book, traveling the world, making a difference?"],
-    }
+      explanation: (
+        <>
+          <strong>Dreams</strong>: The aspirations, goals, and ambitions you have for your life.
+        </>
+      ),
+      questions: [
+        "What dreams do you have for your future?",
+        "In a decade, what would you like to have accomplished?",
+        "Describe your dream project. What would it look like? What would it achieve?",
+        "At the end of your life, what would you like to be remembered for?",
+        "What innovation or invention do you dream of creating?",
+        "If you could instantly transform one aspect of the world, what would it be?",    
+      ],
+    },
+  },
+  {
+    id: 'aspect-skill',
+    zoom: {
+      ids: [ikigaiCircleIds.craft],
+      targetZoom: 3
+    },
+    component: AspectTypeWithQuestionsStep,
+    props: {
+      title: "Skills",
+      subtitle: "Your ability to do things well",
+      subTitleColor: 'text-blue-300',
+      bgColor: 'bg-blue-100',
+      iconPath: '/icons/aspects/skill.png',
+      icon: "/icons/zones/craft.png",
+      size: 'w-[550px] h-[600px]',
+      aspectType: "skill",
+      explanation: (
+        <>
+          <strong>Skills</strong>: Your abilities and competencies that you&apos;ve developed through practice and experience.
+        </>
+      ),
+      questions: [
+        "What skill do you find yourself using most often?",
+        "Which of your skills are you most proud of?",
+        "What software or tools are you proficient in?",
+        "What technical skills dou you have? eg. what software tools you know how to use, programming languages you know, or technical capabilities of any sort.",
+        "Is there a skill you're currently working on improving?",
+        "Which skills do you find most useful in your day-to-day life?",
+        "What leadership or management skills do you bring to a project or team?",
+        "Which communication skills do you consider your strongest—public speaking, writing, or another?"
+      ],
+    },
+  },
+  {
+    id: 'aspect-knowledge',
+    zoom: {
+      ids: [ikigaiCircleIds.craft],
+      targetZoom: 3
+    },
+    component: AspectTypeWithQuestionsStep,
+    props: {
+      title: "Knowledge",
+      subtitle: "What you know",
+      subTitleColor: 'text-blue-300',
+      bgColor: 'bg-blue-100',
+      iconPath: '/icons/aspects/knowledge.png',
+      size: 'w-[550px] h-[600px]',
+      aspectType: "knowledge",
+      explanation: (
+        <>
+          <strong>Knowledge</strong>: The information, understanding, and wisdom you&apos;ve accumulated.
+        </>
+      ),
+      questions: [
+        "What area of knowledge are you often consulted for?",
+        "What subject could you read about or study for hours on end?",
+        "How do you like to acquire new knowledge?",
+        "What's an interesting fact or concept you've learned recently?",
+        "How do you apply your knowledge to solve problems?",
+      ],
+    },
+  },
+  {
+    id: 'aspect-expertise',
+    zoom: {
+      ids: [ikigaiCircleIds.craft],
+      targetZoom: 3
+    },
+    component: AspectTypeWithQuestionsStep,
+    props: {
+      title: "Expertise",
+      subtitle: "Your specialization",
+      subTitleColor: 'text-blue-300',
+      bgColor: 'bg-blue-100',
+      iconPath: '/icons/aspects/expertise.png',
+      size: 'w-[550px] h-[600px]',
+      aspectType: "expertise",
+      explanation: (
+        <>
+          <strong>Expertise</strong>: Areas where you have a depth of experience or specialized training.
+        </>
+      ),
+      questions: [
+        "What's an area of expertise that you're known for?",
+        "How did you come to develop this expertise?",
+        "What does having this expertise allow you to do?",
+        "In what ways do you share or utilize your expertise?",
+        "What's the next level of expertise you're aiming for?",
+      ],
+    },
+  },
+  {
+    id: 'aspect-strength',
+    zoom: {
+      ids: [ikigaiCircleIds.craft],
+      targetZoom: 3
+    },
+    component: AspectTypeWithQuestionsStep,    
+    props: {
+      title: "Strengths",
+      subtitle: "Your innate abilities",
+      subTitleColor: 'text-blue-300',
+      bgColor: 'bg-blue-100',
+      iconPath: '/icons/aspects/strength.png',
+      size: 'w-[550px] h-[600px]',
+      aspectType: "strength",
+      explanation: (
+        <>
+          <strong>Strengths</strong>: Natural talents or abilities that give you an edge.
+        </>
+      ),
+      questions: [
+        "What personal strengths do you rely on the most?",
+        "Can you share a time when your strengths came in handy?",
+        "How do others benefit from your strengths?",
+        "What strength do you wish to cultivate or enhance?",
+        "How do your strengths shape your goals and actions?",
+      ],
+    },
+  },
+  {
+    id: 'aspect-global',
+    zoom: {
+      ids: [ikigaiCircleIds.cause],
+      targetZoom: 3
+    },
+    component: AspectTypeWithQuestionsStep,
+    props: {
+      title: "Global Issues",
+      subtitle: "Worldwide impact",
+      subTitleColor: 'text-green-300',
+      bgColor: 'bg-green-100',
+      iconPath: '/icons/aspects/global.png',
+      icon: "/icons/zones/cause.png",
+      size: 'w-[550px] h-[600px]',
+      aspectType: "global",
+      explanation: (
+        <>
+          <strong>Global Issues</strong>: Challenges facing the entire planet that you feel drawn to address.
+        </>
+      ),
+      questions: [
+        "Which global challenge resonates with you the most?",
+        "How can individual efforts contribute to global solutions?",
+        "What's a global issue you feel is not getting enough attention?",
+        "How do you stay informed and involved with global issues?",
+        "If you could advocate for one global cause, what would it be?",
+      ],
+    },
+  },
+  {
+    id: 'aspect-societal',
+    zoom: {
+      ids: [ikigaiCircleIds.cause],
+      targetZoom: 3
+    },
+    component: AspectTypeWithQuestionsStep,
+    props: {
+      title: "Societal Issues",
+      subtitle: "Cultural and social impact",
+      subTitleColor: 'text-green-300',
+      bgColor: 'bg-green-100',
+      iconPath: '/icons/aspects/societal.png',
+      icon: "/icons/zones/cause.png",
+      size: 'w-[550px] h-[600px]',
+      aspectType: "societal",
+      explanation: (
+        <>
+          <strong>Societal Issues</strong>: Social and cultural problems you&apos;re motivated to solve.
+        </>
+      ),
+      questions: [
+        "What societal issue do you feel most connected to?",
+        "In what ways can people make a positive impact on societal issues?",
+        "Is there a social cause you believe is critical for the future?",
+        "How does your background or experience influence your view on societal issues?",
+        "What societal change would you like to see in your lifetime?",
+      ],
+    },
+  },
+  {
+    id: 'aspect-communal',
+    zoom: {
+      ids: [ikigaiCircleIds.cause],
+      targetZoom: 3
+    },
+    component: AspectTypeWithQuestionsStep,
+    props: {
+      title: "Communal Issues",
+      subtitle: "Local and community focus",
+      subTitleColor: 'text-green-300',
+      bgColor: 'bg-green-100',
+      iconPath: '/icons/aspects/communal.png',
+      icon: "/icons/zones/cause.png",
+      size: 'w-[550px] h-[600px]',
+      aspectType: "communal",
+      explanation: (
+        <>
+          <strong>Communal Issues</strong>: Local community challenges that you are passionate about improving.
+        </>
+      ),
+      questions: [
+        "What's one local issue you're actively involved in or care about?",
+        "How can communities come together to address local problems?",
+        "What local initiative or project do you admire for its impact?",
+        "Can you share a success story from a communal effort you know of or participated in?",
+        "What's an area in your community where you see an opportunity for positive change?",
+      ],
+    },
+  },
+  {
+    id: 'aspect-personal',
+    zoom: {
+      ids: [ikigaiCircleIds.cause],
+      targetZoom: 3
+    },
+    component: AspectTypeWithQuestionsStep,
+    props: {
+      title: "Personal Issues",
+      subtitle: "Individual passions and challenges",
+      subTitleColor: 'text-green-300',
+      bgColor: 'bg-green-100',
+      iconPath: '/icons/aspects/personal.png',
+      icon: "/icons/zones/cause.png",
+      size: 'w-[550px] h-[600px]',
+      aspectType: "personal",
+      explanation: (
+        <>
+          <strong>Personal Issues</strong>: Individual challenges that you feel a strong drive to overcome or address.
+        </>
+      ),
+      questions: [
+        "What personal challenge has shaped you significantly?",
+        "How can personal struggles inspire or lead to broader societal change?",
+        "What personal success are you hoping to achieve that might inspire others?",
+        "Do you have a story of personal triumph that could motivate people facing similar issues?",
+        "What's a lesson you've learned from personal experiences that you'd like to share with others?",
+      ],
+    },
+  },
+  {
+    id: 'aspect-business-idea',
+    zoom: {
+      ids: [ikigaiCircleIds.path],
+      targetZoom: 3
+    },
+    component: AspectTypeWithQuestionsStep,
+    props: {
+      title: "Business Ideas",
+      subtitle: "Innovative ventures",
+      subTitleColor: 'text-yellow-700',
+      bgColor: 'bg-yellow-100',
+      iconPath: '/icons/aspects/business-idea.png',
+      icon: "/icons/zones/path.png",
+      size: 'w-[550px] h-[600px]',
+      aspectType: "business-idea",
+      explanation: (
+        <>
+          <strong>Business Ideas</strong>: Entrepreneurial concepts and innovations you&apos;d love to bring to life.
+        </>
+      ),
+      questions: [
+        "What's a business idea you've been pondering?",
+        "How does your business idea solve a problem or fill a gap in the market?",
+        "Have you taken any steps towards realizing this business idea?",
+        "What excites you the most about your business idea?",
+        "Who would be your dream customer or client for your business idea?",
+      ],
+    },
+  },
+  {
+    id: 'aspect-career',
+    zoom: {
+      ids: [ikigaiCircleIds.path],
+      targetZoom: 3
+    },
+    component: AspectTypeWithQuestionsStep,
+    props: {
+      title: "Career",
+      subtitle: "Professional development",
+      subTitleColor: 'text-yellow-700',
+      bgColor: 'bg-yellow-100',
+      iconPath: '/icons/aspects/career.png',
+      icon: "/icons/zones/path.png",
+      size: 'w-[550px] h-[600px]',
+      aspectType: "career",
+      explanation: (
+        <>
+          <strong>Career</strong>: Professional paths and growth opportunities you&apos;re aiming to pursue.
+        </>
+      ),
+      questions: [
+        "What does your ideal career path look like?",
+        "Which professional achievements are you working towards?",
+        "What skills or experiences are you seeking to advance your career?",
+        "Is there a field or industry where you aspire to make your mark?",
+        "How do you want to evolve in your professional life in the next five years?",
+      ],
+    },
+  },
+  {
+    id: 'aspect-freelance',
+    zoom: {
+      ids: [ikigaiCircleIds.path],
+      targetZoom: 3
+    },
+    component: AspectTypeWithQuestionsStep,
+    props: {
+      title: "Freelance",
+      subtitle: "Independent work",
+      subTitleColor: 'text-yellow-700',
+      bgColor: 'bg-yellow-100',
+      iconPath: '/icons/aspects/freelance.png',
+      icon: "/icons/zones/path.png",
+      size: 'w-[550px] h-[600px]',
+      aspectType: "freelance",
+      explanation: (
+        <>
+          <strong>Freelance</strong>: Opportunities for self-employment and project-based work.
+        </>
+      ),
+      questions: [
+        "What kind of freelance work interests you the most?",
+        "How could freelancing complement your personal and professional goals?",
+        "What's unique about the service or skills you offer as a freelancer?",
+        "Have you identified a niche for your freelance work?",
+        "What's your strategy for finding freelance opportunities?",
+      ],
+    },
+  },
+  {
+    id: 'aspect-industry',
+    zoom: {
+      ids: [ikigaiCircleIds.path],
+      targetZoom: 3
+    },
+    component: AspectTypeWithQuestionsStep,
+    props: {
+      title: "Industry",
+      subtitle: "Sector specialization",
+      subTitleColor: 'text-yellow-700',
+      bgColor: 'bg-yellow-100',
+      iconPath: '/icons/aspects/industry.png',
+      icon: "/icons/zones/path.png",
+      size: 'w-[550px] h-[600px]',
+      aspectType: "industry",
+      explanation: (
+        <>
+          <strong>Industry</strong>: Economic sectors where you see potential for growth or innovation.
+        </>
+      ),
+      questions: [
+        "Which industry do you see yourself thriving in?",
+        "Are there emerging sectors where you’d like to apply your expertise?",
+        "What industry trends are you most excited about?",
+        "How could you contribute to innovation within your chosen industry?",
+        "What steps are you taking to break into or advance in this industry?"
+      ],
+    },
   },
   {
     id: "aspect-demo",
@@ -207,12 +768,61 @@ export const steps: OnboardingStep[] = [
     skipNavButtons: true,
     props: {
       title: "Your first aspect",
-      bgColor: 'bg-red-100',
+      bgColor: 'bg-purple-100',
       iconPath: '/icons/zones/heart.png',
       subtitle: 'interacting with aspects',
-      subTitleColor: 'text-red-300',
-      size: 'w-[450px] h-[450px]',
-    }
+      subTitleColor: 'text-purple-300',
+      size: 'w-[450px] h-[550px]',
+      position: 'inset-y-0 left-20 top-20', // Position the Alert box on the left side of the screen on medium screens and up
 
+    }
+  },
+  {
+    id: "zones-overview",
+    component: ZonesOverviewStep,
+    zoom: {
+      ids: [ikigaiCircleIds.heart, ikigaiCircleIds.craft, ikigaiCircleIds.cause, ikigaiCircleIds.path]
+    },
+    skipNavButtons: true,
+    props: {
+      title: "The 4 Zones",
+      bgColor: 'bg-blue-100',
+      iconPath: '/icons/zones/heart.png',
+      size: 'w-[550px] h-[600px]',
+      zones: [
+        {
+          icon: "/icons/zones/heart.png",
+          zoneType: "heart",
+          description: "What activities captivate you? Reading, history, art, travel, learning new skills?",
+          aspects: [
+            // Add aspects related to the heart zone here
+          ]
+        },
+        {
+          icon: "/icons/zones/craft.png",
+          zoneType: "craft",
+          description: "What principles guide your life? Honesty, creativity, freedom, respect, innovation?",
+          aspects: [
+            // Add aspects related to the craft zone here
+          ]
+        },
+        {
+          icon: "/icons/zones/path.png",
+          zoneType: "path",
+          description: "Who or what has shaped your thinking? Inspirational figures, pivotal events, significant books or art?",
+          aspects: [
+            // Add aspects related to the path zone here
+          ]
+        },
+        {
+          icon: "/icons/zones/cause.png",
+          zoneType: "cause",
+          description: "What are your deepest aspirations? Starting a business, writing a book, traveling the world, making a difference?",
+          aspects: [
+            // Add aspects related to the cause zone here
+          ]
+        },
+      ],
+    }
   }
 ];

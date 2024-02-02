@@ -13,7 +13,7 @@ interface AssetSrc {
   src: string;
 }
 
-const toolsToRemove: string[] = []
+const toolsToRemove: string[] = ["triangle"]
 
 export function getZoneColor(zoneName: ZoneName) {
   switch (zoneName) {
@@ -21,7 +21,7 @@ export function getZoneColor(zoneName: ZoneName) {
       return 'red';
     case 'The Craft':
       return 'blue';
-    case 'The Mission':
+    case 'The Cause':
       return 'green';
     case 'The Path':
       return 'yellow';
@@ -69,8 +69,8 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
                   
             try {
               const uploadResult = await uploadSnapshot(updatedSnapshot);
-              console.log("Saved Ikigai snapshot with updated asset URLs.");
-              console.log(uploadResult)
+              // console.log("Saved Ikigai snapshot with updated asset URLs.");
+              // console.log(uploadResult)
 
             } catch (error) {
               alert("Failed to save the snapshot to the database. Please try again.");
@@ -105,9 +105,9 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
     
             // Save the modified snapshot and asset SRCs
             saveAsJSON(snapshot, 'editor-snapshot.json');
-            console.log(snapshot)
+            // console.log(snapshot)
             saveAsJSON(assetSrcs, 'asset-srcs.json');
-            console.log(assetSrcs)
+            // console.log(assetSrcs)
           } else {
             console.error('Editor or editor.store is undefined.');
           }
@@ -143,7 +143,7 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
 
 
     tools: (editor, tools) => {
-      console.log("here are the tools: ", tools)
+      // console.log("here are the tools: ", tools)
       const filteredTools: Record<string, any> = {};
 
       Object.keys(tools).forEach(key => {
@@ -165,7 +165,7 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
         },
       }
 
-      console.log(filteredTools)
+      // console.log(filteredTools)
 
       return filteredTools;
     },
@@ -173,8 +173,8 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
     toolbar: (_app, toolbar, { tools }) => {
       const filteredToolbar = toolbar.filter(item => !toolsToRemove.includes(item.id));
       // ... additional toolbar configuration ...
-      console.log(tools)
-      console.log("logging tools card:", tools.card)
+      // console.log(tools)
+      // console.log("logging tools card:", tools.card)
       filteredToolbar.splice(3, 0, toolbarItem(tools.card))
 
       return filteredToolbar;
@@ -219,7 +219,7 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
         return !REMOVED_CONTEXT_MENU_OPTIONS.includes(group.id);
       });
       
-      console.log(contextMenu);
+      // console.log(contextMenu);
 
       const CUSTOM_TYPES = ['aspect'];
 
@@ -227,9 +227,9 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
       const selectedAspects = selectedShapes.filter(shape => CUSTOM_TYPES.includes(shape.type));
       const aspectSelected = selectedShapes.some(shape => CUSTOM_TYPES.includes(shape.type));
 
-      console.log("Selected Aspects: ", selectedAspects)
-      console.log("Has aspect: ", aspectSelected);
-      console.log("selected shapes are: ", selectedShapes)
+      // console.log("Selected Aspects: ", selectedAspects)
+      // console.log("Has aspect: ", aspectSelected);
+      // console.log("selected shapes are: ", selectedShapes)
 
       const createAspectMenu: TLUiMenuGroup = menuGroup(
         'create-aspect-group',
@@ -251,7 +251,7 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
             menuItem(actions['create-strength']),
           ),
           menuGroup(
-            'mission-aspects',
+            'cause-aspects',
             menuItem(actions['create-global']),
             menuItem(actions['create-communal']),
             menuItem(actions['create-societal']),
@@ -290,7 +290,7 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
             menuItem(actions['add-strength']),
           ),
           menuGroup(
-            'mission-aspects',
+            'cause-aspects',
             menuItem(actions['add-global']),
             menuItem(actions['add-communal']),
             menuItem(actions['add-societal']),
@@ -323,7 +323,7 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
 
           ),
           menuGroup(
-            'mission-aspects',
+            'cause-aspects',
             ...removeAspectTypeMenuItems(selectedAspectTypes, 
               ['global', 'communal', 'societal', 'personal'], 
               actions

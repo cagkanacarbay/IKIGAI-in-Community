@@ -6,6 +6,8 @@ import {
 import { useEffect } from 'react';
 import { ZoneName } from '@/lib/types';
 import { ikigaiCircleIds } from './shapeIds';
+import { motion } from 'framer-motion';
+
 
 export interface IkigaiCircleShapeMeta {
   zone: ZoneName;
@@ -85,9 +87,11 @@ export default class IkigaiCircleShapeUtil extends ShapeUtil<IIkigaiCircleShape>
   
     return (
       <HTMLContainer>
+        {/* <motion.div> */}
         <svg id={shape.meta.zone} width={radius * 2} height={radius * 2} style={{ overflow: 'visible', position: 'absolute', left: x , top: y }}>
           <circle cx={radius} cy={radius} r={radius} fill={fillColor} fillOpacity={fillOpacity}/>
         </svg>
+        {/* </motion.div> */}
       </HTMLContainer>
     );
   }
@@ -129,7 +133,7 @@ export function IkigaiCircles() {
             y = (radius / 5) * 4;
             color = 'light-blue';
             break;
-          case 'mission':
+          case 'cause':
             x = (radius / 5) * 4 * 2;
             y = (radius / 5) * 4;
             color = 'light-green';

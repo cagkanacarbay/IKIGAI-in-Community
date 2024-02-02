@@ -43,16 +43,17 @@ export type AspectType = "skill" | "knowledge" | "expertise" | "strength" | "int
 
 export const aspectTypes: AspectType[] = ["skill", "knowledge", "expertise", "strength", "interest", "value", "dream", "influence", "global", "societal", "communal", "personal", "business-idea", "career", "freelance", "industry"];
 
-export type ZoneName = "The Heart" | "The Craft" | "The Path" | "The Mission";
+export type ZoneName = "The Heart" | "The Craft" | "The Path" | "The Cause";
 
 type ZoneAspectTypes = {
   [key in ZoneName]: AspectType[];
 }
 
+
 export const zoneAspectTypes: ZoneAspectTypes = {
   "The Heart": ["interest", "value", "dream", "influence"],
   "The Craft": ["skill", "knowledge", "expertise", "strength"], 
-  "The Mission": ["global", "societal", "communal", "personal"], 
+  "The Cause": ["global", "societal", "communal", "personal"], 
   "The Path": ["business-idea", "career", "freelance", "industry"]
 }
 

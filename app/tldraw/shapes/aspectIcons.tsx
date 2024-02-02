@@ -19,7 +19,7 @@ interface ZoneIconProps {
 const zoneIconSrc = {
   "The Heart": "heart.png",
   "The Craft": "craft.png",
-  "The Mission": "mission.png",
+  "The Cause": "cause.png",
   "The Path": "path.png"
 }
 
