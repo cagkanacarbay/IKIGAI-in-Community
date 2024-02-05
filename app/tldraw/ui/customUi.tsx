@@ -14,6 +14,8 @@ interface AssetSrc {
 }
 
 const toolsToRemove: string[] = [
+  "arror",
+  "note",
   "draw",
   "eraser",
   "ellipse",
@@ -178,16 +180,7 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
 
       // ... additional tool configuration ...
 
-      tools.card = {
-        id: 'card',
-        icon: 'color',
-        label: 'Card',
-        kbd: 'c',
-        readonlyOk: false,
-        onSelect: () => {
-          editor.setCurrentTool('card')
-        },
-      }
+      
 
       // console.log(filteredTools)
 
@@ -199,7 +192,6 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
       // ... additional toolbar configuration ...
       // console.log(tools)
       // console.log("logging tools card:", tools.card)
-      filteredToolbar.splice(3, 0, toolbarItem(tools.card))
 
       return filteredToolbar;
     },
