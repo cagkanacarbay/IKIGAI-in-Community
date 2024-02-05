@@ -39,11 +39,13 @@ export type UserInDB = {
   updated_at: string; 
 }
 
-export type AspectType = "skill" | "knowledge" | "expertise" | "strength" | "interest" | "value" | "dream" | "influence" | "global" | "societal" | "communal" | "personal" | "business-idea" | "career" | "freelance" | "industry";
+export type AspectType = "skill" | "knowledge" | "tools" | "strength" | "interest" | "value" | "dream" | "influence" | "global" | "societal" | "communal" | "personal" | "business-idea" | "career" | "freelance" | "industry";
 
-export const aspectTypes: AspectType[] = ["skill", "knowledge", "expertise", "strength", "interest", "value", "dream", "influence", "global", "societal", "communal", "personal", "business-idea", "career", "freelance", "industry"];
+export const aspectTypes: AspectType[] = ["skill", "knowledge", "tools", "strength", "interest", "value", "dream", "influence", "global", "societal", "communal", "personal", "business-idea", "career", "freelance", "industry"];
 
 export type ZoneName = "The Heart" | "The Craft" | "The Path" | "The Cause";
+
+export const zones: ZoneName[] = ['The Heart', 'The Craft', 'The Path', 'The Cause'];
 
 type ZoneAspectTypes = {
   [key in ZoneName]: AspectType[];
@@ -52,14 +54,21 @@ type ZoneAspectTypes = {
 
 export const zoneAspectTypes: ZoneAspectTypes = {
   "The Heart": ["interest", "value", "dream", "influence"],
-  "The Craft": ["skill", "knowledge", "expertise", "strength"], 
+  "The Craft": ["skill", "knowledge", "tools", "strength"], 
   "The Cause": ["global", "societal", "communal", "personal"], 
   "The Path": ["business-idea", "career", "freelance", "industry"]
 }
 
-export const getZoneName = (aspectType: AspectType): ZoneName | undefined => {
+export const getZoneName = (aspectType: AspectType): ZoneName => {
   const zoneName = Object.keys(zoneAspectTypes).find((zoneName) => {
     return zoneAspectTypes[zoneName as ZoneName].includes(aspectType);
   });
-  return zoneName as ZoneName | undefined;
+  return zoneName as ZoneName;
+}
+
+export const zoneIconSrc = {
+  "The Heart": "heart.png",
+  "The Craft": "craft.png",
+  "The Cause": "cause.png",
+  "The Path": "path.png"
 }

@@ -8,11 +8,13 @@ import { useSession } from 'next-auth/react';
 import { CardShapeTool, CardShapeUtil } from './shapes/try';
 import { Toaster } from "@/components/ui/sonner";
 import { GuidedTour } from './onboarding/onboardingTour';
+import { QuestionHelper } from './onboarding/questionsHelper';
 import { useTour } from './onboarding/tourContext';
 import AspectShapeUtil, { IAspectShape } from './shapes/aspect';
 
 const components: TLEditorComponents = {
-  InFrontOfTheCanvas: GuidedTour,
+  // InFrontOfTheCanvas: GuidedTour,
+  InFrontOfTheCanvas: QuestionHelper,
 }
 
 const customTools = [CardShapeTool];
@@ -111,7 +113,8 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
           persistenceKey="persistence-key"
         >
           <IkigaiCircles/>
-          <GuidedTour />
+          <QuestionHelper /> 
+          {/* <GuidedTour /> */}
         </Tldraw>
 
       </div>

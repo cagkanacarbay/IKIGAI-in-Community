@@ -18,3 +18,8 @@ tools: https://www.flaticon.com/free-icon/tool-box_4873901?term=tools&page=1&pos
 path: https://www.flaticon.com/free-icon/digital-currency_1068533
 heart: 
 craft: https://www.flaticon.com/free-icon/hard-work_2405334?term=working&page=1&position=40&origin=search&related_id=2405334
+
+
+next: https://www.flaticon.com/free-icon/next_318275?term=next&related_id=318275
+previous: https://www.flaticon.com/free-icon/previous_318276?term=previous&page=1&position=2&origin=search&related_id=318276
+random: https://www.flaticon.com/free-icon/shuffle_724979?term=random&page=1&position=5&origin=search&related_id=724979

@@ -247,7 +247,7 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
             'craft-aspects',
             menuItem(actions['create-skill']),
             menuItem(actions['create-knowledge']),
-            menuItem(actions['create-expertise']),
+            menuItem(actions['create-tools']),
             menuItem(actions['create-strength']),
           ),
           menuGroup(
@@ -286,7 +286,7 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
             'craft-aspects',
             menuItem(actions['add-skill']),
             menuItem(actions['add-knowledge']),
-            menuItem(actions['add-expertise']),
+            menuItem(actions['add-tools']),
             menuItem(actions['add-strength']),
           ),
           menuGroup(
@@ -317,7 +317,7 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
           menuGroup(
             'craft-aspects',
             ...removeAspectTypeMenuItems(selectedAspectTypes, 
-              ['skill', 'knowledge', 'expertise', 'strength'], 
+              ['skill', 'knowledge', 'tools', 'strength'], 
               actions
             ),
 
