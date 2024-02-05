@@ -13,7 +13,31 @@ interface AssetSrc {
   src: string;
 }
 
-const toolsToRemove: string[] = []
+const toolsToRemove: string[] = [
+  "draw",
+  "eraser",
+  "ellipse",
+  "diamond",
+  "rectangle",
+  "triangle",
+  "trapezoid",
+  "text",
+  "rhombus",
+  "hexagon",
+  "x-box",
+  "check-box",
+  "oval",
+  "star",
+  "cloud",
+  "arrow-left",
+  "arrow-up",
+  "arrow-right",
+  "arrow-down",
+  "line",
+  "highlight",
+  "frame",
+  "laser"
+]
 
 export function getZoneColor(zoneName: ZoneName) {
   switch (zoneName) {
@@ -154,7 +178,7 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
 
       // ... additional tool configuration ...
 
-      filteredTools.card = {
+      tools.card = {
         id: 'card',
         icon: 'color',
         label: 'Card',
@@ -167,7 +191,7 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
 
       // console.log(filteredTools)
 
-      return filteredTools;
+      return tools;
     },
 
     toolbar: (_app, toolbar, { tools }) => {
