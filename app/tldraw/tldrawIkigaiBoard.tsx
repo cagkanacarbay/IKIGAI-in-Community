@@ -12,12 +12,13 @@ import { QuestionHelper } from './onboarding/questionsHelper';
 import { useTour } from './onboarding/tourContext';
 import AspectShapeUtil, { IAspectShape } from './shapes/aspect';
 import { IntroOverlay } from './ui/IntroOverlay';
+import UserHelp from './onboarding/userHelp';
 
 
 
 const components: TLEditorComponents = {
   // InFrontOfTheCanvas: GuidedTour,
-  InFrontOfTheCanvas: QuestionHelper,
+  InFrontOfTheCanvas: UserHelp,
 }
 
 const customTools = [CardShapeTool];
@@ -56,10 +57,12 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
     setEditor(editor);
   }, []);
 
+  
   useEffect(() => {
     if (editor && introComplete) {
       setTimeout(() => editor.zoomToFit({ duration: 600 }), 100);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [introComplete]);
 
 
@@ -126,8 +129,9 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
           persistenceKey="persistence-key"
           className='z-10'
         >
+          <UserHelp/>
           <IkigaiCircles/>
-          <QuestionHelper /> 
+          {/* <QuestionHelper />  */}
           {/* <GuidedTour /> */}
         </Tldraw>
 

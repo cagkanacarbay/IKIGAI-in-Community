@@ -4,6 +4,7 @@ import { useEditor, track, stopEventPropagation, Vec2d, TLRecord } from '@tldraw
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from '@/components/ui/button';
 import { steps } from './stepProps';
+import CloseButton from '@/components/ui/closeButton';
 
 
 const DEFAULT_GUIDE_PANEL_SIZE = "w-96 h-64";
@@ -127,7 +128,9 @@ export const GuidedTour = track(() => {
         } 
         onPointerMove={stopEventPropagation} onPointerDown={stopEventPropagation}
       >
-        <Button className='text-black absolute top-0 right-0' variant="secondary" onClick={closeTour}>✕</Button>
+        {/* <Button className='text-black absolute top-0 right-0' variant="secondary" onClick={closeTour}>✕</Button> */}
+        <CloseButton onClick={closeTour} />
+
         <div className="flex justify-start ml-4 mt-2">
           <div className="flex items-center space-y-1">
             {steps[step].props.iconPath && (
@@ -144,8 +147,10 @@ export const GuidedTour = track(() => {
         </div>
         {!(steps[step].skipNavButtons) && (
           <div className="absolute bottom-2 right-2 flex justify-end">
-            <Button className='rounded px-4 py-2 mr-2' variant="secondary" onClick={goToPreviousStep}>Previous</Button>
-            <Button className='rounded px-4 py-2 ' onClick={goToNextStep}>Next</Button>
+            {step > 0 && (
+              <Button className='rounded-lg px-4 py-2 mr-2 bg-purple-100 hover:bg-purple-400' variant="secondary" onClick={goToPreviousStep}>Previous</Button>
+            )}
+            <Button className='rounded-lg px-4 py-2 bg-purple-100 hover:bg-purple-400' onClick={goToNextStep}>Next</Button>
           </div>
         )}
       </Alert>

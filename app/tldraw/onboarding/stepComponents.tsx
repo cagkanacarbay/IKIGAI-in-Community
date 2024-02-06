@@ -392,3 +392,28 @@ export const AspectDemoStep: React.FC<AspectDemoStepProps> = ({ goToStep, goToPr
     </AlertDescription>
   );
 };
+
+export const WelcomeMessage: React.FC = () => {
+  return (
+    <div className="flex flex-col justify-center items-start px-4 text-left text-lg ">
+      <p>
+        In Journey you explore your life through the lens of <strong>Ikigai</strong>:
+      </p>
+      {/* <p className="text-xl font-bold text-left mb-2">ikigai</p> */}
+      <p className="mb-1 mt-1 ml-4">
+        something to live for, the joy and goal of living
+      </p>
+      <p className="mb-4 ml-4">
+        a life worth living, the happiness and benefit of being alive
+      </p>
+      <p className="mb-4">
+        <strong>Journey</strong> is a space for you to reflect, to understand, and to explore.       
+      </p>
+      <p className="mb-2">
+        Its simple, so let&apos;s get started.
+      </p>
+
+      {/* <button className="bg-blue-500 text-white py-2 px-4 rounded-lg">Begin your Journey</button> */}
+    </div>
+  );
+};

@@ -39,7 +39,7 @@ export const IntroOverlay: React.FC<IntroOverlayProps> = ({ onFadeComplete }) =>
       style={{ zIndex: show ? 100 : -1 }}
     >
       <div className='animate-jump-out animate-once animate-duration-[30000ms] animate-ease-in animate-normal animate-fill-forwards'>
-        When you find your sense of purpose everything has a direction.
+        When you find your sense of purpose everything has direction.
       </div>
 
     </div>

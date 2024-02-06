@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import CloseButton from '@/components/ui/closeButton';
 
 
 interface Question {
@@ -279,14 +280,15 @@ export const QuestionHelper: React.FC = () => {
                 {currentQuestion.text}
               </div>
             </AlertDescription>
-            <Button
+            <CloseButton onClick={toggleVisibility} />
+            {/* <Button
               onClick={toggleVisibility}
               className="absolute top-0 right-0 bg-red-200 hover:bg-red-700 p-2"
             >
               <svg className="w-5 h-5 text-white" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
                 <path d="M6 18L18 6M6 6l12 12"></path>
               </svg>
-            </Button>
+            </Button> */}
             <div className="absolute bottom-2 right-2 flex space-x-2">
               <Button onClick={setPreviousQuestion} className="bg-purple-100 hover:bg-purple-400 rounded-full p-2">
                 <Image src="/icons/previous.svg" alt="Next" width={20} height={20} />

@@ -106,7 +106,7 @@ export const QUESTIONS: Record<AspectType, string[]> = {
     "If you were to start a new career tomorrow, what field would you choose?",
     
     // THIS IS IMPORTANT FIND THE WAY WITH QS LIKE THIS
-    "if you had to do a phd starting tomorrow based entirely on what you find intellectually interesting (no concern for usefulness, job prospects) what would you do it on?",
+    "If you had to do a phd starting tomorrow based entirely on what you find intellectually interesting what would you do it on?",
   ],
   freelance: [
     "Who are your ideal clients? Startups, SMEs, corporations, ...?",

@@ -6,7 +6,8 @@ import {
   InDepthZoneStep, 
   AspectTypeWithQuestionsStep,
   AspectDemoStep,
-  ZonesOverviewStep
+  ZonesOverviewStep,
+  WelcomeMessage
 } from './stepComponents';
 
 
@@ -18,8 +19,75 @@ export interface OnboardingStep {
   skipNavButtons?: boolean;
 }
 
-
 export const steps: OnboardingStep[] = [
+
+  {
+    id: 'welcome',
+    component: WelcomeMessage,
+    zoom: {
+      ids: [ikigaiCircleIds.heart, ikigaiCircleIds.craft, ikigaiCircleIds.cause, ikigaiCircleIds.path],
+    },
+    props: {
+      title: 'Welcome to Journey',
+      subtitle: 'an app inspired by IKIGAI',
+      subTitleColor: 'text-purple-400',
+      iconPath: '/icons/zones/heart.png',
+      bgColor: 'bg-purple-50',
+      size: 'w-[650px] h-[360px]',
+    },
+    // skipNavButtons: true,
+  },
+  {
+    id: "zones-overview",
+    component: ZonesOverviewStep,
+    zoom: {
+      ids: [ikigaiCircleIds.heart, ikigaiCircleIds.craft, ikigaiCircleIds.cause, ikigaiCircleIds.path]
+    },
+    // skipNavButtons: true,
+    props: {
+      title: "The 4 Zones",
+      bgColor: 'bg-purple-50',
+      iconPath: '/icons/zones/heart.png',
+      size: 'w-[550px] h-[600px]',
+      zones: [
+        {
+          icon: "/icons/zones/heart.png",
+          zoneType: "heart",
+          description: "What activities captivate you? Reading, history, art, travel, learning new skills?",
+          aspects: [
+            // Add aspects related to the heart zone here
+          ]
+        },
+        {
+          icon: "/icons/zones/craft.png",
+          zoneType: "craft",
+          description: "What principles guide your life? Honesty, creativity, freedom, respect, innovation?",
+          aspects: [
+            // Add aspects related to the craft zone here
+          ]
+        },
+        {
+          icon: "/icons/zones/path.png",
+          zoneType: "path",
+          description: "Who or what has shaped your thinking? Inspirational figures, pivotal events, significant books or art?",
+          aspects: [
+            // Add aspects related to the path zone here
+          ]
+        },
+        {
+          icon: "/icons/zones/cause.png",
+          zoneType: "cause",
+          description: "What are your deepest aspirations? Starting a business, writing a book, traveling the world, making a difference?",
+          aspects: [
+            // Add aspects related to the cause zone here
+          ]
+        },
+      ],
+    }
+  }
+]
+
+const OLD_STEPS: OnboardingStep[] = [
   {
     id: 'introduce-heart',
     component: IntroduceZoneStep,
@@ -27,7 +95,6 @@ export const steps: OnboardingStep[] = [
       ids: [ikigaiCircleIds.heart],
     },
     props: {
-      id: ikigaiCircleIds.heart,
       title: 'The Heart',
       subtitle: 'the core of who you are',
       subTitleColor: 'text-red-300',
@@ -49,7 +116,6 @@ export const steps: OnboardingStep[] = [
     },
     component: IntroduceZoneStep,
     props: {
-      id: ikigaiCircleIds.craft,
       title: 'The Craft',
       subtitle: 'your practice, effort, and work',
       subTitleColor: 'text-blue-400',
@@ -71,7 +137,6 @@ export const steps: OnboardingStep[] = [
     },
     component: IntroduceZoneStep,
     props: {
-      id: ikigaiCircleIds.cause,
       title: 'The Cause',
       subtitle: 'problems that need to be solved',
       subTitleColor: 'text-green-400',
