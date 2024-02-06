@@ -68,7 +68,6 @@ const defaultQuestion: Question = {
 
 export const QuestionHelper: React.FC = () => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
-  // const [questionHistory, setQuestionHistory] = useState<Question[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState<Question>(defaultQuestion);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(1);
   const [aspectId, setAspectId] = useState<TLShapeId>();
@@ -120,7 +119,6 @@ export const QuestionHelper: React.FC = () => {
           aspectTypes: [currentQuestion.aspectType],
         },
         props: {
-          // w: 160, h: 40,
           text: "...",
           zone: zone,
           color: getZoneColor(zone),
@@ -240,12 +238,12 @@ export const QuestionHelper: React.FC = () => {
           }>
             <AlertTitle className="flex justify-center items-center">
               <Select onValueChange={setAspectTypeQuestion}>
-                <SelectTrigger className="inline-flex items-center ml-12 mr-16 pl-4 pr-6 py-1 rounded-full shadow-inner hover:bg-purple-300 bg-purple-100">
+                <SelectTrigger className="inline-flex items-center w-60 ml-12 mr-16 pl-4 pr-6 py-1 rounded-full shadow-inner hover:bg-purple-300 bg-purple-100">
                   <Image 
                     width={36} height={36}
                     src={`/icons/aspects/${currentQuestion.aspectType}.png`} alt={currentQuestion.aspectType} 
                   />
-                  <span className="ml-4 text-xl font-semibold">{currentQuestion.aspectType}</span>
+                  <span className="text-xl font-semibold">{currentQuestion.aspectType}</span>
                 </SelectTrigger>
                 <SelectContent>
                   {Object.entries(zoneAspectTypes).map(([zone, aspects]) => (
@@ -260,7 +258,7 @@ export const QuestionHelper: React.FC = () => {
                         <span>{zone}</span>
                       </SelectLabel>
                       {aspects.map((aspectType) => (
-                        <SelectItem key={aspectType} value={aspectType} className='hover:bg-gray-100'>
+                        <SelectItem key={aspectType} value={aspectType} className='hover:bg-purple-100'>
                           <Image 
                             src={`/icons/aspects/${aspectType}.png`} 
                             alt={`${zone} icon`} 

@@ -11,6 +11,9 @@ import { GuidedTour } from './onboarding/onboardingTour';
 import { QuestionHelper } from './onboarding/questionsHelper';
 import { useTour } from './onboarding/tourContext';
 import AspectShapeUtil, { IAspectShape } from './shapes/aspect';
+import { IntroOverlay } from './ui/IntroOverlay';
+
+
 
 const components: TLEditorComponents = {
   // InFrontOfTheCanvas: GuidedTour,
@@ -47,10 +50,18 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
   const { addCreatedAspect, addEditedAspect } = useTour();
 
   const customUiOverrides = uiOverrides(isLoggedIn, editor);
+  const [introComplete, setIntroComplete] = useState(false);
 
-  const setAppToState = useCallback((editor: Editor) => {
+  const initializeAppState = useCallback((editor: Editor) => {
     setEditor(editor);
   }, []);
+
+  useEffect(() => {
+    if (editor && introComplete) {
+      setTimeout(() => editor.zoomToFit({ duration: 600 }), 100);
+    }
+  }, [introComplete]);
+
 
   useEffect(() => {
     if (!editor) return;
@@ -99,11 +110,13 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
     };
   }, [editor, addCreatedAspect]);
 
+
   return (
       <div style={{ position: 'fixed', inset: 0 }}>
+        {!introComplete && <IntroOverlay onFadeComplete={() => setIntroComplete(true)} />}
         <Toaster />
         <Tldraw
-          onMount={setAppToState}
+          onMount={initializeAppState}
           store={storeWithStatus}
           overrides={customUiOverrides}
           shapeUtils={customShapeUtils} 
@@ -111,6 +124,7 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
           components={components}
           autoFocus
           persistenceKey="persistence-key"
+          className='z-10'
         >
           <IkigaiCircles/>
           <QuestionHelper /> 

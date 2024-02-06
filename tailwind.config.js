@@ -12,7 +12,7 @@ module.exports = withMT({
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-	],
+  ],
   theme: {
     container: {
       center: true,
@@ -31,15 +31,15 @@ module.exports = withMT({
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: 0 },
         },
-        transitionDuration: {
-          '1500': '1500ms',
-          '2000': '2000ms',
-          '3000': '3000ms',
-        },
-        backdropFilter: {
-          'none': 'none',
-          'blur': 'blur(15px)',
-        },
+      },
+      transitionDuration: {
+        '1500': '1500ms',
+        '2000': '2000ms',
+        '3000': '3000ms',
+      },
+      backdropFilter: {
+        'none': 'none',
+        'blur': 'blur(15px)',
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -47,5 +47,5 @@ module.exports = withMT({
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require('@tailwindcss/forms')],
+  plugins: [require("tailwindcss-animate"), require('@tailwindcss/forms'), require('tailwindcss-animated')],
 });

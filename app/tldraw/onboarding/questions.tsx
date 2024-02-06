@@ -96,8 +96,25 @@ export const QUESTIONS: Record<AspectType, string[]> = {
     "Do you have a story of personal triumph that could motivate people facing similar issues?",
     "What's a lesson you've learned from personal experiences that you'd like to share with others?",
   ],
-  "business-idea": ["PLACEHOLDER"],
-  career: ["PLACEHOLDER"],
-  freelance: ["PLACEHOLDER"],
-  industry: ["PLACEHOLDER"],
+  "business-idea": [
+    "What's a business idea you've had that you believe could be successful?",
+    "If you could become a solo entrepreneur, what would you do?",
+  ],
+  career: [
+    "What is your current role at work and what are the most fulfilling aspects of it?",
+    "What tasks or projects do you find most rewarding in your current job?",
+    "If you were to start a new career tomorrow, what field would you choose?",
+    
+    // THIS IS IMPORTANT FIND THE WAY WITH QS LIKE THIS
+    "if you had to do a phd starting tomorrow based entirely on what you find intellectually interesting (no concern for usefulness, job prospects) what would you do it on?",
+  ],
+  freelance: [
+    "Who are your ideal clients? Startups, SMEs, corporations, ...?",
+    "Are you open to ",
+    "What's a freelance project you'd like to work on in the future?",
+  ],
+  industry: [
+    "What industry are you in, or you know well?"
+
+  ],
 };
