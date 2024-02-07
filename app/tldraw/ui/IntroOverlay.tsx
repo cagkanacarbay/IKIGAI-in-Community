@@ -16,13 +16,13 @@ export const IntroOverlay: React.FC<IntroOverlayProps> = ({ onFadeComplete }) =>
     // Set timeout to start the fade-out effect
     const fadeOutTimer = setTimeout(() => {
       setStartFadeOut(true); // Begin fade-out effect
-    }, 1500); // Start fade out after 1.5 seconds
+    }, 2000); // Start fade out after 1.5 seconds
 
 
     // Set another timeout to call onFadeComplete after allowing time for the fade effect to complete
     const completeTimer = setTimeout(() => {
       onFadeComplete(); // Complete the intro sequence
-    }, 3500); // Complete the sequence after 3 seconds in total
+    }, 4000); // Complete the sequence after 3 seconds in total
 
     return () => {
       clearTimeout(fadeOutTimer);

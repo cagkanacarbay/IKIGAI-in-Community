@@ -7,7 +7,7 @@ import path from 'path';
 export async function GET(_request: NextRequest): Promise<NextResponse> {
     try {
         // Define the file path
-        const filePath = path.join(process.cwd(), 'ikigaiData', 'board-guide', 'v2.json');
+        const filePath = path.join(process.cwd(), 'ikigaiData', 'board-guide', 'helper.json');
 
         // Read the file
         const fileContent = fs.readFileSync(filePath, 'utf-8');

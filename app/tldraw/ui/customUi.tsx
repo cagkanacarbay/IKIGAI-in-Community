@@ -106,7 +106,7 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
             // Save the modified snapshot and asset SRCs
             saveAsJSON(snapshot, 'editor-snapshot.json');
             // console.log(snapshot)
-            saveAsJSON(assetSrcs, 'asset-srcs.json');
+            // saveAsJSON(assetSrcs, 'asset-srcs.json');
             // console.log(assetSrcs)
           } else {
             console.error('Editor or editor.store is undefined.');

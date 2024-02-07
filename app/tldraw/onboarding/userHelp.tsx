@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { GuidedTour } from './onboardingTour';
 import { QuestionHelper } from './questionsHelper';
 
-const UserHelp: React.FC = () => {
+
+
+
+const UserHelp: React.FC = ({}) => {
+
   return (
     <>
       <GuidedTour />

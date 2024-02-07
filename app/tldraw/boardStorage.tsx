@@ -2,9 +2,11 @@ import { uploadImageToStorageProviderTldraw } from "@/lib/storage";
 import { 
   TLBaseAsset, TLAssetPartial, TLStoreSnapshot, 
   SerializedStore, TLRecord, TLAsset, TLImageAsset, 
+  TLStoreWithStatus, createTLStore
 } from "@tldraw/tldraw";
 import { Editor } from "@tldraw/editor";
 import { useSession } from "next-auth/react";
+import { customShapeUtils } from "./shapes/customShapes";
 
 
 type ImageAssetProps = {
@@ -241,7 +243,7 @@ async function fetchAssetSrcFromBlobStorage(blobUrl: string): Promise<string> {
 
 
 
-export async function loadBoardGuideSnapshot() {
+export async function fetchBoardGuideSnapshot() {
   try {
     // Fetch the snapshot from the API route
     const response = await fetch('/api/storage/snapshot/board-guide');
@@ -253,4 +255,24 @@ export async function loadBoardGuideSnapshot() {
     console.error('Error loading board guide:', error);
     throw error;
   }
+}
+
+
+export async function loadStoreWithBoardGuide(): Promise<TLStoreWithStatus> {
+  const newStore = createTLStore({
+    shapeUtils: customShapeUtils,
+  });
+
+  try {
+    const snapshot = await fetchBoardGuideSnapshot();
+    newStore.loadSnapshot(snapshot);
+  } catch (error) {
+    console.error('Error loading board guide snapshot:', error);
+  }
+
+  return {
+    store: newStore,
+    status: 'synced-remote',
+    connectionStatus: 'offline'
+  };
 }

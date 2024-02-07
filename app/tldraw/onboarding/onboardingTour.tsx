@@ -5,6 +5,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from '@/components/ui/button';
 import { steps } from './stepProps';
 import CloseButton from '@/components/ui/closeButton';
+import Image from 'next/image';
 
 
 const DEFAULT_GUIDE_PANEL_SIZE = "w-96 h-64";
@@ -128,7 +129,6 @@ export const GuidedTour = track(() => {
         } 
         onPointerMove={stopEventPropagation} onPointerDown={stopEventPropagation}
       >
-        {/* <Button className='text-black absolute top-0 right-0' variant="secondary" onClick={closeTour}>✕</Button> */}
         <CloseButton onClick={closeTour} />
 
         <div className="flex justify-start ml-4 mt-2">
@@ -148,9 +148,13 @@ export const GuidedTour = track(() => {
         {!(steps[step].skipNavButtons) && (
           <div className="absolute bottom-2 right-2 flex justify-end">
             {step > 0 && (
-              <Button className='rounded-lg px-4 py-2 mr-2 bg-purple-100 hover:bg-purple-400' variant="secondary" onClick={goToPreviousStep}>Previous</Button>
+              <Button className='rounded-lg px-4 py-2 mr-2 bg-purple-100 hover:bg-purple-400' variant="secondary" onClick={goToPreviousStep}>
+                <Image src="/icons/previous.svg" alt="Previous" width={20} height={20} />
+              </Button>
             )}
-            <Button className='rounded-lg px-4 py-2 bg-purple-100 hover:bg-purple-400' onClick={goToNextStep}>Next</Button>
+            <Button className='rounded-lg px-4 py-2 bg-purple-100 hover:bg-purple-400' onClick={goToNextStep}>
+              <Image src="/icons/next.svg" alt="Next" width={20} height={20} />
+            </Button>
           </div>
         )}
       </Alert>

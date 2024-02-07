@@ -63,7 +63,7 @@ import { createTLStore, defaultShapeUtils, TLStore, TLStoreOptions, TLStoreWithS
 import IkigaiCircleShapeUtil from '../shapes/ikigaiCircles';
 import { downloadSnapshot, updateDatabaseSnapshotWithBlobSrc } from '../boardStorage';
 import { Spinner } from "@material-tailwind/react";
-import { loadBoardGuideSnapshot } from '../boardStorage';
+import { fetchBoardGuideSnapshot } from '../boardStorage';
 import { customShapeUtils } from '../shapes/customShapes';
 
 
@@ -86,7 +86,7 @@ export default function LoadSnapshotId({ params }: { params: { snapshotId: strin
           // const snapshot = await downloadSnapshot(params.snapshotId);
           // const snapshotWithAssetSrcs = await updateDatabaseSnapshotWithBlobSrc(snapshot.data);
 
-          const snapshot = await loadBoardGuideSnapshot();
+          const snapshot = await fetchBoardGuideSnapshot();
           console.log("snapshot:", snapshot)
           if (cancelled) return;
 

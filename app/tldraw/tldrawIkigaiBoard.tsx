@@ -7,8 +7,6 @@ import { uiOverrides } from './ui/customUi';
 import { useSession } from 'next-auth/react';
 import { CardShapeTool, CardShapeUtil } from './shapes/try';
 import { Toaster } from "@/components/ui/sonner";
-import { GuidedTour } from './onboarding/onboardingTour';
-import { QuestionHelper } from './onboarding/questionsHelper';
 import { useTour } from './onboarding/tourContext';
 import AspectShapeUtil, { IAspectShape } from './shapes/aspect';
 import { IntroOverlay } from './ui/IntroOverlay';
@@ -29,29 +27,30 @@ interface IkigaiBoardV2Props {
 }
 
 function convertToIAspectShape(record: TLRecord): IAspectShape | null {
-  // Implement logic to verify if `record` matches the `IAspectShape` structure
-  // This includes checking for the existence and type of specific properties
-  // If `record` can be safely treated as `IAspectShape`, return the converted object
-  // Otherwise, return null to indicate that conversion is not possible
-
   if (record.typeName === 'shape' && record.type === 'aspect') {
-      // Assuming all necessary properties for IAspectShape are present and valid
-      // This is a simplification; you'll need to validate and possibly transform properties as needed
       return record as IAspectShape;
   }
 
-  return null; // Conversion not possible
+  return null; 
 }
 
 
 export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
+  
+  // Authentication
   const { data: session } = useSession();
   const isLoggedIn = Boolean(session);
+
+  // TLDRAW
   const [editor, setEditor] = useState<Editor>();
+  const customUiOverrides = uiOverrides(isLoggedIn, editor);
+
+  // Event Tracking
   const { addCreatedAspect, addEditedAspect } = useTour();
 
-  const customUiOverrides = uiOverrides(isLoggedIn, editor);
-  const [introComplete, setIntroComplete] = useState(false);
+  // Loader and intro sequence
+  const [introCompleted, setIntroComplete] = useState(false);
+  const [loadWelcome, setLoadWelcome] = useState(false);
 
   const initializeAppState = useCallback((editor: Editor) => {
     setEditor(editor);
@@ -59,11 +58,12 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
 
   
   useEffect(() => {
-    if (editor && introComplete) {
+    if (editor && introCompleted) {
       setTimeout(() => editor.zoomToFit({ duration: 600 }), 100);
+      setTimeout(() => setLoadWelcome(false), 2000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [introComplete]);
+  }, [introCompleted]);
 
 
   useEffect(() => {
@@ -104,10 +104,8 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
       }
     };
 
-    // Setup the event listener
     const cleanupFunction = editor.store.listen(handleChangeEvent, { source: 'user', scope: 'all' });
 
-    // Return the cleanup function
     return () => {
       cleanupFunction();
     };
@@ -116,7 +114,7 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
 
   return (
       <div style={{ position: 'fixed', inset: 0 }}>
-        {!introComplete && <IntroOverlay onFadeComplete={() => setIntroComplete(true)} />}
+        {!introCompleted && <IntroOverlay onFadeComplete={() => setIntroComplete(true)} />}
         <Toaster />
         <Tldraw
           onMount={initializeAppState}
@@ -129,10 +127,12 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
           persistenceKey="persistence-key"
           className='z-10'
         >
-          <UserHelp/>
+          {loadWelcome && (
+            <div className="transition-opacity duration-700 ease-in border border-black">
+              <UserHelp />
+            </div>
+          )}      
           <IkigaiCircles/>
-          {/* <QuestionHelper />  */}
-          {/* <GuidedTour /> */}
         </Tldraw>
 
       </div>
