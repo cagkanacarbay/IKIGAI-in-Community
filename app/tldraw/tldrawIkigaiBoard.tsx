@@ -8,6 +8,7 @@ import { useSession } from 'next-auth/react';
 import { CardShapeTool, CardShapeUtil } from './shapes/try';
 import { Toaster } from "@/components/ui/sonner";
 import { GuidedTour } from './onboarding/onboardingTour';
+import DemoTour from './onboarding/demoTour';
 import { useTour } from './onboarding/tourContext';
 import AspectShapeUtil, { IAspectShape } from './shapes/aspect';
 
@@ -112,6 +113,7 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
         >
           <IkigaiCircles/>
           <GuidedTour />
+          <DemoTour/>
         </Tldraw>
 
       </div>
