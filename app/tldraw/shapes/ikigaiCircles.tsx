@@ -9,6 +9,8 @@ import { ikigaiCircleIds } from './shapeIds';
 import { motion } from 'framer-motion';
 
 
+export const RADIUS = 800;
+
 export interface IkigaiCircleShapeMeta {
   zone: ZoneName;
 }
@@ -115,27 +117,26 @@ export function IkigaiCircles() {
     for (let key in ikigaiCircleIds) {
       if (!existingShapeIds.includes(ikigaiCircleIds[key as keyof typeof ikigaiCircleIds])) {
         let x, y, color;
-        const radius = 800;
   
         switch (key) {
           case 'heart':
-            x = (radius / 5) * 4;
+            x = (RADIUS / 5) * 4;
             y = 0;
             color = 'light-red';
             break;
           case 'path':
-            x = (radius / 5) * 4;
-            y = (radius / 5) * 4 * 2;
+            x = (RADIUS / 5) * 4;
+            y = (RADIUS / 5) * 4 * 2;
             color = 'yellow';
             break;
           case 'craft':
             x = 0;
-            y = (radius / 5) * 4;
+            y = (RADIUS / 5) * 4;
             color = 'light-blue';
             break;
           case 'cause':
-            x = (radius / 5) * 4 * 2;
-            y = (radius / 5) * 4;
+            x = (RADIUS / 5) * 4 * 2;
+            y = (RADIUS / 5) * 4;
             color = 'light-green';
             break;
           default:
@@ -146,10 +147,12 @@ export function IkigaiCircles() {
           id: ikigaiCircleIds[key as keyof typeof ikigaiCircleIds],
           type: IkigaiCircleShapeUtil.type,
           meta: { zone: key as ZoneName},
-          props: { x, y, radius, color }
+          props: { x, y, radius: RADIUS, color }
         });
       }
     }
+
+    console.log("ikigai circles to be created: ", shapesToCreate)
   
     if (shapesToCreate.length > 0) {
       editor.createShapes(shapesToCreate);
@@ -161,3 +164,14 @@ export function IkigaiCircles() {
 
   return null;
 }
+
+// This is used in setting up the minimzable Help Board.
+// It doesn't have anything to do with the size of the circles, 
+// but if that is changed this should change.
+//
+// I calculated this by drawing a square around the circles and
+// playing with the size so that it one to one contained the circles 
+// with the edges of the circles perflecly matching the square at 
+// the top left right and bottom mid points of the square.
+// This would have to change if ikigai circles were changed.
+export const ikigaiCirclesBoxSize = { width: 2880, height: 2880 }; 

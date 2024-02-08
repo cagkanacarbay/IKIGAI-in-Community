@@ -11,11 +11,12 @@ import { useTour } from './onboarding/tourContext';
 import AspectShapeUtil, { IAspectShape } from './shapes/aspect';
 import { IntroOverlay } from './ui/IntroOverlay';
 import UserHelp from './onboarding/userHelp';
-
+import { HelpMenu } from './onboarding/helpMenu';
 
 
 const components: TLEditorComponents = {
   // InFrontOfTheCanvas: GuidedTour,
+  OnTheCanvas: HelpMenu,
   InFrontOfTheCanvas: UserHelp,
 }
 
@@ -114,7 +115,7 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
 
   return (
       <div style={{ position: 'fixed', inset: 0 }}>
-        {!introCompleted && <IntroOverlay onFadeComplete={() => setIntroComplete(true)} />}
+        {/* {!introCompleted && <IntroOverlay onFadeComplete={() => setIntroComplete(true)} />} */}
         <Toaster />
         <Tldraw
           onMount={initializeAppState}

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, use } from 'react';
-import { useEditor, createShapeId, TLShapeId } from '@tldraw/tldraw';
+import { useEditor, createShapeId, TLShapeId, stopEventPropagation } from '@tldraw/tldraw';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -215,6 +215,7 @@ export const QuestionHelper: React.FC = () => {
   return (
     <>
       <div className="fixed top-16 left-4 z-50 pointer-events-auto"
+        
         onPointerMove={(e) => e.stopPropagation()} onPointerDown={(e) => e.stopPropagation()}
       >
         <Button
@@ -229,7 +230,7 @@ export const QuestionHelper: React.FC = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
-          onPointerMove={(e) => e.stopPropagation()} onPointerDown={(e) => e.stopPropagation()}
+          onPointerMove={stopEventPropagation} onPointerDown={stopEventPropagation}
         >
           <Alert className={`
             fixed m-auto ${bgColor} pointer-events-auto 
