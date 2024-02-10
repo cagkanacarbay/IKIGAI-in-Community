@@ -72,3 +72,17 @@ export const zoneIconSrc = {
   "The Cause": "cause.png",
   "The Path": "path.png"
 }
+
+
+export const zoneBgColor = {
+  "The Heart": "red",
+  "The Craft": "blue",
+  "The Cause": "green",
+  "The Path": "yellow"
+}
+
+
+// export function getBackgroundColorTailwind(zoneName: ZoneName, tailwindColorStrength: number): string {
+//   const color = zoneBgColor[zoneName];
+//   return `bg-${color}-${tailwindColorStrength}`;
+// }

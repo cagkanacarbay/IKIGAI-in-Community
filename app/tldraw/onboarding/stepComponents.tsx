@@ -7,7 +7,7 @@ import { useEditor, createShapeId, TLUnknownShape, TLRecord } from '@tldraw/tldr
 import { ulid } from 'ulid';
 import AspectShapeUtil, {IAspectShape} from '../shapes/aspect';
 import { getZoneColor } from '../ui/customUi';
-import { useTour } from './tourContext';
+import { useBoardContext } from '../boardContext';
 import { zoomToIkigaiCircles, zoomToZone, zoomToAspects } from '../zoom';
 
 
@@ -197,7 +197,7 @@ interface AspectDemoStepProps {
 export const AspectDemoStep: React.FC<AspectDemoStepProps> = ({ goToStep, goToPreviousStep, updateWindowSize }) => {
   const [stage, setStage] = useState(1);
   const [relevantAspects, setRelevantAspects] = useState<IAspectShape[]>([]);
-  const { createdAspects } = useTour();
+  const { createdAspects } = useBoardContext();
   const editor = useEditor();
 
   useEffect(() => {

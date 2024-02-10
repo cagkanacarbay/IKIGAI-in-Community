@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
 import { SessionProvider } from 'next-auth/react';
-import { TourProvider } from './onboarding/tourContext';
+import { BoardProvider } from './boardContext';
 
 export default function Layout({
   children,
@@ -9,11 +9,11 @@ export default function Layout({
   children: React.ReactNode
 }) {  return (
     <SessionProvider>
-      <TourProvider>
+      <BoardProvider>
         <div>
           {children}
         </div>
-      </TourProvider>
+      </BoardProvider>
     </SessionProvider>
   );
 };
