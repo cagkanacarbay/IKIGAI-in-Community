@@ -178,11 +178,11 @@ const ZoneHelpContainer: React.FC<ZoneHelpContainerProps> = ({ zoneName }) => {
         <h2 className='text-5xl font-semibold'>{zoneName}</h2>
       </CardTitle>
       <CardContent className='flex-grow bg-white rounded-xl mt-8 p-4'>
-        <CardDescription className='mt-2 text-justify hyphens-auto'>
+        <CardDescription className='mt-2 text-justify hyphens-auto '>
           {zoneInfo.description.map((desc, index) => (
             <div key={index} >
               <p className='text-xl font-semibold mb-1'>Some Headline</p>
-              <p className='mb-6 text-lg'>{desc}</p>
+              <p className='mb-6 text-lg tracking-tight'>{desc}</p>
             </div>
           ))}
         </CardDescription>
