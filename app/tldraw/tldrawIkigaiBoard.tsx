@@ -12,6 +12,7 @@ import AspectShapeUtil, { IAspectShape } from './shapes/aspect';
 import { IntroOverlay } from './ui/IntroOverlay';
 import UserHelp from './onboarding/userHelp';
 import { HelpMenu } from './onboarding/helpMenu';
+import DemoTour from './onboarding/demoTour';
 
 
 const components: TLEditorComponents = {
@@ -134,6 +135,7 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
             </div>
           )}      
           <IkigaiCircles/>
+          <DemoTour />
         </Tldraw>
 
       </div>
