@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { GuidedTour } from './onboardingTour';
-import { QuestionHelper } from './questionsHelper';
+import { GuidedTour } from './tour/onboardingTour';
+import { QuestionHelper } from './questions/questionsHelper';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { stopEventPropagation } from '@tldraw/tldraw';
@@ -11,7 +11,7 @@ const InFrontOfTheCanvasComponents: React.FC = ({}) => {
 
   return (
     <>
-      <GuidedTour />
+      {/* <GuidedTour /> */}
       <QuestionHelper />
       <UserGuideButton />
 

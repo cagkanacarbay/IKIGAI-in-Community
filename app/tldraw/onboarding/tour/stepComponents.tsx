@@ -5,10 +5,10 @@ import { Button } from '@/components/ui/button';
 import { AspectType } from '@/lib/types';
 import { useEditor, createShapeId, TLUnknownShape, TLRecord } from '@tldraw/tldraw';
 import { ulid } from 'ulid';
-import AspectShapeUtil, {IAspectShape} from '../shapes/aspect';
-import { getZoneColor } from '../ui/customUi';
-import { useBoardContext } from '../boardContext';
-import { zoomToIkigaiCircles, zoomToZone, zoomToAspects } from '../zoom';
+import AspectShapeUtil, {IAspectShape} from '../../shapes/aspect';
+import { getZoneColor } from '../../ui/customUi';
+import { useBoardContext } from '../../boardContext';
+import { zoomToIkigaiCircles, zoomToZone, zoomToAspects } from '../../ui/zoom';
 
 
 interface IntroduceZoneStepProps {

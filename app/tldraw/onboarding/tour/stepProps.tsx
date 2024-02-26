@@ -1,4 +1,4 @@
-import { ikigaiCircleIds } from '../shapes/shapeIds';
+import { ikigaiCircleIds } from '../../shapes/shapeIds';
 import React from 'react';
 import { TLShapeId } from '@tldraw/tldraw';
 import { 

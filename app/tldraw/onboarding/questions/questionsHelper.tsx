@@ -6,12 +6,12 @@ import Image from 'next/image';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { AspectType, zoneAspectTypes, ZoneName, getZoneName, zones, aspectTypes, zoneIconSrc } from '@/lib/types';
-import AspectShapeUtil, { IAspectShape } from '../shapes/aspect';
-import { getZoneColor } from '../ui/customUi';
+import AspectShapeUtil, { IAspectShape } from '../../shapes/aspect';
+import { getZoneColor } from '../../ui/customUi';
 import { ulid } from 'ulid';
 import { QUESTIONS } from './questions';
-import { ikigaiCircleIds, zoneNameToId } from '../shapes/shapeIds';
-import { IIkigaiCircleShape } from '../shapes/ikigaiCircles';
+import { ikigaiCircleIds, zoneNameToId } from '../../shapes/shapeIds';
+import { IIkigaiCircleShape } from '../../shapes/ikigaiCircles';
 import {
   Select,
   SelectContent,

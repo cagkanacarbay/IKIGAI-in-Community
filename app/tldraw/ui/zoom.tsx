@@ -1,5 +1,5 @@
 import { Editor } from '@tldraw/tldraw';
-import { ikigaiCircleIds, zoneNameToId } from './shapes/shapeIds';
+import { ikigaiCircleIds, zoneNameToId } from '../shapes/shapeIds';
 import { ZoneName } from '@/lib/types';
 import { TLShapeId } from '@tldraw/tldraw';
 
