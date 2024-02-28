@@ -65,4 +65,6 @@ const driverObj = driver({
 
 export default function DemoTour() {
     driverObj.drive()
+
+    return (<></>)
 }

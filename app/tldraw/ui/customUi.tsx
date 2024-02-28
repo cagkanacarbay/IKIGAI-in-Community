@@ -234,127 +234,127 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
       
       // console.log(contextMenu);
 
-      const CUSTOM_TYPES = ['aspect'];
+      // const CUSTOM_TYPES = ['aspect'];
 
-      const selectedShapes = editor.getSelectedShapes()
-      const selectedAspects = selectedShapes.filter(shape => CUSTOM_TYPES.includes(shape.type));
-      const aspectSelected = selectedShapes.some(shape => CUSTOM_TYPES.includes(shape.type));
+      // const selectedShapes = editor.getSelectedShapes()
+      // const selectedAspects = selectedShapes.filter(shape => CUSTOM_TYPES.includes(shape.type));
+      // const aspectSelected = selectedShapes.some(shape => CUSTOM_TYPES.includes(shape.type));
 
-      // console.log("Selected Aspects: ", selectedAspects)
-      // console.log("Has aspect: ", aspectSelected);
-      // console.log("selected shapes are: ", selectedShapes)
+      // // console.log("Selected Aspects: ", selectedAspects)
+      // // console.log("Has aspect: ", aspectSelected);
+      // // console.log("selected shapes are: ", selectedShapes)
 
-      const createAspectMenu: TLUiMenuGroup = menuGroup(
-        'create-aspect-group',
-        !aspectSelected && menuSubmenu(
-          'create-aspect',
-          'Create an Aspect',
-          menuGroup(
-            'heart-aspects',
-            menuItem(actions['create-interest']),
-            menuItem(actions['create-value']),
-            menuItem(actions['create-dream']),
-            menuItem(actions['create-influence']),
-          ),
-          menuGroup(
-            'craft-aspects',
-            menuItem(actions['create-skill']),
-            menuItem(actions['create-knowledge']),
-            menuItem(actions['create-tools']),
-            menuItem(actions['create-strength']),
-          ),
-          menuGroup(
-            'cause-aspects',
-            menuItem(actions['create-global']),
-            menuItem(actions['create-communal']),
-            menuItem(actions['create-societal']),
-            menuItem(actions['create-personal']),
-          ),
-          menuGroup(
-            'path-aspects',
-            menuItem(actions['create-business-idea']),
-            menuItem(actions['create-career']),
-            menuItem(actions['create-freelance']),
-            menuItem(actions['create-industry']),
-          ),
-        )
-      ) as TLUiMenuGroup; 
+      // const createAspectMenu: TLUiMenuGroup = menuGroup(
+      //   'create-aspect-group',
+      //   !aspectSelected && menuSubmenu(
+      //     'create-aspect',
+      //     'Create an Aspect',
+      //     menuGroup(
+      //       'heart-aspects',
+      //       menuItem(actions['create-interest']),
+      //       menuItem(actions['create-value']),
+      //       menuItem(actions['create-dream']),
+      //       menuItem(actions['create-influence']),
+      //     ),
+      //     menuGroup(
+      //       'craft-aspects',
+      //       menuItem(actions['create-skill']),
+      //       menuItem(actions['create-knowledge']),
+      //       menuItem(actions['create-tools']),
+      //       menuItem(actions['create-strength']),
+      //     ),
+      //     menuGroup(
+      //       'cause-aspects',
+      //       menuItem(actions['create-global']),
+      //       menuItem(actions['create-communal']),
+      //       menuItem(actions['create-societal']),
+      //       menuItem(actions['create-personal']),
+      //     ),
+      //     menuGroup(
+      //       'path-aspects',
+      //       menuItem(actions['create-business-idea']),
+      //       menuItem(actions['create-career']),
+      //       menuItem(actions['create-freelance']),
+      //       menuItem(actions['create-industry']),
+      //     ),
+      //   )
+      // ) as TLUiMenuGroup; 
       
 
-      const selectedAspectTypes = selectedAspects.flatMap(shape => shape.meta.aspectTypes);
+      // const selectedAspectTypes = selectedAspects.flatMap(shape => shape.meta.aspectTypes);
 
-      const addAspectTypeMenu: TLUiMenuGroup = menuGroup(
-        'edit-aspect-type-group',
-        aspectSelected && menuSubmenu(
-          'add-aspect-type',
-          'Add an Aspect Type',
-          menuGroup(
-            'heart-aspects',
-            menuItem(actions['add-interest'],),
-            menuItem(actions['add-value']),
-            menuItem(actions['add-dream']),
-            menuItem(actions['add-influence']),
-          ),
-          menuGroup(
-            'craft-aspects',
-            menuItem(actions['add-skill']),
-            menuItem(actions['add-knowledge']),
-            menuItem(actions['add-tools']),
-            menuItem(actions['add-strength']),
-          ),
-          menuGroup(
-            'cause-aspects',
-            menuItem(actions['add-global']),
-            menuItem(actions['add-communal']),
-            menuItem(actions['add-societal']),
-            menuItem(actions['add-personal']),
-          ),
-          menuGroup(
-            'path-aspects',
-            menuItem(actions['add-business-idea']),
-            menuItem(actions['add-career']),
-            menuItem(actions['add-freelance']),
-            menuItem(actions['add-industry']),
-          ),
-        ),
-        aspectSelected && menuSubmenu(
-          'remove-aspect-type',
-          'Remove Aspect Type',
-          menuGroup(
-            'heart-aspects',
-            ...removeAspectTypeMenuItems(selectedAspectTypes, 
-              ['interest', 'value', 'dream', 'influence'], 
-              actions
-            ),
-          ),
-          menuGroup(
-            'craft-aspects',
-            ...removeAspectTypeMenuItems(selectedAspectTypes, 
-              ['skill', 'knowledge', 'tools', 'strength'], 
-              actions
-            ),
+      // const addAspectTypeMenu: TLUiMenuGroup = menuGroup(
+      //   'edit-aspect-type-group',
+      //   aspectSelected && menuSubmenu(
+      //     'add-aspect-type',
+      //     'Add an Aspect Type',
+      //     menuGroup(
+      //       'heart-aspects',
+      //       menuItem(actions['add-interest'],),
+      //       menuItem(actions['add-value']),
+      //       menuItem(actions['add-dream']),
+      //       menuItem(actions['add-influence']),
+      //     ),
+      //     menuGroup(
+      //       'craft-aspects',
+      //       menuItem(actions['add-skill']),
+      //       menuItem(actions['add-knowledge']),
+      //       menuItem(actions['add-tools']),
+      //       menuItem(actions['add-strength']),
+      //     ),
+      //     menuGroup(
+      //       'cause-aspects',
+      //       menuItem(actions['add-global']),
+      //       menuItem(actions['add-communal']),
+      //       menuItem(actions['add-societal']),
+      //       menuItem(actions['add-personal']),
+      //     ),
+      //     menuGroup(
+      //       'path-aspects',
+      //       menuItem(actions['add-business-idea']),
+      //       menuItem(actions['add-career']),
+      //       menuItem(actions['add-freelance']),
+      //       menuItem(actions['add-industry']),
+      //     ),
+      //   ),
+      //   aspectSelected && menuSubmenu(
+      //     'remove-aspect-type',
+      //     'Remove Aspect Type',
+      //     menuGroup(
+      //       'heart-aspects',
+      //       ...removeAspectTypeMenuItems(selectedAspectTypes, 
+      //         ['interest', 'value', 'dream', 'influence'], 
+      //         actions
+      //       ),
+      //     ),
+      //     menuGroup(
+      //       'craft-aspects',
+      //       ...removeAspectTypeMenuItems(selectedAspectTypes, 
+      //         ['skill', 'knowledge', 'tools', 'strength'], 
+      //         actions
+      //       ),
 
-          ),
-          menuGroup(
-            'cause-aspects',
-            ...removeAspectTypeMenuItems(selectedAspectTypes, 
-              ['global', 'communal', 'societal', 'personal'], 
-              actions
-            ),
-          ),
-          menuGroup(
-            'path-aspects',
-            ...removeAspectTypeMenuItems(selectedAspectTypes, 
-              ['business-idea', 'career', 'freelance', 'industry'], 
-              actions
-            ),
+      //     ),
+      //     menuGroup(
+      //       'cause-aspects',
+      //       ...removeAspectTypeMenuItems(selectedAspectTypes, 
+      //         ['global', 'communal', 'societal', 'personal'], 
+      //         actions
+      //       ),
+      //     ),
+      //     menuGroup(
+      //       'path-aspects',
+      //       ...removeAspectTypeMenuItems(selectedAspectTypes, 
+      //         ['business-idea', 'career', 'freelance', 'industry'], 
+      //         actions
+      //       ),
 
-          ),
-        )
-      ) as TLUiMenuGroup; 
+      //     ),
+      //   )
+      // ) as TLUiMenuGroup; 
 
 
-      contextMenu.unshift(createAspectMenu, addAspectTypeMenu)
+      // contextMenu.unshift(createAspectMenu, addAspectTypeMenu)
       return contextMenu
     },
 

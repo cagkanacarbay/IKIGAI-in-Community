@@ -13,7 +13,7 @@ import { IntroOverlay } from './ui/IntroOverlay';
 // import { HelpMenu } from './onboarding/helpMenu';
 import DemoTour from './onboarding/demoTour';
 import InFrontOfTheCanvasComponents from './onboarding/inFrontOfCanvasComponents';
-import { UserGuide } from './onboarding/userGuide/userGuide';
+import { UserGuide } from './onboarding/userGuide/UserGuide';
 
 
 const components: TLEditorComponents = {
