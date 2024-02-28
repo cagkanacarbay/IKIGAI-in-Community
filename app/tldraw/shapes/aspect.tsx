@@ -26,10 +26,10 @@ import {
   Editor
   
 } from '@tldraw/tldraw';
-import { ShapePropsType } from '../helpers/deepTldraw';
+import { ShapePropsType } from '../tldrawHelpers/deepTldraw';
 import { AspectIcon, ZoneIcon} from './aspectIcons';
 import { AspectType } from '@/lib/types';
-import { TextLabel, TEXT_PROPS, FONT_FAMILIES, LABEL_FONT_SIZES } from '../helpers/textLabel';
+import { TextLabel, TEXT_PROPS, FONT_FAMILIES, LABEL_FONT_SIZES } from '../tldrawHelpers/textLabel';
 import { motion } from 'framer-motion';
 
 

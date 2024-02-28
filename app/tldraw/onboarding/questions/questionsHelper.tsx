@@ -6,12 +6,12 @@ import Image from 'next/image';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { AspectType, zoneAspectTypes, ZoneName, getZoneName, zones, aspectTypes, zoneIconSrc } from '@/lib/types';
-import AspectShapeUtil, { IAspectShape } from '../shapes/aspect';
-import { getZoneColor } from '../ui/customUi';
+import AspectShapeUtil, { IAspectShape } from '../../shapes/aspect';
+import { getZoneColor } from '../../ui/customUi';
 import { ulid } from 'ulid';
 import { QUESTIONS } from './questions';
-import { ikigaiCircleIds, zoneNameToId } from '../shapes/shapeIds';
-import { IIkigaiCircleShape } from '../shapes/ikigaiCircles';
+import { ikigaiCircleIds, zoneNameToId } from '../../shapes/shapeIds';
+import { IIkigaiCircleShape } from '../../shapes/ikigaiCircles';
 import {
   Select,
   SelectContent,
@@ -209,17 +209,19 @@ export const QuestionHelper: React.FC = () => {
   const zone = currentQuestion ? getZoneName(currentQuestion.aspectType) : "The Heart";
   
   const bgColor = zoneColors[zone];
+
+  const buttonBgColor = isVisible ? 'bg-purple-300 hover:bg-purple-600' : 'bg-purple-100 hover:bg-purple-600';
+
   // const textColor = textColors[zone];
 
 
   return (
     <>
       <div className="fixed top-16 left-4 z-50 pointer-events-auto"
-        
-        onPointerMove={(e) => e.stopPropagation()} onPointerDown={(e) => e.stopPropagation()}
+        onPointerMove={stopEventPropagation} onPointerDown={stopEventPropagation}
       >
         <Button
-          className="bg-purple-200 hover:bg-purple-600 transition-colors duration-300 shadow-lg text-white rounded-full w-16 h-16 flex items-center justify-center cursor-pointer"
+          className={`${buttonBgColor} transition-colors duration-300 shadow-lg text-white rounded-full w-16 h-16 flex items-center justify-center cursor-pointer`}
           onClick={toggleVisibility}
         >
           <Image src="/icons/question.png" alt="?" width={40} height={40} priority/>

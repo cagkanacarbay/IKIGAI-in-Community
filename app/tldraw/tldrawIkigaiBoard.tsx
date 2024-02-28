@@ -5,24 +5,25 @@ import '@tldraw/tldraw/tldraw.css';
 import IkigaiCircleShapeUtil, { IkigaiCircles } from './shapes/ikigaiCircles';
 import { uiOverrides } from './ui/customUi';
 import { useSession } from 'next-auth/react';
-import { CardShapeTool, CardShapeUtil } from './shapes/try';
 import { Toaster } from "@/components/ui/sonner";
-import { useTour } from './onboarding/tourContext';
+import { useBoardContext } from './boardContext';
 import AspectShapeUtil, { IAspectShape } from './shapes/aspect';
 import { IntroOverlay } from './ui/IntroOverlay';
-import UserHelp from './onboarding/userHelp';
-import { HelpMenu } from './onboarding/helpMenu';
+// import UserHelp from './onboarding/userHelp';
+// import { HelpMenu } from './onboarding/helpMenu';
 import DemoTour from './onboarding/demoTour';
+import InFrontOfTheCanvasComponents from './onboarding/inFrontOfCanvasComponents';
+import { UserGuide } from './onboarding/userGuide/userGuide';
 
 
 const components: TLEditorComponents = {
   // InFrontOfTheCanvas: GuidedTour,
-  OnTheCanvas: HelpMenu,
-  InFrontOfTheCanvas: UserHelp,
+  OnTheCanvas: UserGuide,
+  InFrontOfTheCanvas: InFrontOfTheCanvasComponents,
 }
 
-const customTools = [CardShapeTool];
-const customShapeUtils = [IkigaiCircleShapeUtil, AspectShapeUtil, CardShapeUtil];
+// const customTools = [];
+const customShapeUtils = [IkigaiCircleShapeUtil, AspectShapeUtil];
 
 interface IkigaiBoardV2Props {
   storeWithStatus?: TLStoreWithStatus;
@@ -48,7 +49,7 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
   const customUiOverrides = uiOverrides(isLoggedIn, editor);
 
   // Event Tracking
-  const { addCreatedAspect, addEditedAspect } = useTour();
+  const { addCreatedAspect, addEditedAspect } = useBoardContext();
 
   // Loader and intro sequence
   const [introCompleted, setIntroComplete] = useState(false);
@@ -123,7 +124,7 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
           store={storeWithStatus}
           overrides={customUiOverrides}
           shapeUtils={customShapeUtils} 
-          tools={customTools}
+          // tools={customTools}
           components={components}
           autoFocus
           persistenceKey="persistence-key"
@@ -131,7 +132,7 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
         >
           {loadWelcome && (
             <div className="transition-opacity duration-700 ease-in border border-black">
-              <UserHelp />
+              <InFrontOfTheCanvasComponents />
             </div>
           )}      
           <IkigaiCircles/>
