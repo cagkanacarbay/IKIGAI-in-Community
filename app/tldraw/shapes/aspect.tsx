@@ -192,7 +192,7 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
           style={{width: w, height: h, minHeight}} 
           className={`grid grid-cols-[auto,1fr,auto] items-center
             text-xs font-bold
-            ${colorClass} bg-opacity-60 
+            ${colorClass} bg-opacity-60 z-50
             rounded-lg shadow-inner shadow-md
             min-w-[${minWidth}]
           `}

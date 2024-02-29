@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { GuidedTour } from './tour/onboardingTour';
+import { WelcomeTour } from './tour/welcomeTour';
 import { QuestionHelper } from './questions/questionsHelper';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
@@ -11,7 +11,7 @@ const InFrontOfTheCanvasComponents: React.FC = ({}) => {
 
   return (
     <>
-      {/* <GuidedTour /> */}
+      <WelcomeTour />
       <QuestionHelper />
       <UserGuideButton />
 

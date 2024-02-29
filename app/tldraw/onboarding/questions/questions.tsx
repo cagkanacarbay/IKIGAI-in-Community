@@ -45,11 +45,7 @@ export const QUESTIONS: Record<AspectType, string[]> = {
     "What are your favorite activities, hobbies?",
   ],
   value: [
-    "What values are most important to you?",
-    "How do these values influence your daily actions?",
-    "Can you share a time when your values guided a significant decision?",
-    "How do you feel when you are able to live according to your values?",
-    "Are there any values you wish to cultivate more deeply?",
+
   ],
   dream: [
     "What dreams do you have for your future?",

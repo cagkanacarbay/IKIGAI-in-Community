@@ -9,8 +9,6 @@ import { Toaster } from "@/components/ui/sonner";
 import { useBoardContext } from './boardContext';
 import AspectShapeUtil, { IAspectShape } from './shapes/aspect';
 import { IntroOverlay } from './ui/IntroOverlay';
-// import UserHelp from './onboarding/userHelp';
-// import { HelpMenu } from './onboarding/helpMenu';
 import DemoTour from './onboarding/demoTour';
 import InFrontOfTheCanvasComponents from './onboarding/inFrontOfCanvasComponents';
 import { UserGuide } from './onboarding/userGuide/UserGuide';
@@ -136,7 +134,7 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
             </div>
           )}      
           <IkigaiCircles/>
-          <DemoTour />
+          {/* <DemoTour /> */}
         </Tldraw>
 
       </div>

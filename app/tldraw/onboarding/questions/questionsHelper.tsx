@@ -228,75 +228,86 @@ export const QuestionHelper: React.FC = () => {
         </Button>
       </div>
       {isVisible && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          onPointerMove={stopEventPropagation} onPointerDown={stopEventPropagation}
-        >
-          <Alert className={`
-            fixed m-auto ${bgColor} pointer-events-auto 
-            rounded-lg rounded-lg p-4 shadow-xl 
-            w-[450px] h-[200px] 
-            top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2` 
-          }>
-            <AlertTitle className="flex justify-center items-center">
-              <Select onValueChange={setAspectTypeQuestion}>
-                <SelectTrigger className="inline-flex items-center w-60 ml-12 mr-16 pl-4 pr-6 py-1 rounded-full shadow-inner hover:bg-purple-300 bg-purple-100">
-                  <Image 
-                    width={36} height={36}
-                    src={`/icons/aspects/${currentQuestion.aspectType}.png`} alt={currentQuestion.aspectType} 
-                  />
-                  <span className="text-xl font-semibold">{currentQuestion.aspectType}</span>
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.entries(zoneAspectTypes).map(([zone, aspects]) => (
-                    <SelectGroup key={zone}>
-                      <SelectLabel className="flex items-center space-x-2 p-2">
-                        <Image 
-                          src={`/icons/zones/${zoneIconSrc[zone as keyof typeof zoneIconSrc]}`} 
-                          alt={`${zone} icon`} 
-                          height={24} 
-                          width={24} 
-                        />
-                        <span>{zone}</span>
-                      </SelectLabel>
-                      {aspects.map((aspectType) => (
-                        <SelectItem key={aspectType} value={aspectType} className='hover:bg-purple-100'>
-                          <Image 
-                            src={`/icons/aspects/${aspectType}.png`} 
-                            alt={`${zone} icon`} 
-                            height={24} 
-                            width={24} 
-                            className='ml-6 mr-4 inline-block'
-                          />
-                          <span className=''>{aspectType}</span>
-                        </SelectItem>
+        <div>
+          <motion.div
+            // initial={{ backgroundColor: 'rgba(0, 0, 0, 0)' }} // Initial state (transparent)
+            // animate={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }} // Final state (bg-black with opacity-30)
+            // transition={{ duration: 1 }} // Duration of the transition in seconds
+            // className="fixed inset-0 z-10"
+          />
+          {/* <div className="fixed inset-0 bg-black opacity-30 z-10 transtion-opacity duration-3000"></div> */}
+          <motion.div
+              // initial={{ opacity: 0 }}
+              // animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              onPointerMove={stopEventPropagation} onPointerDown={stopEventPropagation}
+              className=''
+            >
+              <Alert className={`
+                fixed m-auto ${bgColor} pointer-events-auto 
+                rounded-lg rounded-lg p-4 shadow-xl 
+                w-[450px] h-[200px] opacity-100 z-50
+                top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2` 
+              }>
+                <AlertTitle className="flex justify-center items-center">
+                  <Select onValueChange={setAspectTypeQuestion}>
+                    <SelectTrigger className="inline-flex items-center w-60 ml-12 mr-16 pl-4 pr-6 py-1 rounded-full shadow-inner hover:bg-purple-300 bg-purple-100">
+                      <Image 
+                        width={36} height={36}
+                        src={`/icons/aspects/${currentQuestion.aspectType}.png`} alt={currentQuestion.aspectType} 
+                      />
+                      <span className="text-xl font-semibold">{currentQuestion.aspectType}</span>
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.entries(zoneAspectTypes).map(([zone, aspects]) => (
+                        <SelectGroup key={zone}>
+                          <SelectLabel className="flex items-center space-x-2 p-2">
+                            <Image 
+                              src={`/icons/zones/${zoneIconSrc[zone as keyof typeof zoneIconSrc]}`} 
+                              alt={`${zone} icon`} 
+                              height={24} 
+                              width={24} 
+                            />
+                            <span>{zone}</span>
+                          </SelectLabel>
+                          {aspects.map((aspectType) => (
+                            <SelectItem key={aspectType} value={aspectType} className='hover:bg-purple-100'>
+                              <Image 
+                                src={`/icons/aspects/${aspectType}.png`} 
+                                alt={`${zone} icon`} 
+                                height={24} 
+                                width={24} 
+                                className='ml-6 mr-4 inline-block'
+                              />
+                              <span className=''>{aspectType}</span>
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
                       ))}
-                    </SelectGroup>
-                  ))}
-                </SelectContent>
-              </Select>
-            </AlertTitle>
-            <AlertDescription>
-              <div className={`flex items-center justify-center h-full text-center text-xl mt-5 mx-4 font-normal `}>
-                {currentQuestion.text}
-              </div>
-            </AlertDescription>
-            <CloseButton onClick={toggleVisibility} />
-            <div className="absolute bottom-2 right-2 flex space-x-2">
-              <Button onClick={setPreviousQuestion} className="bg-purple-100 hover:bg-purple-400 rounded-full p-2">
-                <Image src="/icons/previous.svg" alt="Previous" width={20} height={20} />
-              </Button>
-              <Button onClick={setRandomQuestion} className="bg-purple-100 hover:bg-purple-400 rounded-full p-2">
-                <Image src="/icons/random.svg" alt="Random" width={20} height={20} />
-              </Button>
-              <Button onClick={setNextQuestion} className="bg-purple-100 hover:bg-purple-400 rounded-full p-2">
-                <Image src="/icons/next.svg" alt="Next" width={20} height={20} />
-              </Button>
-            </div>
-          </Alert>
-        </motion.div>
+                    </SelectContent>
+                  </Select>
+                </AlertTitle>
+                <AlertDescription>
+                  <div className={`flex items-center justify-center h-full text-center text-xl mt-5 mx-4 font-normal `}>
+                    {currentQuestion.text}
+                  </div>
+                </AlertDescription>
+                <CloseButton onClick={toggleVisibility} />
+                <div className="absolute bottom-2 right-2 flex space-x-2">
+                  <Button onClick={setPreviousQuestion} className="bg-purple-100 hover:bg-purple-400 rounded-full p-2">
+                    <Image src="/icons/previous.svg" alt="Previous" width={20} height={20} />
+                  </Button>
+                  <Button onClick={setRandomQuestion} className="bg-purple-100 hover:bg-purple-400 rounded-full p-2">
+                    <Image src="/icons/random.svg" alt="Random" width={20} height={20} />
+                  </Button>
+                  <Button onClick={setNextQuestion} className="bg-purple-100 hover:bg-purple-400 rounded-full p-2">
+                    <Image src="/icons/next.svg" alt="Next" width={20} height={20} />
+                  </Button>
+                </div>
+              </Alert>
+            </motion.div>
+          </div>
+
       )}
 
     </>
