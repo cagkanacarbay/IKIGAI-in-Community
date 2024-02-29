@@ -43,7 +43,7 @@ export interface ZoneHelpContainerProps {
 export const ZoneHelpContainer: React.FC<ZoneHelpContainerProps> = ({ zoneName }) => {
   // Places the help menu for each zone right next to it IKIGAI circle. 
   // ie. to the top of THe Heart, left of The Craft, right of The Cause, and bottom of The Path.
-  const containerSize = { width: 800, height: 900 };
+  const containerSize = { width: 800, height: 800 };
   const zoneInfo = guideContent[zoneName];
   const aspects = Object.entries(zoneInfo.aspects).map(([type, text]) => ({ type, text }));
   const backgroundColor = zoneBackgroundColors[zoneName];
@@ -75,7 +75,7 @@ export const ZoneHelpContainer: React.FC<ZoneHelpContainerProps> = ({ zoneName }
     const angle = startAngle + (aspectIndex * angleStep);
 
     // Positioning
-    const radius = 1000;
+    const radius = 1250;
     // Adjust x and y to account for the size of the AspectCard and place the center of the card correctly
     const x = (containerSize.width / 2) + (radius * Math.cos(angle)) - (AspectCardSize.width / 2);
     const y = (containerSize.height / 2) + (radius * Math.sin(angle)) - (AspectCardSize.height / 2);
@@ -97,45 +97,22 @@ export const ZoneHelpContainer: React.FC<ZoneHelpContainerProps> = ({ zoneName }
           <h2 className={`text-xl font-semibold ml-1 ${subtitleColors[zoneName]}`}>{zoneInfo.ikigaiQuestion}</h2>
         </div>
       </CardTitle>
-      <CardContent className='bg-white rounded-xl mt-8 p-4'>
+      <CardContent className='bg-white rounded-xl mt-4 py-8 px-4 mb-4'>
         <blockquote className='border-gray-500 border-l-4 italic mb-10 mt-4 px-6 text-xl text-center font-medium'>
           {zoneInfo.quote}
           <cite className='block text-right text-lg mt-2 font-normal'>{zoneInfo.quoteAuthor}</cite>
         </blockquote>
-        <CardDescription className='mt-2 text-justify hyphens-auto px-4 mx-4'>
-          <div className='text-lg font-semibold mb-1 mt-2'>
-            {Object.keys(zoneInfo.accordion)[0]}
-          </div>
-          <div className='text-lg'>
-            {Object.values(zoneInfo.accordion)[0]}
-          </div>
-          <div className='text-lg font-semibold mb-1 mt-6'>
-            {Object.keys(zoneInfo.accordion)[1]}
-          </div>
-          <div className='text-lg mb-4'>
-            {Object.values(zoneInfo.accordion)[1]}
-          </div>
-          {/* <Accordion type="single" collapsible className="w-full">
-            {Object.entries(zoneInfo.accordion).map(([subtitle, desc], index) => {
-              return (
-                <AccordionItem key={index} value={`item-${index}`}>
-                  <AccordionTrigger className='text-lg'>{subtitle}</AccordionTrigger>
-                  <AccordionContent className='text-lg box-content'>
-                    {desc}
-                  </AccordionContent>
-                </AccordionItem>
-              );
-            })}
-          </Accordion> */}
+        <CardDescription className='mt-4 text-justify hyphens-auto px-4 mx-4 text-xl mb-1'>
+          {zoneInfo.description}
         </CardDescription>
       </CardContent>
       <div className={`flex flex-col items-center p-4 mt-10 `}>
         <div className='grid grid-cols-2 gap-y-5 gap-x-20'>
           {aspects.map((aspect, index) => (
-            <div key={index} className='aspect-container flex flex-col items-center'>
+            <div key={index} className='flex flex-col items-center '>
               <AspectCard
                 aspectType={aspect.type as AspectType}
-                description={aspect.text}
+                content={aspect.text}
                 position={calculatePosition(index, aspects.length)}
                 zoneName={zoneName} />
             </div>

@@ -85,7 +85,7 @@ export default class IkigaiCircleShapeUtil extends ShapeUtil<IIkigaiCircleShape>
     const fillColor = theme[shape.props.color].semi; 
     
     const fillOpacity = 0.60;
-    console.log("the meta: ", shape.meta.zone)
+    // console.log("the meta: ", shape.meta.zone)
   
     return (
       <HTMLContainer>
@@ -152,7 +152,7 @@ export function IkigaiCircles() {
       }
     }
 
-    console.log("ikigai circles to be created: ", shapesToCreate)
+    // console.log("ikigai circles to be created: ", shapesToCreate)
   
     if (shapesToCreate.length > 0) {
       editor.createShapes(shapesToCreate);

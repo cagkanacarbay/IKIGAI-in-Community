@@ -13,6 +13,7 @@ const InFrontOfTheCanvasComponents: React.FC = ({}) => {
     <>
       {/* <GuidedTour /> */}
       <QuestionHelper />
+      <QuestionHelperButton />
       <UserGuideButton />
 
     </>
@@ -36,6 +37,26 @@ const UserGuideButton: React.FC = () => {
         onClick={toggleUserGuideVisibility}
       >
         <Image src="/icons/guide.png" alt="User Guide" width={40} height={40} priority/>
+      </Button>
+    </div>
+  );
+};
+
+
+const QuestionHelperButton: React.FC = () => {
+  const { questionHelperVisible, toggleQuestionHelperVisibility } = useBoardContext(); 
+
+  const bgColor = questionHelperVisible ? 'bg-purple-300 hover:bg-purple-600' : 'bg-purple-100 hover:bg-purple-600';
+
+  return (
+    <div className="fixed top-16 left-4 z-50 pointer-events-auto"
+      onPointerMove={stopEventPropagation} onPointerDown={stopEventPropagation}
+    >
+      <Button
+        className={`transition-colors duration-300 shadow-lg rounded-full w-16 h-16 flex items-center justify-center cursor-pointer ${bgColor}`}
+        onClick={toggleQuestionHelperVisibility}
+      >
+        <Image src="/icons/question.png" alt="Questions" width={40} height={40} priority/>
       </Button>
     </div>
   );

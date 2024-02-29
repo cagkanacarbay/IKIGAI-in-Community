@@ -18,8 +18,19 @@ tools: https://www.flaticon.com/free-icon/tool-box_4873901?term=tools&page=1&pos
 path: https://www.flaticon.com/free-icon/digital-currency_1068533
 heart: 
 craft: https://www.flaticon.com/free-icon/hard-work_2405334?term=working&page=1&position=40&origin=search&related_id=2405334
-
+cause: https://www.flaticon.com/free-icon/world_3758203?term=save+earth&page=1&position=95&origin=search&related_id=3758203
 
 next: https://www.flaticon.com/free-icon/next_318275?term=next&related_id=318275
 previous: https://www.flaticon.com/free-icon/previous_318276?term=previous&page=1&position=2&origin=search&related_id=318276
 random: https://www.flaticon.com/free-icon/shuffle_724979?term=random&page=1&position=5&origin=search&related_id=724979
+
+
+inspiration: https://www.flaticon.com/free-icon/inspiration_8705945
+wellbeing: https://www.flaticon.com/free-icon/wellbeing_6742431?term=wellbeing&page=1&position=5&origin=search&related_id=6742431
+
+accomplishment: https://www.flaticon.com/free-icon/goal_1117473?term=accomplishment&page=1&position=11&origin=search&related_id=1117473
+innovation&progress: https://www.flaticon.com/free-icon/innovation_10266376
+collaboration: https://www.flaticon.com/free-icon/collaboration_13322264?term=collaboration&page=1&position=33&origin=search&related_id=13322264
+level-up: https://www.flaticon.com/free-icon/next-level_8282931
+financial-freedom: https://www.flaticon.com/free-icon/freedom_3345952?term=financial+freedom&page=1&position=2&origin=search&related_id=3345952
+community: https://www.flaticon.com/free-icon/diversity_4917041?term=community&related_id=4917041

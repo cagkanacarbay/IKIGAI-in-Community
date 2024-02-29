@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { useBoardContext } from '../../boardContext';
-import { ZoneHelpContainer } from './ZoneHelpContainer';
+import { ZoneHelpContainer } from './zones/ZoneHelpContainer';
 
 
 // This box wraps around the circles with the center at the center of the circles, so we can place the 
@@ -23,7 +23,7 @@ export const UserGuide: React.FC = () => {
   const offsetY = (boxHeight - ikigaiCirclesBoxSize.height) / 2;
   const offsetX = (boxWidth - ikigaiCirclesBoxSize.width) / 2; // Fixed to use boxWidth for offsetX calculation
 
-  console.log("New dimensions and offsets for Help Menu: ", boxHeight, boxWidth, offsetX, offsetY);
+  // console.log("New dimensions and offsets for Help Menu: ", boxHeight, boxWidth, offsetX, offsetY);
 
   return (
     <>

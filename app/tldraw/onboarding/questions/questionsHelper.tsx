@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import CloseButton from '@/components/ui/closeButton';
+import { useBoardContext } from '../../boardContext';
 
 
 interface Question {
@@ -68,7 +69,8 @@ const defaultQuestion: Question = {
 
 
 export const QuestionHelper: React.FC = () => {
-  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const { questionHelperVisible, toggleQuestionHelperVisibility, questionAspectType, setQuestionAspectType } = useBoardContext(); // Use the context to determine visibility
+
   const [currentQuestion, setCurrentQuestion] = useState<Question>(defaultQuestion);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(1);
   const [aspectId, setAspectId] = useState<TLShapeId>();
@@ -79,7 +81,6 @@ export const QuestionHelper: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentQuestionIndex]);  
 
-  const toggleVisibility = (): void => setIsVisible(!isVisible);
   const editor = useEditor();
 
   
@@ -158,7 +159,7 @@ export const QuestionHelper: React.FC = () => {
     editor.select(zoneNameToId[zone]);
     editor.zoomToSelection({duration: 300});
 
-    if (isVisible) {
+    if (questionHelperVisible) {
       timeoutId = setTimeout(handleNextQuestion, 300);
     } else {
       deleteAspect();
@@ -171,7 +172,22 @@ export const QuestionHelper: React.FC = () => {
     };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isVisible, currentQuestion]);
+  }, [questionHelperVisible, currentQuestion]);
+
+  // When the question changes, update the context to the correct aspect type so we can reference it elsewhere
+  // useEffect(() => {
+  //   if (currentQuestion){
+  //     setQuestionAspectType(currentQuestion.aspectType);
+  //   }
+  // }, [currentQuestion]);
+
+  // When the context for the current question aspect type changes,  
+  // it means the user has triggered a button somwhere to give a question of the new type 
+  // probably from the Aspect Card in the user guide
+  useEffect(() => {
+    console.log("question aspect type from mcontext changed: ", questionAspectType)
+    setAspectTypeQuestion(questionAspectType);
+  }, [questionAspectType]);
 
   // Handlers to get the next, previous, or random question
   const setNextQuestion = () => {
@@ -189,11 +205,11 @@ export const QuestionHelper: React.FC = () => {
   };
 
   const setAspectTypeQuestion = (aspectType: AspectType) => {
+    console.log("setting aspect type question: ", aspectType)
     const questionsOfType = questions.filter(question => question.aspectType === aspectType);
     const randomQuestion = questionsOfType[Math.floor(Math.random() * questionsOfType.length)];
     setCurrentQuestion(randomQuestion);
   };
-
 
   useEffect(() => {
     // will run once at mount to set the questions
@@ -207,27 +223,11 @@ export const QuestionHelper: React.FC = () => {
   }, [questions]);
 
   const zone = currentQuestion ? getZoneName(currentQuestion.aspectType) : "The Heart";
-  
   const bgColor = zoneColors[zone];
-
-  const buttonBgColor = isVisible ? 'bg-purple-300 hover:bg-purple-600' : 'bg-purple-100 hover:bg-purple-600';
-
-  // const textColor = textColors[zone];
-
 
   return (
     <>
-      <div className="fixed top-16 left-4 z-50 pointer-events-auto"
-        onPointerMove={stopEventPropagation} onPointerDown={stopEventPropagation}
-      >
-        <Button
-          className={`${buttonBgColor} transition-colors duration-300 shadow-lg text-white rounded-full w-16 h-16 flex items-center justify-center cursor-pointer`}
-          onClick={toggleVisibility}
-        >
-          <Image src="/icons/question.png" alt="?" width={40} height={40} priority/>
-        </Button>
-      </div>
-      {isVisible && (
+      {questionHelperVisible && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -283,7 +283,7 @@ export const QuestionHelper: React.FC = () => {
                 {currentQuestion.text}
               </div>
             </AlertDescription>
-            <CloseButton onClick={toggleVisibility} />
+            <CloseButton onClick={toggleQuestionHelperVisibility} />
             <div className="absolute bottom-2 right-2 flex space-x-2">
               <Button onClick={setPreviousQuestion} className="bg-purple-100 hover:bg-purple-400 rounded-full p-2">
                 <Image src="/icons/previous.svg" alt="Previous" width={20} height={20} />
