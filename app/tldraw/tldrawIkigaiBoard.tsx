@@ -10,7 +10,7 @@ import { useBoardContext } from './boardContext';
 import AspectShapeUtil, { IAspectShape } from './shapes/aspect';
 import { IntroOverlay } from './ui/IntroOverlay';
 import InFrontOfTheCanvasComponents from './onboarding/inFrontOfCanvasComponents';
-import { UserGuide } from './onboarding/userGuide/userGuide';
+import { UserGuide } from './onboarding/userGuide/UserGuide';
 
 
 const components: TLEditorComponents = {
