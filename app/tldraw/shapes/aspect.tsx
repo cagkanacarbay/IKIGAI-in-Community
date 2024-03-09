@@ -190,11 +190,14 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
         <motion.div 
           whileTap={{ scale: 0.8, transition:{ duration: 0.275}}}
           style={{width: w, height: h, minHeight}} 
-          className={`grid grid-cols-[auto,1fr,auto] items-center
+          id={id}
+          className={`
+            aspect
+            grid grid-cols-[auto,1fr,auto] items-center
             text-xs font-bold
-            ${colorClass} bg-opacity-60 
+            ${colorClass} bg-opacity-60 z-50
             rounded-lg shadow-inner shadow-md
-            min-w-[${minWidth}]
+            min-w-[${minWidth}] 
           `}
         >
             <div className="flex flex-col justify-center items-center ml-1 mr-2 mb-1">

@@ -50,6 +50,7 @@ export const AspectCard: React.FC<AspectCardProps> = ({ aspectType, content, pos
       }}
       onPointerDown={stopEventPropagation}
       onPointerMove={stopEventPropagation}
+      id={`user-guide-${aspectType}`}
     >
       <Card className={`flex flex-col justify-between ${bgColor}`}>
         <CardHeader>

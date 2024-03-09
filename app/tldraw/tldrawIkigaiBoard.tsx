@@ -9,8 +9,9 @@ import { Toaster } from "@/components/ui/sonner";
 import { useBoardContext } from './boardContext';
 import AspectShapeUtil, { IAspectShape } from './shapes/aspect';
 import { IntroOverlay } from './ui/IntroOverlay';
+import DemoTour from './onboarding/demoTour';
 import InFrontOfTheCanvasComponents from './onboarding/inFrontOfCanvasComponents';
-import { UserGuide } from './onboarding/userGuide/userGuide';
+import { UserGuide } from './onboarding/userGuide/UserGuide';
 
 
 const components: TLEditorComponents = {
@@ -113,7 +114,7 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
 
 
   return (
-      <div style={{ position: 'fixed', inset: 0 }}>
+      <div style={{ position: 'fixed', inset: 0 }} id="tldraw-ikigai-board">
         {/* {!introCompleted && <IntroOverlay onFadeComplete={() => setIntroComplete(true)} />} */}
         <Toaster />
         <Tldraw
@@ -127,12 +128,21 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
           persistenceKey="persistence-key"
           className='z-10'
         >
+
           {loadWelcome && (
             <div className="transition-opacity duration-700 ease-in border border-black">
               <InFrontOfTheCanvasComponents />
             </div>
-          )}      
-          <IkigaiCircles/>
+          )}     
+
+          <IkigaiCircles />
+
+          { /* These are invisible divs that allows driverjs to highlight the center of the screen */}
+          <div id="mid-screen-driverjs" className="absolute z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-[65vh] w-[65vw] pointer-events-none"></div>  
+          <div id="user-guide-heart-driverjs" className="fixed z-50 left-0 top-0 bg-red-50 w-full h-1/3 pointer-events-none"></div>
+
+
+          {/* <DemoTour /> */}
         </Tldraw>
 
       </div>

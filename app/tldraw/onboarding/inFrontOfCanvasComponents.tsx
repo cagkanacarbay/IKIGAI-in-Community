@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { GuidedTour } from './tour/onboardingTour';
+import { WelcomeTour } from './tour/welcomeTour';
 import { QuestionHelper } from './questions/questionsHelper';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
@@ -11,11 +11,12 @@ const InFrontOfTheCanvasComponents: React.FC = ({}) => {
 
   return (
     <>
-      {/* <GuidedTour /> */}
+      <WelcomeTour />
       <QuestionHelper />
-      <QuestionHelperButton />
-      <UserGuideButton />
-
+      <div id='helper-buttons'>
+        <QuestionHelperButton />
+        <UserGuideButton />
+      </div>
     </>
   );
 };
@@ -31,6 +32,7 @@ const UserGuideButton: React.FC = () => {
   return (
     <div className="fixed top-36 left-4 z-50 pointer-events-auto "
       onPointerMove={stopEventPropagation} onPointerDown={stopEventPropagation}
+      id="user-guide-button"
     >
       <Button
         className={`transition-colors duration-300 shadow-lg rounded-full w-16 h-16 flex items-center justify-center cursor-pointer ${bgColor}`}
@@ -51,6 +53,7 @@ const QuestionHelperButton: React.FC = () => {
   return (
     <div className="fixed top-16 left-4 z-50 pointer-events-auto"
       onPointerMove={stopEventPropagation} onPointerDown={stopEventPropagation}
+      id="questions-helper-button"
     >
       <Button
         className={`transition-colors duration-300 shadow-lg rounded-full w-16 h-16 flex items-center justify-center cursor-pointer ${bgColor}`}

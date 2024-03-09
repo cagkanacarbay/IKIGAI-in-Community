@@ -6,7 +6,7 @@ export const QUESTIONS: Record<AspectType, string[]> = {
     "What skills do you have that set you apart from others?",
     "What social skills or soft skills do you consider your strongest?",
     "What leadership or management skills do you bring to a project or team?",
-    "Which communication skills do you consider your strongest—public speaking, writing, or another?"
+    "Which communication skills do you consider your strongest: public speaking, writing, or another?"
   ],
   knowledge: [
     "What unique insights have you gained from your current or past job roles?",
@@ -46,16 +46,12 @@ export const QUESTIONS: Record<AspectType, string[]> = {
     "What are your favorite activities, hobbies?",
   ],
   value: [
-    "What values are most important to you?",
-    "How do these values influence your daily actions?",
-    "Can you share a time when your values guided a significant decision?",
-    "How do you feel when you are able to live according to your values?",
-    "Are there any values you wish to cultivate more deeply?",
+
   ],
   dream: [
     "What dreams do you have for your future?",
     "In a decade, what would you like to have accomplished?",
-    "Describe your dream project. What would it look like? What would it achieve?",
+    "Describe your dream project. What would it look like? What would it achieve? Why is this important to you?",
     "At the end of your life, what would you like to be remembered for?",
     "What innovation or invention do you dream of creating?",
     "If you could instantly transform one aspect of the world, what would it be?",
@@ -112,7 +108,6 @@ export const QUESTIONS: Record<AspectType, string[]> = {
     "What business ideas do you constantly think about?",
     "What are some problems you've noticed around you that might turn into business opportunities?",
     "What's a business idea you've had that you believe could be successful?",
-    "You've been to bars, restaurants, and cafes. What would you do differently if you were to open one?",
     "What's one type of business everyone seems to be doing, but you think you could do better?",
     "Do you have a startup idea you like to think about? What is it?",
 
@@ -131,6 +126,7 @@ export const QUESTIONS: Record<AspectType, string[]> = {
     "Who are your ideal clients? Startups, SMEs, corporations, ...?",
     "Are you open to ",
     "What's a freelance project you'd like to work on in the future?",
+    "What's a one day business you can spin up today?",
   ],
   growth: [
 

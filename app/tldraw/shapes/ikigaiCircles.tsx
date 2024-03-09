@@ -88,7 +88,7 @@ export default class IkigaiCircleShapeUtil extends ShapeUtil<IIkigaiCircleShape>
     // console.log("the meta: ", shape.meta.zone)
   
     return (
-      <HTMLContainer>
+      <HTMLContainer id={`ikigai-circle-${shape.meta.zone}`}>
         {/* <motion.div> */}
         <svg id={shape.meta.zone} width={radius * 2} height={radius * 2} style={{ overflow: 'visible', position: 'absolute', left: x , top: y }}>
           <circle cx={radius} cy={radius} r={radius} fill={fillColor} fillOpacity={fillOpacity}/>

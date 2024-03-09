@@ -85,11 +85,11 @@ export const ZoneHelpContainer: React.FC<ZoneHelpContainerProps> = ({ zoneName }
 
 
   return (
-    <Card className={`absolute flex flex-col justify-between items-center pointer-events-auto rounded-lg ${backgroundColor} px-16`}
+    <Card id={`${zoneName.toLowerCase().split(' ').join('-')}-guide`} className={`absolute flex flex-col justify-between items-center pointer-events-auto rounded-lg ${backgroundColor} px-16`}
       style={{ ...commonStyles, ...style }}
       onPointerMove={stopEventPropagation} onPointerDown={stopEventPropagation}
     >
-      <CardTitle className='flex items-center mt-10 '>
+      <CardTitle className='flex items-center mt-10'>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={`/icons/zones/${zoneIconSrc[zoneName]}`} alt={zoneName} className='w-24 h-24 p-2 transition-colors mr-4' />
         <div>

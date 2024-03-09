@@ -57,19 +57,20 @@ const reshapeQuestions = (): Question[] => {
       });
     });
   });
+  console.log("reshapedQuestions: ", reshapedQuestions	)
   return reshapedQuestions;
 };
 
 
 const defaultQuestion: Question = {
   text: 'loading...',
-  aspectType: 'interest', 
+  aspectType: 'knowledge', 
   zone: 'The Heart',
 };
 
 
 export const QuestionHelper: React.FC = () => {
-  const { questionHelperVisible, toggleQuestionHelperVisibility, questionAspectType, setQuestionAspectType } = useBoardContext(); // Use the context to determine visibility
+  const { questionHelperVisible, toggleQuestionHelperVisibility, questionAspectType, setQuestionAspectType } = useBoardContext();
 
   const [currentQuestion, setCurrentQuestion] = useState<Question>(defaultQuestion);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(1);
@@ -185,12 +186,14 @@ export const QuestionHelper: React.FC = () => {
   // it means the user has triggered a button somwhere to give a question of the new type 
   // probably from the Aspect Card in the user guide
   useEffect(() => {
-    console.log("question aspect type from mcontext changed: ", questionAspectType)
+    // console.log("question aspect type in CONTEXT has changed to: ", questionAspectType)
     setAspectTypeQuestion(questionAspectType);
   }, [questionAspectType]);
 
   // Handlers to get the next, previous, or random question
   const setNextQuestion = () => {
+    console.log("setting next question, current index: ", currentQuestionIndex)
+    console.log("current question: ", currentQuestion)
     setCurrentQuestionIndex((currentQuestionIndex + 1) % questions.length); // loop back to 0th index
   };
 
@@ -208,7 +211,11 @@ export const QuestionHelper: React.FC = () => {
     console.log("setting aspect type question: ", aspectType)
     const questionsOfType = questions.filter(question => question.aspectType === aspectType);
     const randomQuestion = questionsOfType[Math.floor(Math.random() * questionsOfType.length)];
-    setCurrentQuestion(randomQuestion);
+    // const randomIndex = Math.floor(Math.random() * questionsOfType.length);
+    const originalIndex = questions.findIndex(question => question === randomQuestion);
+
+
+    setCurrentQuestionIndex(originalIndex);
   };
 
   useEffect(() => {
@@ -234,7 +241,7 @@ export const QuestionHelper: React.FC = () => {
           transition={{ duration: 0.5 }}
           onPointerMove={stopEventPropagation} onPointerDown={stopEventPropagation}
         >
-          <Alert className={`
+          <Alert id="questions-helper" className={`
             fixed m-auto ${bgColor} pointer-events-auto 
             rounded-lg rounded-lg p-4 shadow-xl 
             w-[450px] h-[200px] 

@@ -31,7 +31,7 @@ export const BoardProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [editedAspects, setEditedAspects] = useState<{ fromAspect: IAspectShape, toAspect: IAspectShape }[]>([]);
   const [userGuideVisible, setUserGuideVisible] = useState<boolean>(false); 
   const [questionHelperVisible, setQuestionHelperVisible] = useState<boolean>(false); 
-  const [questionAspectType, setQuestionAspectType] = useState<AspectType>("interest");
+  const [questionAspectType, setQuestionAspectType] = useState<AspectType>("community");
 
   const addCreatedAspect = (aspect: IAspectShape) => {
     setCreatedAspects((prevAspects) => [...prevAspects, aspect]);
@@ -45,6 +45,7 @@ export const BoardProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const toggleQuestionHelperVisibility = () => setQuestionHelperVisible(!questionHelperVisible);
 
   const setQuestionAspectTypeAndShowHelper = (type: AspectType) => {
+    // console.log("Setting question aspect type in Context to: ", type)
     setQuestionAspectType(type);
     setQuestionHelperVisible(true);
   };
