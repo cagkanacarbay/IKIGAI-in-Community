@@ -8,6 +8,7 @@ import { saveImageAssetsAsBlobsAndUpdateMetadata, saveAsJSON, uploadSnapshot } f
 import { ZoneName, aspectTypes, getZoneName } from '@/lib/types';
 import { createAspectAction, addAspectTypeAction, removeAspectTypeAction } from './actions';
 
+
 interface AssetSrc {
   id: string;
   src: string;
@@ -18,7 +19,7 @@ const toolsToRemove: string[] = [
   "hand",
   "asset",
   "arrow",
-  "note",
+  "notes",
   "draw",
   "eraser",
   "ellipse",
@@ -194,14 +195,27 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
         },
       }
 
-      tools.aspect = {
+      tools.heartAspect = {
         id: 'aspect',
-        icon: 'heart',
+        icon: 'color',
         label: 'Aspect',
         kbd: 'a',
         readonlyOk: false,
         onSelect: () => {
           editor.setCurrentTool('aspect')
+          createAspectAction(editor, "interest", "The Heart");
+        },
+      }
+
+      tools.craftAspect = {
+        id: 'aspect',
+        icon: 'color',
+        label: 'Aspect',
+        kbd: 'a',
+        readonlyOk: false,
+        onSelect: () => {
+          editor.setCurrentTool('aspect')
+          createAspectAction(editor, "skill", "The Craft");
         },
       }
 
@@ -215,8 +229,9 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
       // ... additional toolbar configuration ...
       // console.log(tools)
       // console.log("logging tools card:", tools.card)
-      filteredToolbar.splice(3, 0, toolbarItem(tools.card))
-      filteredToolbar.splice(4, 0, toolbarItem(tools.aspect))
+      filteredToolbar.splice(1, 0, toolbarItem(tools.card))
+      filteredToolbar.splice(2, 0, toolbarItem(tools.heartAspect))
+      filteredToolbar.splice(3, 0, toolbarItem(tools.craftAspect))
       
 
       return filteredToolbar;
@@ -280,31 +295,31 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
           'Create an Aspect',
           menuGroup(
             'heart-aspects',
-            menuItem(actions['add-interest'],),
-            menuItem(actions['add-value']),
-            menuItem(actions['add-dream']),
-            menuItem(actions['add-inspiration']),
+            menuItem(actions['create-interest'],),
+            menuItem(actions['create-value']),
+            menuItem(actions['create-dream']),
+            menuItem(actions['create-inspiration']),
           ),
           menuGroup(
             'craft-aspects',
-            menuItem(actions['add-skill']),
-            menuItem(actions['add-accomplishment']),
-            menuItem(actions['add-knowledge']),
-            menuItem(actions['add-strength']),
+            menuItem(actions['create-skill']),
+            menuItem(actions['create-accomplishment']),
+            menuItem(actions['create-knowledge']),
+            menuItem(actions['create-strength']),
           ),
           menuGroup(
             'cause-aspects',
-            menuItem(actions['add-innovation&progress']),
-            menuItem(actions['add-impact']),
-            menuItem(actions['add-community']),
-            menuItem(actions['add-wellbeing']),
+            menuItem(actions['create-innovation&progress']),
+            menuItem(actions['create-impact']),
+            menuItem(actions['create-community']),
+            menuItem(actions['create-wellbeing']),
           ),
           menuGroup(
             'path-aspects',
-            menuItem(actions['add-financial-freedom']),
-            menuItem(actions['add-business-idea']),
-            menuItem(actions['add-career']),
-            menuItem(actions['add-growth']),
+            menuItem(actions['create-financial-freedom']),
+            menuItem(actions['create-business-idea']),
+            menuItem(actions['create-career']),
+            menuItem(actions['create-growth']),
           ),
         )
       ) as TLUiMenuGroup; 

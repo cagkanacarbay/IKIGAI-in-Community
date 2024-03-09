@@ -16,6 +16,7 @@ export function createAspectAction(editor: Editor, aspectType: AspectType, zoneN
     // icon: "chevron-right",
     readonlyOk: true,
     onSelect(source: any) {
+      console.log("createAspectAction onSelect", source);
       const { x, y } = editor.inputs.currentPagePoint; // last left click xy
       const aspectId = createShapeId(`aspect-${ulid()}`);
 

@@ -8,6 +8,9 @@ import { useSession } from 'next-auth/react';
 import { Toaster } from "@/components/ui/sonner";
 import { useBoardContext } from './boardContext';
 import AspectShapeUtil, { IAspectShape } from './shapes/aspect';
+import CardShapeUtil, { CardShape} from './shapes/card';
+import { CardShapeTool } from './shapes/cardShapeTool';
+import { AspectShapeTool } from './shapes/aspectShapeTool';
 import { IntroOverlay } from './ui/IntroOverlay';
 import InFrontOfTheCanvasComponents from './onboarding/inFrontOfCanvasComponents';
 import { UserGuide } from './onboarding/userGuide/UserGuide';
@@ -20,7 +23,8 @@ const components: TLEditorComponents = {
 }
 
 // const customTools = [];
-const customShapeUtils = [IkigaiCircleShapeUtil, AspectShapeUtil];
+const customShapeUtils = [IkigaiCircleShapeUtil, AspectShapeUtil, CardShapeUtil];
+const customTools = [CardShapeTool, AspectShapeTool];
 
 interface IkigaiBoardV2Props {
   storeWithStatus?: TLStoreWithStatus;
@@ -121,7 +125,7 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
           store={storeWithStatus}
           overrides={customUiOverrides}
           shapeUtils={customShapeUtils} 
-          // tools={customTools}
+          tools={customTools}
           components={components}
           autoFocus
           persistenceKey="persistence-key"
