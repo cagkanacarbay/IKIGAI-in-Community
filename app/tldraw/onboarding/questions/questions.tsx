@@ -80,6 +80,8 @@ export const QUESTIONS: Record<AspectType, string[]> = {
     "AI is here, in which unconvential way do you think it can be used?",
     "In what area do you think more innovation is needed?",
     "What really annoys you about the place you live in, that you think could be improved with a bit of innovation?",
+    "How do you think technology could be leveraged to improve education or healthcare in your community?",
+
   ],
   impact: [
     "What's a global issue you believe is critical for the future?",
@@ -102,10 +104,14 @@ export const QUESTIONS: Record<AspectType, string[]> = {
     "What do you look for in an online community when joining?"
   ],
   progress: [
-    "What progress elsewhere in the world is needed where you live?",
-    "What progress or innovation from where you are could be useful elsewhere in the world?",
-    
-    
+    "In what areas do you want to see progress in your country in the next 10 years?",
+    "In what areas do you want to see progress in the world in the next 10 years?",
+    "Which ideas are not being taken too seriously as a way to improve the conditions of people, and yet maybe they should?",
+    "What practical steps can be taken to promote environmental sustainability?",
+    "What are the main challenges standing in the way of progress you want to see in the world?",
+    "Thinking about your city, what initiative or development do you think could significantly enhance the quality of life for its residents?",
+    "On a national level, what progress do you think is essential for your country to address current challenges and improve the well-being of its citizens?",
+    "What are the key areas where you believe progress is needed to create a better future for all?",
   ],
   "business-idea": [
     "What's a business idea you've had that you believe could be successful?",
@@ -115,7 +121,6 @@ export const QUESTIONS: Record<AspectType, string[]> = {
     "What's a business idea you've had that you believe could be successful?",
     "What's one type of business everyone seems to be doing, but you think you could do better?",
     "Do you have a startup idea you like to think about? What is it?",
-
   ],
   career: [
     "What is your current role at work?",
