@@ -44,7 +44,7 @@ export type ZoneName = "The Heart" | "The Craft" | "The Path" | "The Cause";
 export type AspectType = 
   "interest" | "value" | "dream" | "inspiration" | 
   "skill" | "accomplishment" | "knowledge" | "strength" | 
-  "innovation&progress" | "impact" | "community" | "wellbeing" | 
+  "innovation" | "impact" | "community" | "progress" | 
   "financial-freedom" | "business-idea" | "career" | "growth";
 
 
@@ -53,7 +53,7 @@ export const zones: ZoneName[] = ['The Heart', 'The Craft', 'The Path', 'The Cau
 export const aspectTypes: AspectType[] = [
   "interest", "value", "dream", "inspiration", 
   "skill", "accomplishment", "knowledge", "strength", 
-  "innovation&progress", "wellbeing", "community", "impact", 
+  "innovation", "progress", "community", "impact", 
   "financial-freedom", "business-idea", "career", "growth"
 ]
 
@@ -64,7 +64,7 @@ type ZoneAspectTypes = {
 export const zoneAspectTypes: ZoneAspectTypes = {
   "The Heart": ["interest", "value", "dream", "inspiration"],
   "The Craft": ["skill", "knowledge", "strength", "accomplishment"], 
-  "The Cause": ["innovation&progress", "wellbeing", "impact", "community"], 
+  "The Cause": ["innovation", "progress", "impact", "community"], 
   "The Path": ["business-idea", "career", "financial-freedom", "growth"]
 }
 

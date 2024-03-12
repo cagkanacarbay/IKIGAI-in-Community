@@ -54,13 +54,17 @@ export const guideContent = {
     quoteAuthor: "Harriet Tubman",
     description: "The Cause is a collection of opportunities for impact, highlighting the myriad ways you can engage with the world's challenges. This space is dedicated to identifying problems that can be addressed with thoughtful solutions, whether through entrepreneurship, technology, or collaborative initiatives. The Cause is about recognizing the problems that resonate with you and the ones that are yet to capture your attention. The Cause is about actionable insights and solutions, aiming to match the world's needs with your ability to create positive change through innovative and compassionate endeavors.",
     aspects: {
-      "innovation&progress": {
+      // "innovation": {
+      //   "subtitle": "Igniting New Ideas",
+      //   "description": "Innovation is the spark that ignites new ideas, methods, and solutions, driving us beyond current boundaries. It's about creating breakthroughs that tackle challenges and introduce novel possibilities. Innovation encompasses the generation of fresh concepts, the development of new technologies, and the pioneering of approaches that enhance efficiency and effectiveness. In a world that constantly changes, innovation is critical for addressing emerging needs and paving the way for future advancements. What areas do you believe are ripe for innovation, and how do you envision these innovations coming to life?"
+      // },
+      "innovation": {
         subtitle: "What needs our attention",
-        description: "Innovation and progress are the driving forces behind societal evolution and advancement. They are the breakthroughs that propel us forward, addressing challenges and opening new possibilities. Innovation ignites new ideas and methods, pushing past current limits to improve efficiency and effectiveness. Progress is the stride towards betterment in technology, society, and the environment, embodying the fruits of innovation. While we've come a long way as humanity, there is still a lot to do. Where do you think we need innovation and progress, of what type, how, with who?",
+        description: "Innovation is the development and application of new technologies and methodologies to solve problems, leading to transformative breakthroughs across science, business, and institutions. ",
       },
-      "wellbeing": {
-        subtitle: "Ways to improve society's health",
-        description: "Wellbeing is about understanding and addressing the factors that contribute to the physical, mental, and emotional health of individuals. It's recognizing what we, as people, need to thrive in all aspects of our lives. This might include access to quality healthcare, initiatives promoting mental health awareness, or community programs fostering social connections and support. From personal health to community resilience, each idea for improving wellbeing plays a crucial role in building a healthier, more supportive world. What do you think the world needs to improve society's wellbeing?",
+      "progress": {
+        "subtitle": "Creating a Better Tomorrow",
+        "description": "Progress is to develop towards an improved or advanced condition. It is a critical part of our collective journey as humanity. It is an evolutionary force that adapts and changes society, yet it is not a given that our societies will progress. It is decided by the actions of each and every one if we do progress or regress. Recognizing problems and caring deeply about them sets the stage for progress. Your particular concerns are indicators of where you can leave your mark on the world. By aligning your actions with what you care about most, you become a part of the push towards progress, contributing meaningfully to the changes you wish to see.",
       },
       "impact": {
         subtitle: "Where we need to affect change",

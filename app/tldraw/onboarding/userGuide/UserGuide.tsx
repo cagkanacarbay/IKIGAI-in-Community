@@ -41,6 +41,7 @@ export const UserGuide: React.FC = () => {
               top: `-${offsetY}px`, 
               left: `-${offsetX}px`, 
             }}
+            id="user-guide-container"
           >
             {zones.map((zone) => (
               <ZoneHelpContainer

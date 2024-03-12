@@ -9,16 +9,35 @@ import { Toaster } from "@/components/ui/sonner";
 import { useBoardContext } from './boardContext';
 import AspectShapeUtil, { IAspectShape } from './shapes/aspect';
 import { IntroOverlay } from './ui/IntroOverlay';
-import DemoTour from './onboarding/demoTour';
 import InFrontOfTheCanvasComponents from './onboarding/inFrontOfCanvasComponents';
 import { UserGuide } from './onboarding/userGuide/UserGuide';
 
 
-const components: TLEditorComponents = {
-  // InFrontOfTheCanvas: GuidedTour,
+import { DefaultToolbar, TLComponents} from 'tldraw'
+import 'tldraw/tldraw.css'
+
+// function CustomToolbar() {
+// 	return (
+// 		<div style={{ transform: 'rotate(180deg)' }}>
+// 			<DefaultToolbar />
+// 		</div>
+// 	)
+// }
+
+const components: TLComponents = {
+	// Toolbar: CustomToolbar, // null will hide the panel instead
   OnTheCanvas: UserGuide,
   InFrontOfTheCanvas: InFrontOfTheCanvasComponents,
+
 }
+
+// const components: TLEditorComponents = {
+//   // InFrontOfTheCanvas: GuidedTour,
+//   OnTheCanvas: UserGuide,
+//   InFrontOfTheCanvas: InFrontOfTheCanvasComponents,
+//   	Toolbar: CustomToolbar, // null will hide the panel instead
+
+// }
 
 // const customTools = [];
 const customShapeUtils = [IkigaiCircleShapeUtil, AspectShapeUtil];

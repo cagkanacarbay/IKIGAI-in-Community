@@ -247,9 +247,9 @@ export const QuestionHelper: React.FC = () => {
             w-[450px] h-[200px] 
             top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2` 
           }>
-            <AlertTitle className="flex justify-center items-center">
-              <Select onValueChange={setAspectTypeQuestion}>
-                <SelectTrigger className="inline-flex items-center w-60 ml-12 mr-16 pl-4 pr-6 py-1 rounded-full shadow-inner hover:bg-purple-300 bg-purple-100">
+            <AlertTitle className="flex justify-center items-center" >
+              <Select onValueChange={setAspectTypeQuestion} >
+                <SelectTrigger className="inline-flex items-center w-60 ml-12 mr-16 pl-4 pr-6 py-1 rounded-full shadow-inner hover:bg-purple-300 bg-purple-100" id="question-helper-aspect-type-selector">
                   <Image 
                     width={36} height={36}
                     src={`/icons/aspects/${currentQuestion.aspectType}.png`} alt={currentQuestion.aspectType} 

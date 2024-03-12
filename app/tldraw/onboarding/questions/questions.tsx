@@ -46,7 +46,13 @@ export const QUESTIONS: Record<AspectType, string[]> = {
     "What are your favorite activities, hobbies?",
   ],
   value: [
-
+    "What principles guide your decision-making process?",
+    "Which values do you consider non-negotiable in your life?",
+    "Can you describe a belief that has shaped the way you view the world?",
+    "What cultural or spiritual beliefs deeply impact your daily life?",
+    "How do your values influence your relationships with others?",
+    "What ethical standards do you hold yourself to in professional settings?",
+    "Is there a philosophy that you live by? If so, how does it influence your actions?",
   ],
   dream: [
     "What dreams do you have for your future?",
@@ -68,14 +74,12 @@ export const QUESTIONS: Record<AspectType, string[]> = {
     "What personal challenge has shaped you significantly?",
     "What personal success are you hoping to achieve that might inspire others?",
   ],
-  "innovation&progress": [
+  innovation: [
     "Technology is advancing rapidly, but it's still not adopted in so many areas of life. Where do you think it's most needed?",
     "What's the most critical problem nobody is working on?",
     "AI is here, in which unconvential way do you think it can be used?",
     "In what area do you think more innovation is needed?",
     "What really annoys you about the place you live in, that you think could be improved with a bit of innovation?",
-    "What progress elsewhere in the world is needed where you live?",
-    "What progress or innovation from where you are could be useful elsewhere in the world?",
   ],
   impact: [
     "What's a global issue you believe is critical for the future?",
@@ -97,8 +101,9 @@ export const QUESTIONS: Record<AspectType, string[]> = {
     "What's a community project you'd like to be a part of?",
     "What do you look for in an online community when joining?"
   ],
-  wellbeing: [
-    
+  progress: [
+    "What progress elsewhere in the world is needed where you live?",
+    "What progress or innovation from where you are could be useful elsewhere in the world?",
     
     
   ],
@@ -129,6 +134,14 @@ export const QUESTIONS: Record<AspectType, string[]> = {
     "What's a one day business you can spin up today?",
   ],
   growth: [
-
+    "What area of your professional expertise are you looking to deepen?",
+    "Are there any new technologies or tools you want to learn?",
+    "Is there a particular language, either programming or spoken, you aim to learn?",
+    "What soft skill (e.g., communication, leadership, time management) do you believe will make the biggest impact on your growth?",
+    "What health or wellness practice do you want to adopt to improve your well-being?",
+    "Is there a specific industry knowledge or insight you aim to gain to better understand your field?",
+    "What personal project are you planning that you believe will contribute to your growth?",
+    "Do you have plans to attend any workshops, seminars, or conferences that focus on areas you wish to grow in?",
+    "What new book, podcast, or other resource are you looking to explore to gain knowledge or inspiration?"
   ],
 };
