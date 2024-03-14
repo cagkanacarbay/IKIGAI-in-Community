@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from '@/components/ui/button'; 
 import { ZoneName, zoneAspectTypes, defaultButtonColors, zoneBgColor, zones, zoneIconPaths } from '@/lib/types'; 
-import { useEditor, stopEventPropagation } from 'tldraw'; 
+import { useEditor, stopEventPropagation, DefaultToolbar } from 'tldraw'; 
 import Image from 'next/image';
 import { createAspectAction, addAspectTypeAction, removeAspectTypeAction } from './aspectActions';
 
@@ -55,11 +55,8 @@ const CreateAspectButtons: React.FC<CreateAspectButtonsProps> = ({ zoneName }) =
   const getButtonClasses = (aspectType: string) => {
     let classes = `w-12 h-12 rounded-lg flex items-center justify-center overflow-visible opacity-100 flex-shrink-0 relative `;
     classes += defaultButtonColors[zoneName]; // Apply base color
-    if (selectedAspect === aspectType) {
-      classes += ` ${selectedButtonColors[zoneName]}`; // Apply selected color
-    }
-    if (hoveredAspect === aspectType) {
-      // Apply hover effect manually
+    if (selectedAspect === aspectType || hoveredAspect === aspectType) {
+      // Apply selected color or hover effect
       classes = classes.replace(defaultButtonColors[zoneName], selectedButtonColors[zoneName]);
     }
     return classes;
@@ -69,11 +66,16 @@ const CreateAspectButtons: React.FC<CreateAspectButtonsProps> = ({ zoneName }) =
 		if (selectedAspect) {
 			console.log("setting selected aspect Tool to", selectedAspect)
 			console.log("editor", editor)
-			
-
 			editor.setCurrentTool(selectedAspect);
 		} 
 	}, [selectedAspect]);
+
+  useEffect(() => {
+    if (editor.getCurrentTool().id != selectedAspect) {
+      setSelectedAspect(null);
+    }
+  }, [editor.getCurrentTool()]);
+  
 
   return (
     <div className={`flex flex-column bg-white rounded-lg pointer-events-auto p-2 mx-4 space-x-2 mb-2 shadow-md ${buttonOffsets[zoneName]}`}>
@@ -82,7 +84,7 @@ const CreateAspectButtons: React.FC<CreateAspectButtonsProps> = ({ zoneName }) =
           key={aspectType}
           onMouseEnter={() => setHoveredAspect(aspectType)}
           onMouseLeave={() => setHoveredAspect(null)}
-          onClick={() => setSelectedAspect(aspectType)}
+          onClick={() => setSelectedAspect(prevAspect => prevAspect === aspectType ? null : aspectType)}
           className={getButtonClasses(aspectType)}
         >
           <Image src={`/icons/aspects/${aspectType}.png`} alt={aspectType} width={36} height={36} />
@@ -142,6 +144,9 @@ export default function CustomToolbar() {
         <ToolbarZoneButton zoneName="The Cause" isSelected={isSelected} handleButtonClick={handleZoneButtonClick} />
         <ToolbarZoneButton zoneName="The Path" isSelected={isSelected} handleButtonClick={handleZoneButtonClick} />
       </div>
+
+      {/* <DefaultToolbar/> */}
+
     </div>
   );
 }

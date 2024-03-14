@@ -131,9 +131,9 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
 
   };
 
-  onDoubleClick = (shape: IAspectShape) => {
-    console.log("double click: ", shape)
-  }
+  // onDoubleClick = (shape: IAspectShape) => {
+  //   console.log("double click: ", shape)
+  // }
 
   getDefaultProps(): IAspectShape['props'] {
     return {
@@ -167,7 +167,7 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
   }
 
   getHeight(shape: IAspectShape) {
-    console.log("shape height by growy: ", BASE_ASPECT_HEIGHT + shape.props.growY, "actual shape height: ", shape.props.h)
+    // console.log("shape height by growy: ", BASE_ASPECT_HEIGHT + shape.props.growY, "actual shape height: ", shape.props.h)
 		return Math.max(BASE_ASPECT_HEIGHT + shape.props.growY, this.getMinHeight(shape))
 	}
 
