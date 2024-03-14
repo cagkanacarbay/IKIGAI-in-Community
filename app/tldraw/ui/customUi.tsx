@@ -1,12 +1,11 @@
 import { 
-  TLUiOverrides, findMenuItem, menuItem, 
-  Editor, toolbarItem, TLUiMenuGroup, 
-  TLUiActionItem, menuGroup, 
-  menuSubmenu, JsonObject
+  TLUiOverrides, 
+  Editor, toolbarItem, 
+  TLUiActionItem, 
 } from '@tldraw/tldraw';
 import { saveImageAssetsAsBlobsAndUpdateMetadata, saveAsJSON, uploadSnapshot } from '../boardStorage';
 import { ZoneName, aspectTypes, getZoneName } from '@/lib/types';
-import { createAspectAction, addAspectTypeAction, removeAspectTypeAction } from './actions';
+import { createAspectAction, addAspectTypeAction, removeAspectTypeAction } from './customUI/aspectActions';
 
 interface AssetSrc {
   id: string;
@@ -71,8 +70,7 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
     actions: (editor, actions) => {
       actions['save'] = {
         id: 'save',
-        label: 'Save',
-        menuLabel: "Save Ikigai",
+        label: 'Save Ikigai',
         icon: 'save',
         readonlyOk: true,
         /**
@@ -107,8 +105,7 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
 
       actions['save-local'] = {
         id: 'save-local',
-        label: 'Save',
-        menuLabel: "Save Ikigai Locally",
+        label: 'Save Ikigai Locally',
         icon: 'check',
         readonlyOk: true,
         onSelect: (source: any) => {
@@ -170,206 +167,40 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
 
     tools: (editor, tools) => {
       // console.log("here are the tools: ", tools)
-      const filteredTools: Record<string, any> = {};
+      // const filteredTools: Record<string, any> = {};
 
-      Object.keys(tools).forEach(key => {
-        if (!toolsToRemove.includes(key)) {
-          filteredTools[key] = tools[key];
+      // Object.keys(tools).forEach(key => {
+      //   if (!toolsToRemove.includes(key)) {
+      //     filteredTools[key] = tools[key];
+      //   }
+      // });
+
+      aspectTypes.forEach((aspectType) => {
+        const zoneName = getZoneName(aspectType);
+        if (zoneName) {
+          // console.log("adding aspectType:", aspectType, "to tools"	)
+          tools[aspectType] = {
+            id: aspectType, 
+            icon: aspectType, 
+            label: `tool.${aspectType}`,
+            // kbd: undefined, 
+            onSelect: () => {
+              console.log("setting current tool to", aspectType)
+              editor.setCurrentTool(aspectType);
+            },
+          }
         }
       });
+      
 
       // ... additional tool configuration ...
-      // console.log(filteredTools)
+      // console.log("filteredTools", filteredTools)
+
+      // console.log("tools:", tools)
 
       return tools;
-    },
-
-    toolbar: (_app, toolbar, { tools }) => {
-      const filteredToolbar = toolbar.filter(item => !toolsToRemove.includes(item.id));
-      // ... additional toolbar configuration ...
-      // console.log(tools)
-      // console.log("logging tools card:", tools.card)
-
-      return filteredToolbar;
-    },
-
-    keyboardShortcutsMenu: (_app, keyboardShortcutsMenu, { tools }) => {
-      keyboardShortcutsMenu.forEach(group => {
-        if ('children' in group) {
-          group.children = group.children.filter(
-            item => item && !toolsToRemove.includes(item.id)
-          );
-        }
-      });
-
-      return keyboardShortcutsMenu;
-    },
-
-    menu: (editor, menu, { actions }) => {
-      const fileMenu = findMenuItem(menu, ['menu', 'file']);
-      if (fileMenu.type === 'submenu') {
-        const saveMenuItem = menuItem(actions['save']);
-        const saveLocalMenuItem = menuItem(actions['save-local']);
-        fileMenu.children.unshift(saveMenuItem);
-        fileMenu.children.unshift(saveLocalMenuItem);
-      }
-      return menu;
-    },
-
-    contextMenu(editor, contextMenu, { actions }) {
-      // const newMenuItem = menuItem(actions['add-aspect'])
-
-      const REMOVED_CONTEXT_MENU_OPTIONS = [
-        // 'selection',          // Duplicate and Toggle Locked.         TODO: add Toggle Locked back 
-        'modify',             // Reorder and Move to page.            TODO: add reorder back
-        // 'clipboard-group', // Cut copy paste
-        // 'conversions',        // Copy as SVG, PNG, JSON, Export as SVG, PNG, JSON
-        // 'delete-group',    // Delete
-        'set-selection-group' // Select all, select none
-      ];
-
-      contextMenu = contextMenu.filter(group => {
-        return !REMOVED_CONTEXT_MENU_OPTIONS.includes(group.id);
-      });
-      
-      // console.log(contextMenu);
-
-      // const CUSTOM_TYPES = ['aspect'];
-
-      // const selectedShapes = editor.getSelectedShapes()
-      // const selectedAspects = selectedShapes.filter(shape => CUSTOM_TYPES.includes(shape.type));
-      // const aspectSelected = selectedShapes.some(shape => CUSTOM_TYPES.includes(shape.type));
-
-      // // console.log("Selected Aspects: ", selectedAspects)
-      // // console.log("Has aspect: ", aspectSelected);
-      // // console.log("selected shapes are: ", selectedShapes)
-
-      // const createAspectMenu: TLUiMenuGroup = menuGroup(
-      //   'create-aspect-group',
-      //   !aspectSelected && menuSubmenu(
-      //     'create-aspect',
-      //     'Create an Aspect',
-      //     menuGroup(
-      //       'heart-aspects',
-      //       menuItem(actions['create-interest']),
-      //       menuItem(actions['create-value']),
-      //       menuItem(actions['create-dream']),
-      //       menuItem(actions['create-influence']),
-      //     ),
-      //     menuGroup(
-      //       'craft-aspects',
-      //       menuItem(actions['create-skill']),
-      //       menuItem(actions['create-knowledge']),
-      //       menuItem(actions['create-tools']),
-      //       menuItem(actions['create-strength']),
-      //     ),
-      //     menuGroup(
-      //       'cause-aspects',
-      //       menuItem(actions['create-global']),
-      //       menuItem(actions['create-communal']),
-      //       menuItem(actions['create-societal']),
-      //       menuItem(actions['create-personal']),
-      //     ),
-      //     menuGroup(
-      //       'path-aspects',
-      //       menuItem(actions['create-business-idea']),
-      //       menuItem(actions['create-career']),
-      //       menuItem(actions['create-freelance']),
-      //       menuItem(actions['create-industry']),
-      //     ),
-      //   )
-      // ) as TLUiMenuGroup; 
-      
-
-      // const selectedAspectTypes = selectedAspects.flatMap(shape => shape.meta.aspectTypes);
-
-      // const addAspectTypeMenu: TLUiMenuGroup = menuGroup(
-      //   'edit-aspect-type-group',
-      //   aspectSelected && menuSubmenu(
-      //     'add-aspect-type',
-      //     'Add an Aspect Type',
-      //     menuGroup(
-      //       'heart-aspects',
-      //       menuItem(actions['add-interest'],),
-      //       menuItem(actions['add-value']),
-      //       menuItem(actions['add-dream']),
-      //       menuItem(actions['add-influence']),
-      //     ),
-      //     menuGroup(
-      //       'craft-aspects',
-      //       menuItem(actions['add-skill']),
-      //       menuItem(actions['add-knowledge']),
-      //       menuItem(actions['add-tools']),
-      //       menuItem(actions['add-strength']),
-      //     ),
-      //     menuGroup(
-      //       'cause-aspects',
-      //       menuItem(actions['add-global']),
-      //       menuItem(actions['add-communal']),
-      //       menuItem(actions['add-societal']),
-      //       menuItem(actions['add-personal']),
-      //     ),
-      //     menuGroup(
-      //       'path-aspects',
-      //       menuItem(actions['add-business-idea']),
-      //       menuItem(actions['add-career']),
-      //       menuItem(actions['add-freelance']),
-      //       menuItem(actions['add-industry']),
-      //     ),
-      //   ),
-      //   aspectSelected && menuSubmenu(
-      //     'remove-aspect-type',
-      //     'Remove Aspect Type',
-      //     menuGroup(
-      //       'heart-aspects',
-      //       ...removeAspectTypeMenuItems(selectedAspectTypes, 
-      //         ['interest', 'value', 'dream', 'influence'], 
-      //         actions
-      //       ),
-      //     ),
-      //     menuGroup(
-      //       'craft-aspects',
-      //       ...removeAspectTypeMenuItems(selectedAspectTypes, 
-      //         ['skill', 'knowledge', 'tools', 'strength'], 
-      //         actions
-      //       ),
-
-      //     ),
-      //     menuGroup(
-      //       'cause-aspects',
-      //       ...removeAspectTypeMenuItems(selectedAspectTypes, 
-      //         ['global', 'communal', 'societal', 'personal'], 
-      //         actions
-      //       ),
-      //     ),
-      //     menuGroup(
-      //       'path-aspects',
-      //       ...removeAspectTypeMenuItems(selectedAspectTypes, 
-      //         ['business-idea', 'career', 'freelance', 'industry'], 
-      //         actions
-      //       ),
-
-      //     ),
-      //   )
-      // ) as TLUiMenuGroup; 
-
-
-      // contextMenu.unshift(createAspectMenu, addAspectTypeMenu)
-      return contextMenu
     },
 
   };
 };
 
-
-const removeAspectTypeMenuItems = (selectedAspectTypes: any, aspectTypes: string[], actions: any) => {
-  return aspectTypes
-    .map(type => {
-      // Only create a menu item if the aspectType exists in the selectedAspectTypes
-      if (selectedAspectTypes.includes(type)) {
-        return menuItem(actions[`remove-${type}`]);
-      }
-      return false; // Return false instead of undefined
-    })
-    .filter(item => item !== false); // Filter out false items
-}

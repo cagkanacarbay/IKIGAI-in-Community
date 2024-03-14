@@ -1,5 +1,5 @@
 import {
-	Box2d,
+	Box,
 	TLDefaultColorStyle,
 	TLDefaultFillStyle,
 	TLDefaultFontStyle,
@@ -67,7 +67,7 @@ export const TextLabel = React.memo(function TextLabel<
 	wrap?: boolean
 	text: string
 	labelColor: TLDefaultColorStyle
-	bounds?: Box2d
+	bounds?: Box,
 }) {
 	const {
 		rInput,
@@ -93,7 +93,7 @@ export const TextLabel = React.memo(function TextLabel<
 
 	return (
 		<div
-			className="tl-text-label mr-6 ml-6 overflow-hidden"
+			className="tl-text-label px-6 py-2 overflow-hidden border border-red-500"
 			data-font={font}
 			data-align={align}
 			data-hastext={!isEmpty}

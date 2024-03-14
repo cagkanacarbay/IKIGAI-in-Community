@@ -31,7 +31,7 @@ import { AspectIcon, ZoneIcon} from './aspectIcons';
 import { AspectType } from '@/lib/types';
 import { TextLabel, TEXT_PROPS, FONT_FAMILIES, LABEL_FONT_SIZES } from '../tldrawHelpers/textLabel';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+
 
 export const BASE_ASPECT_HEIGHT = 32
 export const MIN_ASPECT_WIDTH = 120
@@ -63,7 +63,7 @@ export const aspectShapeProps = {
   text: T.string,
   w: T.nonZeroNumber,
   h: T.nonZeroNumber,
-  zone: T.setEnum(new Set(["The Heart", "The Craft", "The Path", "The Cause"])),
+  zone: T.setEnum(new Set(["The Heart", "The Craft", "The Path", "The Cause"])), 
 };
 
 
@@ -79,7 +79,6 @@ export declare type IAspectShape = TLBaseShape<'aspect', AspectShapeProps> & { m
 export default class AspectShape extends ShapeUtil<IAspectShape> {
   static override type = 'aspect' as const;
   static override props = aspectShapeProps;
-
 
   override isAspectRatioLocked = (_shape: IAspectShape) => false
 	override canResize = (_shape: IAspectShape) => true
@@ -131,9 +130,9 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
 
   };
 
-  onDoubleClick = (shape: IAspectShape) => {
-    console.log("double click: ", shape)
-  }
+  // onDoubleClick = (shape: IAspectShape) => {
+  //   console.log("double click: ", shape)
+  // }
 
   getDefaultProps(): IAspectShape['props'] {
     return {
@@ -143,7 +142,7 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
       font: 'mono',
       align: 'middle',
       verticalAlign: 'middle',
-      growY: 6,
+      growY: 0,
       w: MIN_ASPECT_WIDTH,
       h: BASE_ASPECT_HEIGHT,
       // aspectTypes: ['skill'],
@@ -167,7 +166,7 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
   }
 
   getHeight(shape: IAspectShape) {
-    console.log("shape height by growy: ", BASE_ASPECT_HEIGHT + shape.props.growY, "actual shape height: ", shape.props.h)
+    console.log("shape height: ", BASE_ASPECT_HEIGHT + shape.props.growY)
 		return Math.max(BASE_ASPECT_HEIGHT + shape.props.growY, this.getMinHeight(shape))
 	}
 
@@ -188,13 +187,14 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
     const colorClass = bgColors[color as keyof typeof bgColors]; 
     const minWidth = `${MIN_ASPECT_WIDTH}px`
 
+
+    // console.log("shape details:  ", shape)
+    console.log("the height is: ", h, "heigh calculated by getHeight: ", this.getHeight(shape))
+
     return (
         <motion.div 
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.3 }}
           whileTap={{ scale: 0.8, transition:{ duration: 0.275}}}
-          style={{width: w, height: this.getHeight(shape), minHeight}} 
+          style={{width: w, height: h, minHeight}} 
           id={id}
           className={`
             aspect
@@ -210,7 +210,7 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
                 <AspectIcon key={type} type={type} />
               ))}
             </div>
-            <div className="flex justify-center items-center p-2">
+            <div className="flex justify-center items-center border py-2">
               <TextLabel 
                 id={id}
                 type="text"
@@ -259,7 +259,7 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
 
     
     const minHeight = BASE_ASPECT_HEIGHT * next.meta.aspectTypes.length;
-    // console.log("min height according ti icon number: ", minHeight)
+    console.log("min height according ti icon number: ", minHeight)
     if (next.props.h < minHeight) {
       next.props.h = minHeight;
     }
@@ -299,13 +299,14 @@ function updateGrowYProp(editor: Editor, shape: IAspectShape, prevGrowY = 0) {
     maxWidth: shape.props.w - PADDING,
   })
   
-  const textHeight = nextTextSize.h 
+  const textHeight = nextTextSize.h + PADDING * 2
 
   let growY: number | null = null
 
   if (shape.props.h > textHeight) {
     growY = shape.props.h - BASE_ASPECT_HEIGHT
   } else if (textHeight > BASE_ASPECT_HEIGHT) {
+    // TODO: fix min height as calculated here. IKI-62
     growY = textHeight - BASE_ASPECT_HEIGHT
 
   } else {
@@ -316,12 +317,18 @@ function updateGrowYProp(editor: Editor, shape: IAspectShape, prevGrowY = 0) {
     growY = 0;
   } 
 
-  return {
+  console.log("calculated growY as: ", growY, "text height: ", textHeight, "shape height: ", shape.props.h, "base height: ", BASE_ASPECT_HEIGHT)
+
+  const updatedShape = {
     ...shape,
     props: {
       ...shape.props,
-      growY,
+      // h: growY+ shape.props.h,
     },
   }
+
+  console.log("update shapae ", updatedShape)
+
+  return updatedShape
   
 }

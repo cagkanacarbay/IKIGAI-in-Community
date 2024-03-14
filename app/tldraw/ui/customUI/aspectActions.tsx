@@ -1,9 +1,9 @@
-import { getZoneColor } from './customUi';
+import { getZoneColor } from '../customUi';
 import { AspectType, ZoneName } from '@/lib/types';
 import { Editor, createShapeId, TLUiToast } from '@tldraw/tldraw';
 import { ulid } from 'ulid';
-import AspectShapeUtil from '../shapes/aspect';
-import { getShapeTypes } from './customUi';
+import AspectShapeUtil from '../../shapes/aspect';
+import { getShapeTypes } from '../customUi';
 import { toast } from "sonner"
 
 

@@ -11,35 +11,34 @@ import AspectShapeUtil, { IAspectShape } from './shapes/aspect';
 import { IntroOverlay } from './ui/IntroOverlay';
 import InFrontOfTheCanvasComponents from './onboarding/inFrontOfCanvasComponents';
 import { UserGuide } from './onboarding/userGuide/UserGuide';
-
-
-import { DefaultToolbar, TLComponents} from 'tldraw'
+import CustomActionsMenu from './ui/customUI/customActions';
+import CustomToolbar from './ui/customUI/customToolbar';
+import { customAssetUrls } from './ui/customUI/customAssets';
+import { DefaultToolbar, useTools, TLComponents, DefaultKeyboardShortcutsDialog, DefaultKeyboardShortcutsDialogContent, TldrawUiMenuItem} from 'tldraw'
 import 'tldraw/tldraw.css'
+import { aspectTypeTools } from './ui/customUI/aspectTypeTools';
 
-// function CustomToolbar() {
-// 	return (
-// 		<div style={{ transform: 'rotate(180deg)' }}>
-// 			<DefaultToolbar />
-// 		</div>
-// 	)
-// }
 
 const components: TLComponents = {
-	// Toolbar: CustomToolbar, // null will hide the panel instead
+  // Use null to hide any panel
+	Toolbar: CustomToolbar, 
   OnTheCanvas: UserGuide,
   InFrontOfTheCanvas: InFrontOfTheCanvasComponents,
-
+  // ActionsMenu: CustomActionsMenu,
+  // KeyboardShortcutsDialog: (props) => {
+	// 	const tools = useTools()
+	// 	return (
+	// 		<DefaultKeyboardShortcutsDialog {...props}>
+	// 			<DefaultKeyboardShortcutsDialogContent />
+	// 			{/* Ideally, we'd interleave this into the tools group */}
+	// 			{/* <TldrawUiMenuItem {...tools['arrow']} /> */}
+	// 		</DefaultKeyboardShortcutsDialog>
+	// 	)
+	// },
 }
 
-// const components: TLEditorComponents = {
-//   // InFrontOfTheCanvas: GuidedTour,
-//   OnTheCanvas: UserGuide,
-//   InFrontOfTheCanvas: InFrontOfTheCanvasComponents,
-//   	Toolbar: CustomToolbar, // null will hide the panel instead
 
-// }
-
-// const customTools = [];
+const customTools = [...aspectTypeTools];
 const customShapeUtils = [IkigaiCircleShapeUtil, AspectShapeUtil];
 
 interface IkigaiBoardV2Props {
@@ -141,11 +140,12 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
           store={storeWithStatus}
           overrides={customUiOverrides}
           shapeUtils={customShapeUtils} 
-          // tools={customTools}
+          tools={customTools}
           components={components}
           autoFocus
           persistenceKey="persistence-key"
           className='z-10'
+          assetUrls={customAssetUrls}
         >
 
           {loadWelcome && (

@@ -75,6 +75,7 @@ export const getZoneName = (aspectType: AspectType): ZoneName => {
   return zoneName as ZoneName;
 }
 
+// TODO: merge these path objects 
 export const zoneIconSrc = {
   "The Heart": "heart.png",
   "The Craft": "craft.png",
@@ -82,13 +83,30 @@ export const zoneIconSrc = {
   "The Path": "path.png"
 }
 
+export const zoneIconPaths = {
+  "The Heart": "/icons/zones/heart.png",
+  "The Craft": "/icons/zones/craft.png",
+  "The Cause": "/icons/zones/cause.png",
+  "The Path": "/icons/zones/path.png"
+}
 
+
+// TODO: merge these colors 
 export const zoneBgColor = {
   "The Heart": "red",
   "The Craft": "blue",
   "The Cause": "green",
   "The Path": "yellow"
 }
+
+
+export const defaultButtonColors = {
+  "The Heart": "bg-red-50 hover:bg-red-300",
+  "The Craft": "bg-blue-50 hover:bg-blue-300",
+  "The Cause": "bg-green-50 hover:bg-green-300",
+  "The Path": "bg-yellow-50 hover:bg-yellow-300"
+}
+
 
 
 // export function getBackgroundColorTailwind(zoneName: ZoneName, tailwindColorStrength: number): string {
