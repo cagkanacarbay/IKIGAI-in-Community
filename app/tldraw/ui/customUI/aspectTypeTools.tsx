@@ -44,7 +44,7 @@ class AspectTypeTool extends StateNode {
       }, 
     });
 
-    console.log("selected shapeId", shapeId)
+    // Select the newly created shape to edit
     this.editor.setEditingShape(shapeId)
   };
 }

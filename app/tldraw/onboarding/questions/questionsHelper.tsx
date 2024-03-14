@@ -132,6 +132,7 @@ export const QuestionHelper: React.FC = () => {
 
       editor.select(newAspectId);
       editor.zoomToSelection({ duration: 400});
+      editor.setEditingShape(newAspectId)
 
     };
 

@@ -93,7 +93,7 @@ export const TextLabel = React.memo(function TextLabel<
 
 	return (
 		<div
-			className="tl-text-label px-6 py-2 overflow-hidden border border-red-500"
+			className="tl-text-label px-6 py-2 overflow-hidden"
 			data-font={font}
 			data-align={align}
 			data-hastext={!isEmpty}
