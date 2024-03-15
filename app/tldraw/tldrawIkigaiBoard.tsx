@@ -21,12 +21,12 @@ import { aspectTypeTools } from './ui/customUI/aspectTypeTools';
 
 const components: TLComponents = {
   // Use null to hide any panel
-	Toolbar: CustomToolbar, 
+  Toolbar: (toolbarProps) => <CustomToolbar {...toolbarProps} />, 
   OnTheCanvas: UserGuide,
   InFrontOfTheCanvas: InFrontOfTheCanvasComponents,
   // ActionsMenu: CustomActionsMenu,
   // KeyboardShortcutsDialog: (props) => {
-	// 	const tools = useTools()
+	// 	const tools = useTools() 
 	// 	return (
 	// 		<DefaultKeyboardShortcutsDialog {...props}>
 	// 			<DefaultKeyboardShortcutsDialogContent />

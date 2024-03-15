@@ -26,6 +26,7 @@
     "@radix-ui/react-scroll-area": "^1.0.5",
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
+    "@radix-ui/react-tooltip": "^1.0.7",
     "@tldraw/tldraw": "^2.1.0-canary.eb80cf787bcf",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",

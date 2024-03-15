@@ -201,6 +201,17 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
       return tools;
     },
 
+    toolbar: (_app, toolbar, { tools }) => {
+      console.log("here are the tools: ", tools)
+      const filteredToolbar = toolbar.filter(item => !toolsToRemove.includes(item.id));
+      // ... additional toolbar configuration ...
+      // console.log(tools)
+      // console.log("logging tools card:", tools.card)
+      console.log("filteredToolbar", filteredToolbar	)
+
+      return filteredToolbar;
+    },
+
   };
 };
 
