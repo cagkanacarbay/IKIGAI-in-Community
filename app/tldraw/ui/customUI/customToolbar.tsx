@@ -175,7 +175,7 @@ const CustomToolbar: React.FC<any> = (props) => {
         </AnimatePresence>
 
         <div className="
-          bg-white py-2 space-x-1 h-auto w-full mb-1 
+          bg-white py-2 space-x-1 h-auto w-full mb-16
           rounded-xl shadow-md flex items-bottom justify-center z-50
         ">  
           <ToolbarZoneButton zoneName="The Craft" isSelected={isSelected} handleButtonClick={handleZoneButtonClick} />
