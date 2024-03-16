@@ -137,7 +137,7 @@ function useIsToolSelected(tool: TLUiToolItem) {
 
 
 
-const CustomToolbar: React.FC<any> = (props) => {
+const CustomToolbar: React.FC = () => {
   const [selectedZone, setSelectedZone] = useState<ZoneName | null>(null);
 
   const handleZoneButtonClick = (zoneName: ZoneName) => {
@@ -175,7 +175,7 @@ const CustomToolbar: React.FC<any> = (props) => {
         </AnimatePresence>
 
         <div className="
-          bg-white py-2 space-x-1 h-auto w-full mb-16
+          bg-white py-2 space-x-1 h-auto w-full mb-16 border border-gray-200
           rounded-xl shadow-md flex items-bottom justify-center z-50
         ">  
           <ToolbarZoneButton zoneName="The Craft" isSelected={isSelected} handleButtonClick={handleZoneButtonClick} />
@@ -185,7 +185,7 @@ const CustomToolbar: React.FC<any> = (props) => {
         </div>
       </div>
 
-			<DefaultToolbar {...props} />
+			<DefaultToolbar />
     </div>
   );
 };

@@ -1,3 +1,4 @@
+"use client"
 import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 import { IAspectShape } from './shapes/aspect';
 import { AspectType } from '@/lib/types';
@@ -46,11 +47,9 @@ export const BoardProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   useEffect(() => {
     const savedStep = parseInt(localStorage.getItem('tutorialStep') || '0', 10);
     setStep(savedStep);
-
-    const tutorialCompleted = localStorage.getItem('tutorialCompleted');
-    if (tutorialCompleted === 'true') {
-      setIsTutorialCompleted(true);
-    }
+  
+    const tutorialCompleted = localStorage.getItem('tutorialCompleted') === 'true';
+    setIsTutorialCompleted(tutorialCompleted);
 
   }, []);
 
@@ -61,6 +60,7 @@ export const BoardProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       setIsTutorialCompleted(true);
       localStorage.setItem('tutorialCompleted', 'true');
     }
+
   }, [step]);
 
 

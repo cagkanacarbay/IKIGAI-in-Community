@@ -13,12 +13,15 @@ export default NextAuth({
         password:  { label: "Password", type: "password" }
       },
       authorize: async (credentials, req) => {
+        console.log("new loging", credentials)
 
         if (!credentials) return null;
         
         const user = await prisma.user.findUnique({
           where: { username: credentials.username }
         });
+
+        console.log("user", user)
 
         if (user && bcrypt.compareSync(credentials.password, user.password_hash)) {
           return {
@@ -27,6 +30,7 @@ export default NextAuth({
             email: user.email
           };
         }
+        console.log("Authentication failed");
 
         return null;
       }
@@ -35,7 +39,7 @@ export default NextAuth({
   callbacks: {
     async session({ session, token }) {
       if (token.sub) {
-        session.user.id = token.sub; // Assuming `id` is stored in the token
+        session.user.id = token.sub; 
       }
       return session;
     },

@@ -23,6 +23,9 @@ export const customAssetUrls: TLUiAssetUrlOverrides = {
     'business-idea': '/icons/aspects/business-idea.png',
     'career': '/icons/aspects/career.png',
     'growth': '/icons/aspects/growth.png',
+
+    // other icons
+    'save': '/icons/save.svg',
   
   },
 }

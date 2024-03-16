@@ -133,13 +133,13 @@ export const QUESTIONS: Record<AspectType, string[]> = {
     "If you had to do a PHD starting tomorrow based entirely on what you find intellectually interesting what would you do it on?",
   ],
   "financial-freedom": [
-    "Who are your ideal clients? Startups, SMEs, corporations, ...?",
-    "Are you open to ",
     "What's a freelance project you'd like to work on in the future?",
     "What's a one day business you can spin up today?",
+    "",
   ],
   growth: [
     "What area of your professional expertise are you looking to deepen?",
+    "In which areas of your life are you seeking to grow?",
     "Are there any new technologies or tools you want to learn?",
     "Is there a particular language, either programming or spoken, you aim to learn?",
     "What soft skill (e.g., communication, leadership, time management) do you believe will make the biggest impact on your growth?",

@@ -13,7 +13,6 @@ interface AssetSrc {
 }
 
 const toolsToRemove: string[] = [
-  "arror",
   "note",
   "draw",
   "eraser",
@@ -24,6 +23,9 @@ const toolsToRemove: string[] = [
   "trapezoid",
   "text",
   "rhombus",
+  "rhombus-2",
+  "pentagon",
+  "octagon",
   "hexagon",
   "x-box",
   "check-box",
@@ -167,6 +169,10 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
 
     tools: (editor, tools) => {
       // console.log("here are the tools: ", tools)
+
+      // FILTERING OUT TOOLS results in an error. we need to investigate. but for now we can just remove them from the toolbar.
+      // A user may use the shortcuts tho. 
+
       // const filteredTools: Record<string, any> = {};
 
       // Object.keys(tools).forEach(key => {
@@ -178,7 +184,6 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
       aspectTypes.forEach((aspectType) => {
         const zoneName = getZoneName(aspectType);
         if (zoneName) {
-          // console.log("adding aspectType:", aspectType, "to tools"	)
           tools[aspectType] = {
             id: aspectType, 
             icon: aspectType, 
@@ -202,12 +207,14 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
     },
 
     toolbar: (_app, toolbar, { tools }) => {
-      console.log("here are the tools: ", tools)
+      // console.log(" YOYOYOYOYO here are the toolbar pre filter: ", toolbar)
       const filteredToolbar = toolbar.filter(item => !toolsToRemove.includes(item.id));
       // ... additional toolbar configuration ...
       // console.log(tools)
       // console.log("logging tools card:", tools.card)
-      console.log("filteredToolbar", filteredToolbar	)
+      // console.log("filteredToolbar", filteredToolbar	)
+      filteredToolbar.splice(4, 0, toolbarItem(tools.embed))
+
 
       return filteredToolbar;
     },

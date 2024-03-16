@@ -15,7 +15,6 @@ class AspectTypeTool extends StateNode {
   constructor(editor: Editor, parent?: StateNode) {
     super(editor, parent);
     this.zone = getZoneName(this.id as AspectType);
-    console.log("zone", this.zone)
   }
 
   override onEnter = () => {
@@ -24,8 +23,6 @@ class AspectTypeTool extends StateNode {
 
 	override onPointerDown: TLEventHandlers['onPointerDown'] = (info) => {
     const { currentPagePoint } = this.editor.inputs;
-    console.log("zone", this.zone)
-
     const shapeId = createShapeId(ulid());
 
     this.editor.createShape({
@@ -40,6 +37,7 @@ class AspectTypeTool extends StateNode {
         zone: this.zone, 
         color: zoneBgColor[this.zone as ZoneName],
         align: 'middle',	 
+        w: MIN_ASPECT_WIDTH + 20,
         text: "...",
       }, 
     });

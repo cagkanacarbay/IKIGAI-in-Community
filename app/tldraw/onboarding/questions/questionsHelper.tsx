@@ -57,7 +57,7 @@ const reshapeQuestions = (): Question[] => {
       });
     });
   });
-  console.log("reshapedQuestions: ", reshapedQuestions	)
+  // console.log("reshapedQuestions: ", reshapedQuestions	)
   return reshapedQuestions;
 };
 
@@ -193,8 +193,8 @@ export const QuestionHelper: React.FC = () => {
 
   // Handlers to get the next, previous, or random question
   const setNextQuestion = () => {
-    console.log("setting next question, current index: ", currentQuestionIndex)
-    console.log("current question: ", currentQuestion)
+    // console.log("setting next question, current index: ", currentQuestionIndex)
+    // console.log("current question: ", currentQuestion)
     setCurrentQuestionIndex((currentQuestionIndex + 1) % questions.length); // loop back to 0th index
   };
 
@@ -209,7 +209,7 @@ export const QuestionHelper: React.FC = () => {
   };
 
   const setAspectTypeQuestion = (aspectType: AspectType) => {
-    console.log("setting aspect type question: ", aspectType)
+    // console.log("setting aspect type question: ", aspectType)
     const questionsOfType = questions.filter(question => question.aspectType === aspectType);
     const randomQuestion = questionsOfType[Math.floor(Math.random() * questionsOfType.length)];
     // const randomIndex = Math.floor(Math.random() * questionsOfType.length);

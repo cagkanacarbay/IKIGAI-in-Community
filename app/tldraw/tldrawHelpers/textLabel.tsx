@@ -22,10 +22,10 @@ export function isLegacyAlign(align: TLDefaultHorizontalAlignStyle | string): bo
 }
 
 export const LABEL_FONT_SIZES: Record<TLDefaultSizeStyle, number> = {
-	s: 12,
-	m: 14,
-	l: 18,
-	xl: 22,
+	s: 6,
+	m: 10,
+	l: 14,
+	xl: 18,
 }
 
 export const TEXT_PROPS = {

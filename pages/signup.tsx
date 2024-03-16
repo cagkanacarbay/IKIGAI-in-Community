@@ -1,11 +1,11 @@
 import React from 'react';
-import { RegistrationForm } from '@/components/signup';
+import { SignUpForm } from '@/components/signUpForm';
 
 
 export default function Signup() {
     return (
         <div className="flex justify-center items-center h-screen bg-gray-100">
-            <RegistrationForm />
+            <SignUpForm />
         </div>
     );
 }

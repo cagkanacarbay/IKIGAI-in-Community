@@ -17,13 +17,17 @@ import { customAssetUrls } from './ui/customUI/customAssets';
 import { DefaultToolbar, useTools, TLComponents, DefaultKeyboardShortcutsDialog, DefaultKeyboardShortcutsDialogContent, TldrawUiMenuItem} from 'tldraw'
 import 'tldraw/tldraw.css'
 import { aspectTypeTools } from './ui/customUI/aspectTypeTools';
+import CustomQuickActions from './ui/customUI/customQuickActions';
 
 
 const components: TLComponents = {
-  // Use null to hide any panel
-  Toolbar: (toolbarProps) => <CustomToolbar {...toolbarProps} />, 
+  Toolbar: CustomToolbar, 
   OnTheCanvas: UserGuide,
   InFrontOfTheCanvas: InFrontOfTheCanvasComponents,
+  ActionsMenu: null,
+  PageMenu: null,
+  QuickActions: CustomQuickActions,
+  HelpMenu: null
   // ActionsMenu: CustomActionsMenu,
   // KeyboardShortcutsDialog: (props) => {
 	// 	const tools = useTools() 
