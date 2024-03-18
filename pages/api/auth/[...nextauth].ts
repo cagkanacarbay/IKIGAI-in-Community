@@ -38,11 +38,14 @@ export default NextAuth({
   ],
   callbacks: {
     async session({ session, token }) {
+      console.log("session", session, token	)
       if (token.sub) {
         session.user.id = token.sub; 
       }
       return session;
     },
   },
-  // Additional NextAuth configuration...
+  session: {
+    strategy: "jwt",
+  },
 });

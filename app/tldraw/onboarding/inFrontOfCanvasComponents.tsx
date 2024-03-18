@@ -13,13 +13,12 @@ import { useSession } from 'next-auth/react';
 const InFrontOfTheCanvasComponents: React.FC = ({}) => {
 
   const { data: session } = useSession();
-  console.log(session)
 
   return (
     <>
       <Tutorial />
       <QuestionHelper />
-      <NotLoggedInAlert />
+      {session ? null : <NotLoggedInAlert />}
       <div id='helper-buttons'>
         <QuestionHelperButton />
         <UserGuideButton />

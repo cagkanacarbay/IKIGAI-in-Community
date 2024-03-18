@@ -11,32 +11,33 @@ export default function SignInForm() {
   const { data: session, status } = useSession();
 
   useEffect(() => {
-    console.log("session", session, status)
+    // If user is logged in just redirect them to tldraw
+    // console.log("session", session, status)
     if (status === "authenticated") {
       // Redirect or perform actions based on the authenticated session
-      console.log("Session:", session);
-      window.location.href = '/tldraw'; // Example redirect
+      window.location.href = '/tldraw'; 
     }
-  }, [session, status]);
+  }, [session]);
 
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    console.log("sending this info to credentials", username, password)
+    // console.log("sending this info to credentials", username, password)
     setError('');
     const result = await signIn('credentials', {
       redirect: false,
+      // callbackUrl: '/signin',
       username,
       password,
     });
 
-    console.log("signin result", result)
+    // console.log("signin result", result)
 
     if (result?.error) {
       setError('The username and password combination is incorrect.');
     } else {
-      // window.location.href = '/signin';
+      window.location.href = '/signin';
     }
   };
 
