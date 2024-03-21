@@ -80,8 +80,6 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
     setEditor(editor);
   }, []);
 
-  const [storeEvents, setStoreEvents] = useState<string[]>([])
-
   
   useEffect(() => {
     if (editor && introCompleted) {
@@ -97,19 +95,13 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
 
     const handleChangeEvent: TLEventMapHandler<'change'> = (change) => {
 
-
-      // Create new aspect events
       Object.values(change.changes.added)
       .filter(record => record.typeName === 'shape' && record.type === 'aspect')
       .forEach(record => {
           const aspectShape = convertToIAspectShape(record);
           if (aspectShape) {
-              // add to store events
-              // setStoreEvents([...storeEvents, {aspectShape.id}])
               addCreatedAspect(aspectShape);
               console.log("User created a new aspect", aspectShape);
-              console.log(record)
-
           }
       });
 

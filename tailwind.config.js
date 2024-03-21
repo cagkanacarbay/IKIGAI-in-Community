@@ -45,6 +45,9 @@ module.exports = withMT({
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      colors: {
+        'tldraw-menu-hover-gray': '#E3E6E8',
+      },
     },
   },
   plugins: [require("tailwindcss-animate"), require('@tailwindcss/forms'), require('tailwindcss-animated')],

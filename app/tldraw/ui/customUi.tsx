@@ -70,40 +70,6 @@ export function getShapeTypes(editor: Editor, shapeTypes: string[]) {
 export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => {
   return {
     actions: (editor, actions) => {
-      actions['save'] = {
-        id: 'save',
-        label: 'Save Ikigai',
-        icon: 'save',
-        readonlyOk: true,
-        /**
-         * Save processes each asset in the store, uploads them as blobs, 
-         * updates the store with blob_urls, and saves the snapshot to the databse.
-         * @param source The source of the onSelect event.
-         */
-        onSelect: async (source: any) => {
-          if (!isLoggedIn) {
-            if (window.confirm("You need to be signed in to save your IKIGAI. Sign up now?")) {
-              window.location.href = '/signup';
-            }
-            return;
-          }
-
-          if (editor && editor.store) {
-            const snapshot = editor.store.getSnapshot();
-            await saveImageAssetsAsBlobsAndUpdateMetadata(snapshot.store, editor);
-            const updatedSnapshot = editor.store.getSnapshot();
-                  
-            try {
-              const uploadResult = await uploadSnapshot(updatedSnapshot);
-              // console.log("Saved Ikigai snapshot with updated asset URLs.");
-              // console.log(uploadResult)
-
-            } catch (error) {
-              alert("Failed to save the snapshot to the database. Please try again.");
-            }
-          }
-        }
-      },
 
       actions['save-local'] = {
         id: 'save-local',
