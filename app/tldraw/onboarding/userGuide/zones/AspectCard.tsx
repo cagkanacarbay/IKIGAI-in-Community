@@ -32,7 +32,7 @@ const subtitleColors: Record<ZoneName, string> = {
 
 export const AspectCard: React.FC<AspectCardProps> = ({ aspectType, content, position, zoneName }) => {
 
-  const { setQuestionAspectType } = useBoardContext();
+  const { setQuestionAspectType, questionHelperVisible, toggleQuestionHelperVisibility } = useBoardContext();
 
   const bgColor = `bg-${zoneBgColor[zoneName]}-50`;
   const subtitleColor = subtitleColors[zoneName];
@@ -79,8 +79,13 @@ export const AspectCard: React.FC<AspectCardProps> = ({ aspectType, content, pos
         <CardFooter className="flex justify-center ">
           <Button 
             className="text-lg px-10 py-4" 
-            onClick={() => setQuestionAspectType(aspectType)}
-          >
+            onClick={() => {
+              setQuestionAspectType(aspectType);
+              if (!questionHelperVisible) {
+                toggleQuestionHelperVisibility();
+              }
+            }}          
+            >
             Ask me a question
           </Button>          
         </CardFooter>

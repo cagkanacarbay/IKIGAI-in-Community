@@ -4,10 +4,10 @@ import {
   ShapeUtil, HTMLContainer, Circle2d, getDefaultColorTheme, createShapeId, useEditor
 } from '@tldraw/tldraw';
 import { useEffect } from 'react';
-import { ZoneName } from '@/lib/types';
+import { zoneIconPaths, ZoneName } from '@/lib/types';
 import { ikigaiCircleIds } from './shapeIds';
 import { motion } from 'framer-motion';
-
+import { useState } from 'react';
 
 export const RADIUS = 800;
 
@@ -109,22 +109,21 @@ export default class IkigaiCircleShapeUtil extends ShapeUtil<IIkigaiCircleShape>
 
   component(shape: IIkigaiCircleShape) {
     const { x, y, radius } = shape.props;
-    console.log(shape)
-    const theme = getDefaultColorTheme({ isDarkMode: this.editor.user.getIsDarkMode() });
-    // const fillColor = theme[shape.props.color].semi; 
-    // const fillColor = "#c33c66"
-    // console.log("the color from theme is: ", theme[shape.props.color])
-    const fillColor = ikigaiCircleColors[shape.meta.zone];
     
+    const fillColor = ikigaiCircleColors[shape.meta.zone];
     const fillOpacity = 0.25;
-    console.log("the meta: ", shape.meta.zone)
+    const iconSize = 80;
+    const iconPositions = {
+      "The Heart": { x: radius - iconSize / 2, y: 40 },
+      "The Craft": { x: 40, y: radius - iconSize / 2 },
+      "The Cause": { x: radius * 2 - iconSize - 40, y: radius - iconSize / 2 },
+      "The Path": { x: radius - iconSize / 2, y: radius * 2 - iconSize - 40},
+    };
   
     return (
       <HTMLContainer id={`ikigai-circle-${shape.meta.zone}`}>
-        {/* <motion.div> */}
         <svg 
           id={shape.meta.zone} width={radius * 2} height={radius * 2} 
-          
           style={
             { 
               overflow: 'visible', 
@@ -132,7 +131,8 @@ export default class IkigaiCircleShapeUtil extends ShapeUtil<IIkigaiCircleShape>
               left: x , 
               top: y,
             }
-          }>
+          }
+          >
           <circle 
             cx={radius} 
             cy={radius} 
@@ -143,8 +143,14 @@ export default class IkigaiCircleShapeUtil extends ShapeUtil<IIkigaiCircleShape>
             strokeWidth="1"
             strokeOpacity={1}
           />
+          <image 
+            href={zoneIconPaths[shape.meta.zone]} 
+            x={iconPositions[shape.meta.zone].x} 
+            y={iconPositions[shape.meta.zone].y} 
+            height={iconSize} 
+            width={iconSize}
+          />
         </svg>
-        {/* </motion.div> */}
       </HTMLContainer>
     );
   }

@@ -3,9 +3,9 @@ import {
   Editor, toolbarItem, 
   TLUiActionItem, 
 } from '@tldraw/tldraw';
-import { saveImageAssetsAsBlobsAndUpdateMetadata, saveAsJSON, uploadSnapshot } from '../boardStorage';
+import { saveImageAssetsAsBlobsAndUpdateMetadata, saveAsJSON, uploadSnapshot } from '../../boardStorage';
 import { ZoneName, aspectTypes, getZoneName } from '@/lib/types';
-import { createAspectAction, addAspectTypeAction, removeAspectTypeAction } from './customUI/aspectActions';
+import { createAspectAction, addAspectTypeAction, removeAspectTypeAction } from './aspectActions';
 
 interface AssetSrc {
   id: string;

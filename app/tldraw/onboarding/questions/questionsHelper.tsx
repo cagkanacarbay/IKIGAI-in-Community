@@ -7,7 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { AspectType, zoneAspectTypes, ZoneName, getZoneName, zones, aspectTypes, zoneIconSrc } from '@/lib/types';
 import AspectShapeUtil, { IAspectShape } from '../../shapes/aspect';
-import { getZoneColor } from '../../ui/customUi';
+import { getZoneColor } from '../../ui/customUI/customUi';
 import { ulid } from 'ulid';
 import { QUESTIONS } from './questions';
 import { zoneNameToId } from '../../shapes/shapeIds';
@@ -159,7 +159,7 @@ export const QuestionHelper: React.FC = () => {
     };
 
     editor.select(zoneNameToId[zone]);
-    editor.zoomToSelection({duration: 300});
+    editor.zoomToSelection({duration: 500});
 
     if (questionHelperVisible) {
       timeoutId = setTimeout(handleNextQuestion, 300);

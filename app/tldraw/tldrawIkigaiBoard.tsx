@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Tldraw, Editor, TLStoreWithStatus, TLEditorComponents, TLEventMapHandler, TLUnknownShape, TLRecord } from '@tldraw/tldraw';
 import '@tldraw/tldraw/tldraw.css';
 import IkigaiCircleShapeUtil, { IkigaiCircles } from './shapes/ikigaiCircles';
-import { uiOverrides } from './ui/customUi';
+import { uiOverrides } from './ui/customUI/customUi';
 import { useSession } from 'next-auth/react';
 import { Toaster } from "@/components/ui/sonner";
 import { useBoardContext } from './boardContext';
