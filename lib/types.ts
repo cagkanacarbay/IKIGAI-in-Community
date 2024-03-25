@@ -1,4 +1,3 @@
-
 export interface Position {
   x: number;
   y: number;
@@ -105,6 +104,22 @@ export const defaultButtonColors = {
   "The Craft": "bg-blue-50 hover:bg-blue-300",
   "The Cause": "bg-green-50 hover:bg-green-300",
   "The Path": "bg-yellow-50 hover:bg-yellow-300"
+}
+
+export function getAspectColorByZone(zoneName: ZoneName) {
+  // this references the bgColors set in aspect.tsx
+  switch (zoneName) {
+    case 'The Heart':
+      return 'heart';
+    case 'The Craft':
+      return 'craft';
+    case 'The Cause':
+      return 'cause';
+    case 'The Path':
+      return 'path';
+    default:
+      return 'default';
+  }
 }
 
 

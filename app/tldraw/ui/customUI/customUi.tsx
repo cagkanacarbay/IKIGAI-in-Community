@@ -4,7 +4,7 @@ import {
   TLUiActionItem, 
 } from '@tldraw/tldraw';
 import { saveImageAssetsAsBlobsAndUpdateMetadata, saveAsJSON, uploadSnapshot } from '../../boardStorage';
-import { ZoneName, aspectTypes, getZoneName } from '@/lib/types';
+import { aspectTypes, getZoneName } from '@/lib/types';
 import { createAspectAction, addAspectTypeAction, removeAspectTypeAction } from './aspectActions';
 
 interface AssetSrc {
@@ -41,21 +41,6 @@ const toolsToRemove: string[] = [
   "frame",
   "laser"
 ]
-
-export function getZoneColor(zoneName: ZoneName) {
-  switch (zoneName) {
-    case 'The Heart':
-      return 'red';
-    case 'The Craft':
-      return 'blue';
-    case 'The Cause':
-      return 'green';
-    case 'The Path':
-      return 'yellow';
-    default:
-      return 'black';
-  }
-}
 
 export function getShapeTypes(editor: Editor, shapeTypes: string[]) {
   const selectedShapes = editor.getSelectedShapes();

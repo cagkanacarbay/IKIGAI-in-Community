@@ -1,4 +1,4 @@
-import { getZoneColor } from './customUi';
+import { getAspectColorByZone } from '@/lib/types';
 import { AspectType, ZoneName } from '@/lib/types';
 import { Editor, createShapeId, TLUiToast } from '@tldraw/tldraw';
 import { ulid } from 'ulid';
@@ -29,7 +29,7 @@ export function createAspectAction(editor: Editor, aspectType: AspectType, zoneN
           w: 160, h: 40,
           text: "...",
           zone: zoneName,
-          color: getZoneColor(zoneName),
+          color: getAspectColorByZone(zoneName),
         },
         x: x,
         y: y,

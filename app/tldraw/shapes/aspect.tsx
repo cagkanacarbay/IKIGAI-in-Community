@@ -36,25 +36,45 @@ import { useEffect, useState } from 'react';
 export const BASE_ASPECT_HEIGHT = 32
 export const MIN_ASPECT_WIDTH = 120
 
+// const bgColors = {
+//   "blue": "bg-blue-100",
+//   "green": "bg-green-100",
+//   "red": "bg-red-100",
+//   "yellow": "bg-yellow-100",
+//   "teal": "bg-teal-100",
+//   "purple": "bg-purple-50",
+//   "lime": "bg-lime-100",
+//   "amber": "bg-amber-100",
+//   "purple-strong": "bg-purple-200",
+//   "orange": "bg-orange-200",
+//   "yellow-strong": "bg-yellow-200",
+//   "emerald": "bg-emerald-200",
+//   "amber-strong": "bg-amber-400",
+//   "default": "bg-gray-100"
+// }
+
 const bgColors = {
-  "blue": "bg-blue-100",
-  "green": "bg-green-100",
-  "red": "bg-red-100",
-  "yellow": "bg-yellow-100",
-  "teal": "bg-teal-100",
-  "purple": "bg-purple-50",
-  "lime": "bg-lime-100",
-  "amber": "bg-amber-100",
-  "purple-strong": "bg-purple-200",
-  "orange": "bg-orange-200",
-  "yellow-strong": "bg-yellow-200",
-  "emerald": "bg-emerald-200",
-  "amber-strong": "bg-amber-400",
-  "default": "bg-gray-100"
+  "craft": '#7D77FF',
+  "heart": '#FF77B5',
+  "path": '#F9FF77', 
+  "cause": '#77FFC1', 
+  "heart-craft": "#E39CFF",
+  "heart-cause": "#B8FF9C", // mix is gray
+  "heart-path": "#FCBB96",
+  "craft-cause": "#7ABBE0",
+  "craft-path": "#9CE9FF", // mix is gray 
+  "cause-path": "#B8FF9C",
+  "heart-craft-cause": "#BB4465",
+  "craft-path-cause": "#A0BB44",
+  "heart-craft-path": "#5F44BB",
+  "heart-cause-path": "#44BB9A",
+  "ikigai": "#F790F2",
+  "default": "#817986"
 }
 
 export const aspectShapeProps = {
-  color: T.setEnum(new Set(["blue", "green", "red", "yellow", "teal", "purple", "lime", "amber", "purple-strong", "orange", "yellow-strong", "emerald", "amber-strong", "default"])),
+  // color: T.setEnum(new Set(["blue", "green", "red", "yellow", "teal", "purple", "lime", "amber", "purple-strong", "orange", "yellow-strong", "emerald", "amber-strong", "default"])),
+  color: T.setEnum(new Set(["heart", "craft", "path", "cause", "heart-craft", "heart-cause", "heart-path", "craft-cause", "craft-path", "cause-path", "heart-craft-cause", "craft-path-cause", "heart-craft-path", "heart-cause-path", "ikigai", "default"])),
   size: DefaultSizeStyle,
   font: DefaultFontStyle,
   align: DefaultHorizontalAlignStyle,
@@ -108,20 +128,36 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
     const inTheCause = this.editor.isPointInShape(ikigaiCircleMap['theCause'], { x: current.x, y: current.y })
     const inThePath = this.editor.isPointInShape(ikigaiCircleMap['thePath'], { x: current.x, y: current.y })
   
+    // const color = 
+    //   inTheHeart && inTheCraft && inTheCause && inThePath ? "amber-strong" : 
+    //   inTheHeart && inTheCraft && inTheCause ? "orange" :
+    //   inTheHeart && inTheCraft && inThePath ? "purple-strong" :
+    //   inTheHeart && inTheCause && inThePath ? "emerald" :
+    //   inTheCraft && inTheCause && inThePath ? "yellow-strong" :
+    //   inTheHeart && inTheCraft ? "purple" : 
+    //   inTheHeart && inTheCause ? "amber" : 
+    //   inThePath && inTheCause ? "lime" : 
+    //   inThePath && inTheCraft ? "teal" : 
+    //   inTheHeart ? "red" : 
+    //   inTheCraft ? "blue" :
+    //   inTheCause ? "green" : 
+    //   inThePath ? "yellow" : 
+    //   "default"; 
+
     const color = 
-      inTheHeart && inTheCraft && inTheCause && inThePath ? "amber-strong" : 
-      inTheHeart && inTheCraft && inTheCause ? "orange" :
-      inTheHeart && inTheCraft && inThePath ? "purple-strong" :
-      inTheHeart && inTheCause && inThePath ? "emerald" :
-      inTheCraft && inTheCause && inThePath ? "yellow-strong" :
-      inTheHeart && inTheCraft ? "purple" : 
-      inTheHeart && inTheCause ? "amber" : 
-      inThePath && inTheCause ? "lime" : 
-      inThePath && inTheCraft ? "teal" : 
-      inTheHeart ? "red" : 
-      inTheCraft ? "blue" :
-      inTheCause ? "green" : 
-      inThePath ? "yellow" : 
+      inTheHeart && inTheCraft && inTheCause && inThePath ? "ikigai" : 
+      inTheHeart && inTheCraft && inTheCause ? "heart-craft-cause" :
+      inTheHeart && inTheCraft && inThePath ? "heart-craft-path" :
+      inTheHeart && inTheCause && inThePath ? "heart-cause-path" :
+      inTheCraft && inTheCause && inThePath ? "craft-path-cause" :
+      inTheHeart && inTheCraft ? "heart-craft" : 
+      inTheHeart && inTheCause ? "heart-cause" : 
+      inThePath && inTheCause ? "cause-path" : 
+      inThePath && inTheCraft ? "craft-path" : 
+      inTheHeart ? "heart" : 
+      inTheCraft ? "craft" :
+      inTheCause ? "cause" : 
+      inThePath ? "path" : 
       "default"; 
 
     this.editor.updateShape({
@@ -138,7 +174,7 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
   getDefaultProps(): IAspectShape['props'] {
     return {
       text: "...",
-      color: 'red', 
+      color: 'heart', 
       size: 'm',
       font: 'mono',
       align: 'middle',
@@ -194,13 +230,12 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.3 }}
           whileTap={{ scale: 0.8, transition:{ duration: 0.275}}}
-          style={{width: w, height: this.getHeight(shape), minHeight}} 
-          id={id}
+          style={{width: w, height: this.getHeight(shape), minHeight, backgroundColor: colorClass}}          id={id}
           className={`
             aspect
             grid grid-cols-[auto,1fr,auto] items-center
             text-xs font-bold
-            ${colorClass} bg-opacity-60 z-50
+            bg-opacity-60 z-50
             rounded-lg shadow-inner shadow-md
             min-w-[${minWidth}] 
           `}

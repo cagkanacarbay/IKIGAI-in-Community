@@ -13,6 +13,8 @@ interface BoardContextType {
   toggleUserGuideVisibility: () => void;
   tutorialVisible: boolean;
   toggleTutorialVisibility: () => void;
+  tutorialToCVisible: boolean;
+  setTutorialToCVisible: (isVisible: boolean) => void;
   questionHelperVisible: boolean;
   toggleQuestionHelperVisibility: () => void;
   questionAspectType: AspectType;
@@ -41,6 +43,7 @@ export const BoardProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [userGuideVisible, setUserGuideVisible] = useState<boolean>(false); 
   const [questionHelperVisible, setQuestionHelperVisible] = useState<boolean>(false); 
   const [tutorialVisible, setTutorialVisible] = useState<boolean>(false);
+  const [tutorialToCVisible, setTutorialToCVisible] = useState<boolean>(false);
   const [step, setStep] = useState<number>(parseInt(localStorage.getItem('tutorialStep') || '0', 10));
   const [isTutorialCompleted, setIsTutorialCompleted] = useState<boolean>(false);
 
@@ -91,6 +94,8 @@ export const BoardProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       setQuestionAspectType,
       tutorialVisible,
       toggleTutorialVisibility,
+      tutorialToCVisible,
+      setTutorialToCVisible,
       step,
       setStep,
       totalSteps: tutorialSteps.length,

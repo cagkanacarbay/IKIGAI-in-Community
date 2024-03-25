@@ -6,31 +6,8 @@ import {
 import { useEffect } from 'react';
 import { zoneIconPaths, ZoneName } from '@/lib/types';
 import { ikigaiCircleIds } from './shapeIds';
-import { motion } from 'framer-motion';
-import { useState } from 'react';
 
 export const RADIUS = 800;
-
-// const ikigaiCircleColors = {
-//   "The Craft": '#6956F1',
-//   "The Heart": '#F15692',
-//   "The Path": '#DFF156', 
-//   "The Cause": '#56F1B6', 
-// };
-
-// const ikigaiCircleColors = {
-//   "The Craft": '#5713EC',
-//   "The Heart": '#EC133C',
-//   "The Path": '#A8EC13', 
-//   "The Cause": '#13ECC3', 
-// };
-
-// const ikigaiCircleColors = {
-//   "The Craft": '#0B00FF',
-//   "The Heart": '#FF0074',
-//   "The Path": '#F4FF00', 
-//   "The Cause": '#00FF8B', 
-// };
 
 const ikigaiCircleColors = {
   "The Craft": '#7D77FF',
@@ -38,6 +15,7 @@ const ikigaiCircleColors = {
   "The Path": '#F9FF77', 
   "The Cause": '#77FFC1', 
 };
+
 
 export interface IkigaiCircleShapeMeta {
   zone: ZoneName;

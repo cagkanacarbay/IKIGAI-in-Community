@@ -158,39 +158,6 @@ export const TeachMovementMechanics: React.FC<GenericStepProps> = () => {
 };
 
 
-export const TutorialDone: React.FC<GenericStepProps> = () => {
-  const { setStep } = useBoardContext();
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      >
-      <div className="top-20 -left-56 mb-10 w-full max-w-xs rounded-md border bg-white px-6 shadow-md lg:absolute lg:w-56">
-      {/* <div className="pb-2 text-xl font-medium text-purple-600">Table of Contents</div> */}
-      <AlertDescription className='text-black text-md mt-2'>
-        <div className="mt-4">
-          {tutorialSteps.map((step, index) => (
-
-            <div key={step.id} className="mb-3 rounded hover:bg-purple-100 hover:text-purple-600">
-              <a 
-                onClick={() => setStep(index)}
-                className="text-lg font-medium  ">
-                {index+1}. {step.props.title}
-              </a>
-            </div>
-          ))}
-
-          </div>
-        </AlertDescription>
-      </div>
-    </motion.div>
-
-  );
-};
-
-
 
 export interface OnboardingStep {
   id: string;
@@ -358,21 +325,5 @@ export const tutorialSteps: OnboardingStep[] = [
       title: 'Questions Helper',
     }, 
     noView: true, // Don't render the parent in welcomeTour, just the component.
-  },
-  {
-    id: 'tutorial-done',
-    component: TutorialDone,
-    skipNavButtons: true,
-    zoom: {
-      ids: [ikigaiCircleIds["The Heart"], ikigaiCircleIds["The Craft"], ikigaiCircleIds["The Cause"], ikigaiCircleIds["The Path"]],
-    },
-    props: {
-      title: 'Tutorial Completed',
-      subtitle: 'Redo any step by clicking below',
-      subTitleColor: 'text-purple-600',
-      bgColor: 'bg-purple-50',
-      size: 'w-[350px] h-[600px]',
-
-    },
   },
 ];

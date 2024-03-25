@@ -83,8 +83,8 @@ const CreateAspectButtons: React.FC<CreateAspectButtonsProps> = ({ zoneName }) =
 
 	useEffect(() => {
 		if (selectedAspect) {
-			console.log("setting selected aspect Tool to", selectedAspect)
-			console.log("editor", editor)
+			// console.log("setting selected aspect Tool to", selectedAspect)
+			// console.log("editor", editor)
 			editor.setCurrentTool(selectedAspect);
 		} 
 	}, [selectedAspect]);

@@ -107,7 +107,7 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
               // add to store events
               // setStoreEvents([...storeEvents, {aspectShape.id}])
               addCreatedAspect(aspectShape);
-              console.log("User created a new aspect", aspectShape);
+              // console.log("User created a new aspect", aspectShape);
               console.log(record)
 
           }
@@ -122,7 +122,7 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
           from.type === 'aspect' &&
           to.type === 'aspect'
         ) {
-          console.log("User edited an aspect", from, to);
+          // console.log("User edited an aspect", from, to);
           // addEditedAspect(from, to);
         }
       }
@@ -130,7 +130,7 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
 
       for (const record of Object.values(change.changes.removed)) {
         if (record.typeName === 'shape' && record.type === 'aspect') {
-          console.log("Got a delete event")
+          // console.log("Got a delete event")
           // logChangeEvent(`deleted aspect (${record.type})`);
         }
       }

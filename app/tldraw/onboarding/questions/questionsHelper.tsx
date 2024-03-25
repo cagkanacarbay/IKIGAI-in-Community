@@ -7,7 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { AspectType, zoneAspectTypes, ZoneName, getZoneName, zones, aspectTypes, zoneIconSrc } from '@/lib/types';
 import AspectShapeUtil, { IAspectShape } from '../../shapes/aspect';
-import { getZoneColor } from '../../ui/customUI/customUi';
+import { getAspectColorByZone } from '@/lib/types';
 import { ulid } from 'ulid';
 import { QUESTIONS } from './questions';
 import { zoneNameToId } from '../../shapes/shapeIds';
@@ -124,7 +124,7 @@ export const QuestionHelper: React.FC = () => {
         props: {
           text: "...",
           zone: zone,
-          color: getZoneColor(zone),
+          color: getAspectColorByZone(zone),
         },
         x: adjustedX,
         y: adjustedY,
@@ -245,7 +245,7 @@ export const QuestionHelper: React.FC = () => {
           <Alert id="questions-helper" className={`
             fixed m-auto ${bgColor} pointer-events-auto 
             rounded-lg rounded-lg p-4 shadow-xl 
-            w-[450px] h-[200px] 
+            w-[450px] h-[200px] z-40
             top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2` 
           }>
             <AlertTitle className="flex justify-center items-center" >

@@ -9,10 +9,14 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import CloseButton from '@/components/ui/closeButton';
 import { useSession } from 'next-auth/react';
+import { AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { tutorialSteps } from './tutorial/welcomeSteps';
+
 
 const InFrontOfTheCanvasComponents: React.FC = ({}) => {
 
   const { data: session } = useSession();
+  const { tutorialToCVisible } = useBoardContext();
 
   return (
     <>
@@ -24,6 +28,7 @@ const InFrontOfTheCanvasComponents: React.FC = ({}) => {
         <UserGuideButton />
         <TutorialButton />
       </div>
+      { tutorialToCVisible ? <TutorialTableOfContents /> : null}
     </>
   );
 };
@@ -90,7 +95,7 @@ const QuestionHelperButton: React.FC = () => {
 
 
 const TutorialButton: React.FC = () => {
-  const { tutorialVisible, toggleTutorialVisibility, step, totalSteps, isTutorialCompleted } = useBoardContext(); 
+  const { tutorialVisible, tutorialToCVisible, setTutorialToCVisible, step, totalSteps, isTutorialCompleted } = useBoardContext(); 
   const [tutorialProgress, setTutorialProgress] = useState((step/totalSteps) * 100);
   // console.log("tutorialProgress: ", tutorialProgress)
 
@@ -98,7 +103,7 @@ const TutorialButton: React.FC = () => {
     setTutorialProgress((step/totalSteps) * 100);
   }, [step]);
 
-  const bgColor = tutorialVisible ? 'bg-purple-300 hover:bg-purple-600' : 'bg-purple-100 hover:bg-purple-600';
+  const bgColor = (tutorialVisible || tutorialToCVisible) ? 'bg-purple-300 hover:bg-purple-600' : 'bg-purple-100 hover:bg-purple-600';
 
   return (
     <div className={`fixed top-56 left-4 z-50 pointer-events-auto`}
@@ -108,21 +113,22 @@ const TutorialButton: React.FC = () => {
       {isTutorialCompleted ? (
         <Button
           className={`transition-colors duration-300 shadow-lg rounded-full w-16 h-16 flex items-center justify-center cursor-pointer bg-green-100`}
-          onClick={toggleTutorialVisibility}
-        >
+          onClick={() => setTutorialToCVisible(true)}
+          >
           <Image src="/icons/check.svg" alt="Check" width={30} height={30} priority/>
         </Button>
       ) : (
         <Button
           className={`transition-colors duration-300 shadow-lg rounded-full w-16 h-16 flex items-center justify-center cursor-pointer ${bgColor}`}
-          onClick={toggleTutorialVisibility}
+          onClick={() => setTutorialToCVisible(true)}
         >
           <div className="flex flex-col items-center pb-2">
             <div className="text-center mb-1">{step+1}/{totalSteps}</div>
-
             <div className="w-12 bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
               <div className={`bg-blue-600 h-1.5 rounded-full dark:bg-blue-500`} style={{width: `${tutorialProgress}%`}}></div>        
+              
             </div>
+            
           </div>
         </Button>
       )}
@@ -179,4 +185,53 @@ const NotLoggedInAlert: React.FC = () => {
       </div>
     );
   }
+};
+
+
+
+
+export const TutorialTableOfContents: React.FC = () => {
+  const { setStep, toggleTutorialVisibility, tutorialVisible, setTutorialToCVisible } = useBoardContext();
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className='pointer-events-auto flex flex-col bg-purple-50 w-80 top-80 absolute left-4 rounded-lg'
+      onPointerMove={stopEventPropagation} onPointerDown={stopEventPropagation}
+    >
+      <div className='m-4'>
+        <AlertTitle className="ml-2 text-2xl font-semibold text-purple-600">
+          Tutorial
+          <CloseButton onClick={() => setTutorialToCVisible(false)}/>
+          {/* <div className='text-xs text-purple-300'>Click on any step to go to that part of the tutorial.</div> */}
+        </AlertTitle>
+        <AlertDescription className='text-black mt-1 py-1 flex-grow rounded-md bg-white px-6 shadow-md'>
+          <div className="mt-1">
+            {tutorialSteps.map((step, index) => (
+
+              <div key={step.id} className="mb-1 rounded hover:bg-purple-100 hover:text-purple-600">
+                <a 
+                  onClick={() => {
+                    console.log(step.props.title);
+                    setStep(index);
+                    if (!tutorialVisible) {
+                      toggleTutorialVisibility();
+                      setTutorialToCVisible(false);
+                    }
+                    
+                  }}
+                  className="text-lg font-medium  ">
+                  {index+1}. {step.props.title}
+                </a>
+              </div>
+            ))}
+
+            </div>
+          </AlertDescription>
+      </div>
+    </motion.div>
+
+  );
 };

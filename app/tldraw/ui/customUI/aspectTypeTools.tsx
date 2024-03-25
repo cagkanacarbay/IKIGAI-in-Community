@@ -1,5 +1,5 @@
 import { StateNode, Editor, TLEventHandlers } from 'tldraw';
-import { AspectType, getZoneName, zoneAspectTypes, zoneBgColor, ZoneName } from '@/lib/types';
+import { AspectType, getZoneName, zoneAspectTypes, zoneBgColor, ZoneName, getAspectColorByZone } from '@/lib/types';
 import { createShapeId } from '@tldraw/tldraw';
 import { ulid } from 'ulid';
 import AspectShapeUtil from '../../shapes/aspect';
@@ -35,7 +35,7 @@ class AspectTypeTool extends StateNode {
       y: currentPagePoint.y - Y_OFFSET,
       props: { 
         zone: this.zone, 
-        color: zoneBgColor[this.zone as ZoneName],
+        color: getAspectColorByZone(this.zone as ZoneName),
         align: 'middle',	 
         w: MIN_ASPECT_WIDTH + 20,
         text: "...",
