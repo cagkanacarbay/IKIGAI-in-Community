@@ -11,6 +11,34 @@ import { motion } from 'framer-motion';
 
 export const RADIUS = 800;
 
+// const ikigaiCircleColors = {
+//   "The Craft": '#6956F1',
+//   "The Heart": '#F15692',
+//   "The Path": '#DFF156', 
+//   "The Cause": '#56F1B6', 
+// };
+
+// const ikigaiCircleColors = {
+//   "The Craft": '#5713EC',
+//   "The Heart": '#EC133C',
+//   "The Path": '#A8EC13', 
+//   "The Cause": '#13ECC3', 
+// };
+
+// const ikigaiCircleColors = {
+//   "The Craft": '#0B00FF',
+//   "The Heart": '#FF0074',
+//   "The Path": '#F4FF00', 
+//   "The Cause": '#00FF8B', 
+// };
+
+const ikigaiCircleColors = {
+  "The Craft": '#7D77FF',
+  "The Heart": '#FF77B5',
+  "The Path": '#F9FF77', 
+  "The Cause": '#77FFC1', 
+};
+
 export interface IkigaiCircleShapeMeta {
   zone: ZoneName;
 }
@@ -81,17 +109,40 @@ export default class IkigaiCircleShapeUtil extends ShapeUtil<IIkigaiCircleShape>
 
   component(shape: IIkigaiCircleShape) {
     const { x, y, radius } = shape.props;
+    console.log(shape)
     const theme = getDefaultColorTheme({ isDarkMode: this.editor.user.getIsDarkMode() });
-    const fillColor = theme[shape.props.color].semi; 
+    // const fillColor = theme[shape.props.color].semi; 
+    // const fillColor = "#c33c66"
+    // console.log("the color from theme is: ", theme[shape.props.color])
+    const fillColor = ikigaiCircleColors[shape.meta.zone];
     
-    const fillOpacity = 0.60;
-    // console.log("the meta: ", shape.meta.zone)
+    const fillOpacity = 0.25;
+    console.log("the meta: ", shape.meta.zone)
   
     return (
       <HTMLContainer id={`ikigai-circle-${shape.meta.zone}`}>
         {/* <motion.div> */}
-        <svg id={shape.meta.zone} width={radius * 2} height={radius * 2} style={{ overflow: 'visible', position: 'absolute', left: x , top: y }}>
-          <circle cx={radius} cy={radius} r={radius} fill={fillColor} fillOpacity={fillOpacity}/>
+        <svg 
+          id={shape.meta.zone} width={radius * 2} height={radius * 2} 
+          
+          style={
+            { 
+              overflow: 'visible', 
+              position: 'absolute', 
+              left: x , 
+              top: y,
+            }
+          }>
+          <circle 
+            cx={radius} 
+            cy={radius} 
+            r={radius} 
+            fill={fillColor} 
+            fillOpacity={fillOpacity}
+            stroke="white" 
+            strokeWidth="1"
+            strokeOpacity={1}
+          />
         </svg>
         {/* </motion.div> */}
       </HTMLContainer>
@@ -119,22 +170,22 @@ export function IkigaiCircles() {
         let x, y, color;
   
         switch (key) {
-          case 'heart':
+          case 'The Heart':
             x = (RADIUS / 5) * 4;
             y = 0;
             color = 'light-red';
             break;
-          case 'path':
+          case 'The Path':
             x = (RADIUS / 5) * 4;
             y = (RADIUS / 5) * 4 * 2;
             color = 'yellow';
             break;
-          case 'craft':
+          case 'The Craft':
             x = 0;
             y = (RADIUS / 5) * 4;
             color = 'light-blue';
             break;
-          case 'cause':
+          case 'The Cause':
             x = (RADIUS / 5) * 4 * 2;
             y = (RADIUS / 5) * 4;
             color = 'light-green';

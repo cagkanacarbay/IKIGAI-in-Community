@@ -10,7 +10,7 @@ import AspectShapeUtil, { IAspectShape } from '../../shapes/aspect';
 import { getZoneColor } from '../../ui/customUi';
 import { ulid } from 'ulid';
 import { QUESTIONS } from './questions';
-import { ikigaiCircleIds, zoneNameToId } from '../../shapes/shapeIds';
+import { zoneNameToId } from '../../shapes/shapeIds';
 import { IIkigaiCircleShape } from '../../shapes/ikigaiCircles';
 import {
   Select,

@@ -6,12 +6,14 @@ import { TLShapeId } from '@tldraw/tldraw';
 
 export function zoomToIkigaiCircles(editor: Editor) {
   // Select the Ikigai circles
-  editor.select(ikigaiCircleIds.heart, ikigaiCircleIds.craft, ikigaiCircleIds.cause, ikigaiCircleIds.path)
+  editor.select(...[ikigaiCircleIds["The Heart"], ikigaiCircleIds["The Craft"], ikigaiCircleIds["The Cause"], ikigaiCircleIds["The Path"]])
 
   // Zoom to the selection
   editor.zoomToSelection({duration: 300});
 
-  editor.deselect(ikigaiCircleIds.heart, ikigaiCircleIds.craft, ikigaiCircleIds.cause, ikigaiCircleIds.path);
+  editor.deselect(
+    ...[ikigaiCircleIds["The Heart"], ikigaiCircleIds["The Craft"], ikigaiCircleIds["The Cause"], ikigaiCircleIds["The Path"]]
+  );
 }
 
 

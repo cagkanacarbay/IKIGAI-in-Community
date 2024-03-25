@@ -79,7 +79,7 @@ const SaveButton: React.FC = () => {
 
   useEffect(() => {
     if (!session) {
-      alert("You need to be signed in to save your IKIGAI.");
+      // alert("You need to be signed in to save your IKIGAI.");
     }
   }, [session]);
 

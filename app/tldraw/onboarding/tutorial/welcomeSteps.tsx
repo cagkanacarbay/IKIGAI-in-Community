@@ -206,7 +206,7 @@ export const tutorialSteps: OnboardingStep[] = [
     id: 'welcome',
     component: WelcomeMessage,
     zoom: {
-      ids: [ikigaiCircleIds.heart, ikigaiCircleIds.craft, ikigaiCircleIds.cause, ikigaiCircleIds.path],
+      ids: [ikigaiCircleIds["The Heart"], ikigaiCircleIds["The Craft"], ikigaiCircleIds["The Cause"], ikigaiCircleIds["The Path"]],
     },
     props: {
       title: 'Welcome to Journey',
@@ -221,7 +221,7 @@ export const tutorialSteps: OnboardingStep[] = [
     id: "zones-overview",
     component: ZonesOverviewStep,
     zoom: {
-      ids: [ikigaiCircleIds.heart, ikigaiCircleIds.craft, ikigaiCircleIds.cause, ikigaiCircleIds.path]
+      ids: [ikigaiCircleIds["The Heart"], ikigaiCircleIds["The Craft"], ikigaiCircleIds["The Cause"], ikigaiCircleIds["The Path"]],
     },
     props: {
       title: "The 4 Zones of Journey",
@@ -234,7 +234,7 @@ export const tutorialSteps: OnboardingStep[] = [
     id: 'introduce-heart',
     component: IntroduceZoneStep,
     zoom: {
-      ids: [ikigaiCircleIds.heart],
+      ids: [ikigaiCircleIds["The Heart"]],
     },
     props: {
       title: 'The Heart',
@@ -254,7 +254,7 @@ export const tutorialSteps: OnboardingStep[] = [
   {
     id: 'introduce-craft',
     zoom: {
-      ids: [ikigaiCircleIds.craft],
+      ids: [ikigaiCircleIds["The Craft"]],
     },
     component: IntroduceZoneStep,
     props: {
@@ -275,7 +275,7 @@ export const tutorialSteps: OnboardingStep[] = [
   {
     id: 'introduce-cause',
     zoom: {
-      ids: [ikigaiCircleIds.cause],
+      ids: [ikigaiCircleIds["The Cause"]],
     },
     component: IntroduceZoneStep,
     props: {
@@ -297,7 +297,7 @@ export const tutorialSteps: OnboardingStep[] = [
   {
     id: 'introduce-path',
     zoom: {
-      ids: [ikigaiCircleIds.path],
+      ids: [ikigaiCircleIds["The Path"]],
     },
     component: IntroduceZoneStep,
     props: {
@@ -364,7 +364,7 @@ export const tutorialSteps: OnboardingStep[] = [
     component: TutorialDone,
     skipNavButtons: true,
     zoom: {
-      ids: [ikigaiCircleIds.heart, ikigaiCircleIds.craft, ikigaiCircleIds.cause, ikigaiCircleIds.path]
+      ids: [ikigaiCircleIds["The Heart"], ikigaiCircleIds["The Craft"], ikigaiCircleIds["The Cause"], ikigaiCircleIds["The Path"]],
     },
     props: {
       title: 'Tutorial Completed',
