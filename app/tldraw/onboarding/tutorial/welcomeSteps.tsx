@@ -4,7 +4,7 @@ import { useBoardContext } from "../../boardContext";
 import { TLShapeId } from "@tldraw/tldraw";
 import 'driver.js/dist/driver.css';
 import "./driverjs.css";
-import { IntroduceUserGuide, IntroduceAspects, IntroduceQuestionsHelper } from "./driverJsSteps";
+import { IntroduceUserGuide, IntroduceAspects, IntroduceQuestionsHelper, QuestionsMenuDetails, IntroduceCreateAspectsMenu, IntroduceTldrawTools } from "./driverJsSteps";
 import { motion } from 'framer-motion';
 
 export interface GenericStepProps {
@@ -16,19 +16,19 @@ export interface GenericStepProps {
 export const WelcomeMessage: React.FC = () => {
 
       return (
-      <div className="flex flex-col justify-center items-start px-4 text-left text-lg ">
+      <div className="flex flex-col justify-center items-start px-4 text-left text-lg mt-4">
         <p>
           Journey is a space to view your life through the lens of <strong>Ikigai</strong>:
         </p>
         {/* <p className="text-xl font-bold text-left mb-2">ikigai</p> */}
         <p className="mb-1 mt-1 ml-4">
-          something to live for, the joy and goal of living
+          - something to live for, the joy and goal of living
         </p>
         <p className="mb-4 ml-4">
-          a life worth living, the happiness and benefit of being alive
+          - a life worth living, the happiness and benefit of being alive
         </p>
         <p className="mb-4">
-          A space to reflect, to understand, and to explore the possibilities of your life.    
+          A space to reflect, understand, and explore the possibilities of your life.    
         </p>
         <p className="mb-2">
           Let&apos;s get started.
@@ -58,7 +58,7 @@ export const ZonesOverviewStep: React.FC<GenericStepProps> = ({ goToStep }) => {
       icon: "/icons/zones/path.png",
       zoneType: "The Path",
       zoneTypeTextColor: "text-yellow-700",
-      question: "Where you're going",
+      question: "Money and career",
     },
     {
       icon: "/icons/zones/cause.png",
@@ -78,7 +78,7 @@ export const ZonesOverviewStep: React.FC<GenericStepProps> = ({ goToStep }) => {
           {zones.map((zone, index) => (
             <div key={index} className="flex flex-col items-center ">
               <span className={`mt-2 block font-semibold text-center text-xl ${zone.zoneTypeTextColor}`}>{zone.zoneType}</span>
-              <div className="w-16 h-16 p-2 rounded-full shadow-inner bg-white flex items-center justify-center" onClick={() => goToStep(`${zone.zoneType}-aspect-types`)}>
+              <div className="w-16 h-16 p-2 rounded-full font-medium shadow-inner bg-white flex items-center justify-center" onClick={() => goToStep(`${zone.zoneType}-aspect-types`)}>
                 <img src={zone.icon} alt={zone.zoneType} className="w-10 h-10 object-contain" />
               </div>
               <span className="mt-2 block text-center text-lg">{zone.question}</span>
@@ -86,7 +86,7 @@ export const ZonesOverviewStep: React.FC<GenericStepProps> = ({ goToStep }) => {
           ))}
         </div>
         <span className=''>
-          Together, they form your Ikigai. Let's take a quick look at each zone and what it is about.
+          Together, they form your <strong>Ikigai</strong>. You'll explore the app as we go along. So let's dive right into it.
         </span>
       </AlertDescription>
     </>
@@ -181,7 +181,7 @@ export const tutorialSteps: OnboardingStep[] = [
       subTitleColor: 'text-purple-400',
       iconPath: '/icons/zones/heart.png',
       bgColor: 'bg-purple-50',
-      size: 'w-[650px] h-[360px]',
+      size: 'w-[500px] h-[390px]',
     },
   },
   {
@@ -191,97 +191,123 @@ export const tutorialSteps: OnboardingStep[] = [
       ids: [ikigaiCircleIds["The Heart"], ikigaiCircleIds["The Craft"], ikigaiCircleIds["The Cause"], ikigaiCircleIds["The Path"]],
     },
     props: {
-      title: "The 4 Zones of Journey",
+      title: "The 4 Zones",
+      subtitle: 'areas of your life',
+      subTitleColor: 'text-purple-400',
       bgColor: 'bg-purple-50',
       iconPath: '/icons/zones/heart.png',
-      size: 'w-[550px] h-[550px]',
+      size: 'w-[550px] h-[580px]',
     }
   },
   {
-    id: 'introduce-heart',
-    component: IntroduceZoneStep,
-    zoom: {
-      ids: [ikigaiCircleIds["The Heart"]],
-    },
+    id: 'introduce-questions-helper',
+    component: IntroduceQuestionsHelper,
     props: {
-      title: 'The Heart',
-      subtitle: 'What you love',
-      subTitleColor: 'text-red-300',
-      description: (
-        <>
-          The Heart is your <strong>guide</strong> in Journey.
-          <br /><br />
-          It is made up of the things you love from the heart. The things that make you curious, that shape you 
-        </>
-      ),
-      iconPath: '/icons/zones/heart.png',
-      bgColor: 'bg-red-50',
-    }
+      title: 'Getting Started',
+    }, 
+    noView: true, // Don't render the parent in welcomeTour, just the component.
   },
   {
-    id: 'introduce-craft',
-    zoom: {
-      ids: [ikigaiCircleIds["The Craft"]],
-    },
-    component: IntroduceZoneStep,
+    id: 'creating-aspects',
+    component: IntroduceCreateAspectsMenu,
     props: {
-      title: 'The Craft',
-      subtitle: 'What you are good at',
-      subTitleColor: 'text-blue-400',
-      description: (
-        <>
-          The Craft is how you <strong>shape the world</strong>.
-          <br /><br />
-          It&apos;s what you&apos;re good at and what you can offer. What skills have you cultivated, what knowledge have you gained, what can you do?
-        </>
-      ),
-      iconPath: '/icons/zones/craft.png',
-      bgColor: 'bg-blue-50'
-    }
+      title: 'Creating New Aspects',
+    }, 
+    noView: true, // Don't render the parent in welcomeTour, just the component.
   },
   {
-    id: 'introduce-cause',
-    zoom: {
-      ids: [ikigaiCircleIds["The Cause"]],
-    },
-    component: IntroduceZoneStep,
+    id: 'questions-detail',
+    component: QuestionsMenuDetails,
     props: {
-      title: 'The Cause',
-      subtitle: 'What the world needs',
-      subTitleColor: 'text-green-400',
-      description: (
-        <>
-          The Cause is your <strong>call to action</strong>.
-          <br /><br />
-          The world is rife with problems waiting to be solved ranging from your local community to the entire planet.
-          Which of them will you claim?
-        </>
-      ),
-      iconPath: '/icons/zones/cause.png',
-      bgColor: 'bg-green-50'
-    }
+      title: 'Question Menu',
+    }, 
+    noView: true, // Don't render the parent in welcomeTour, just the component.
   },
-  {
-    id: 'introduce-path',
-    zoom: {
-      ids: [ikigaiCircleIds["The Path"]],
-    },
-    component: IntroduceZoneStep,
-    props: {
-      title: 'The Path',
-      subtitle: 'Where you are going',
-      subTitleColor: 'text-yellow-700',
-      description: (
-        <>
-          The Path is the <strong>world of opportunities</strong>.
-          <br /><br />
-          What careers align with your skills? What industries offer the right rewards? Where should you go to find purpose?
-        </>
-      ),
-      iconPath: '/icons/zones/path.png',
-      bgColor: 'bg-yellow-50'
-    }
-  },
+  // {
+  //   id: 'introduce-heart',
+  //   component: IntroduceZoneStep,
+  //   zoom: {
+  //     ids: [ikigaiCircleIds["The Heart"]],
+  //   },
+  //   props: {
+  //     title: 'The Heart',
+  //     subtitle: 'What you love',
+  //     subTitleColor: 'text-red-300',
+  //     description: (
+  //       <>
+  //         The Heart is your <strong>guide</strong> in Journey.
+  //         <br /><br />
+  //         It is made up of the things you love from the heart. The things that make you curious, that shape you 
+  //       </>
+  //     ),
+  //     iconPath: '/icons/zones/heart.png',
+  //     bgColor: 'bg-red-50',
+  //   }
+  // },
+  // {
+  //   id: 'introduce-craft',
+  //   zoom: {
+  //     ids: [ikigaiCircleIds["The Craft"]],
+  //   },
+  //   component: IntroduceZoneStep,
+  //   props: {
+  //     title: 'The Craft',
+  //     subtitle: 'What you are good at',
+  //     subTitleColor: 'text-blue-400',
+  //     description: (
+  //       <>
+  //         The Craft is how you <strong>shape the world</strong>.
+  //         <br /><br />
+  //         It&apos;s what you&apos;re good at and what you can offer. What skills have you cultivated, what knowledge have you gained, what can you do?
+  //       </>
+  //     ),
+  //     iconPath: '/icons/zones/craft.png',
+  //     bgColor: 'bg-blue-50'
+  //   }
+  // },
+  // {
+  //   id: 'introduce-cause',
+  //   zoom: {
+  //     ids: [ikigaiCircleIds["The Cause"]],
+  //   },
+  //   component: IntroduceZoneStep,
+  //   props: {
+  //     title: 'The Cause',
+  //     subtitle: 'What the world needs',
+  //     subTitleColor: 'text-green-400',
+  //     description: (
+  //       <>
+  //         The Cause is your <strong>call to action</strong>.
+  //         <br /><br />
+  //         The world is rife with problems waiting to be solved ranging from your local community to the entire planet.
+  //         Which of them will you claim?
+  //       </>
+  //     ),
+  //     iconPath: '/icons/zones/cause.png',
+  //     bgColor: 'bg-green-50'
+  //   }
+  // },
+  // {
+  //   id: 'introduce-path',
+  //   zoom: {
+  //     ids: [ikigaiCircleIds["The Path"]],
+  //   },
+  //   component: IntroduceZoneStep,
+  //   props: {
+  //     title: 'The Path',
+  //     subtitle: 'Where you are going',
+  //     subTitleColor: 'text-yellow-700',
+  //     description: (
+  //       <>
+  //         The Path is the <strong>world of opportunities</strong>.
+  //         <br /><br />
+  //         What careers align with your skills? What industries offer the right rewards? Where should you go to find purpose?
+  //       </>
+  //     ),
+  //     iconPath: '/icons/zones/path.png',
+  //     bgColor: 'bg-yellow-50'
+  //   }
+  // },
   {
     id: 'introduce-user-guide',
     component: IntroduceUserGuide,
@@ -294,7 +320,15 @@ export const tutorialSteps: OnboardingStep[] = [
     id: 'introduce-aspects',
     component: IntroduceAspects,
     props: {
-      title: 'Aspects',
+      title: 'Aspect Types',
+    }, 
+    noView: true, // Don't render the parent in welcomeTour, just the component.
+  },
+  {
+    id: 'tldraw-tools',
+    component: IntroduceTldrawTools,
+    props: {
+      title: 'Tldraw Tools',
     }, 
     noView: true, // Don't render the parent in welcomeTour, just the component.
   },
@@ -303,8 +337,8 @@ export const tutorialSteps: OnboardingStep[] = [
     component: TeachZoomMechanics,
     props: {
       title: 'Zooming In and Out',
-      // subtitle: 'Where you are going',
-      // subTitleColor: 'text-yellow-700',
+      subtitle: 'Get a closer look, hide things, or make them big',
+      subTitleColor: 'text-purple-400',
       bgColor: 'bg-purple-50'
     }
   },
@@ -312,18 +346,11 @@ export const tutorialSteps: OnboardingStep[] = [
     id: 'teach-movement',
     component: TeachMovementMechanics,
     props: {
-      title: 'Moving Around the Canvas',
-      // subtitle: 'Where you are going',
-      // subTitleColor: 'text-yellow-700',
+      title: 'Moving Around',
+      subtitle: 'This place is yours to explore',
+      subTitleColor: 'text-purple-400',
       bgColor: 'bg-purple-50'
     }
   },
-  {
-    id: 'introduce-questions-helper',
-    component: IntroduceQuestionsHelper,
-    props: {
-      title: 'Questions Helper',
-    }, 
-    noView: true, // Don't render the parent in welcomeTour, just the component.
-  },
+
 ];

@@ -13,7 +13,7 @@ const DEFAULT_GUIDE_PANEL_SIZE = "w-96 h-64";
 
 
 export const Tutorial = track(() => { 
-  const { tutorialVisible, toggleTutorialVisibility, step, setStep } = useBoardContext();
+  const { tutorialVisible, toggleTutorialVisibility, step, setStep, setCurrentStepAsCompleted: setCurrentStepAsCompleted } = useBoardContext();
 
   // const [step, setStep] = useState(0);
   const [currentSize, setCurrentSize] = useState(DEFAULT_GUIDE_PANEL_SIZE);
@@ -97,19 +97,22 @@ export const Tutorial = track(() => {
   }, [editor, step]);
 
   const goToNextStep = () => {
+    setCurrentStepAsCompleted();
     if (step < tutorialSteps.length - 1) {
       setStep(step + 1);
+    } else if (step === tutorialSteps.length - 1) {
+      closeTour();
     }
   };
 
   const goToPreviousStep = () => {
     if (step > 0) {
-      console.log("setting step to ", step - 1)
       setStep(step - 1);
-    }
+    } 
   };
 
   const goToStep = (id: string) => {
+    setCurrentStepAsCompleted();
     const nextStep = tutorialSteps.find(step => step.id === id);
     if (nextStep) {
       setStep(tutorialSteps.indexOf(nextStep));
@@ -132,7 +135,7 @@ export const Tutorial = track(() => {
       {
         tutorialVisible && (
           tutorialSteps[step]?.noView ? (
-            <CurrentStepComponent {...tutorialSteps[step].props} goToStep={goToStep} updateWindowSize={updateSize} goToPreviousStep={goToPreviousStep}/>        
+            <CurrentStepComponent {...tutorialSteps[step].props} goToStep={goToStep} updateWindowSize={updateSize} goToPreviousStep={goToPreviousStep} goToNextStep={goToNextStep}/>        
           ) : (
           <Alert 
             className={`z-50 shadow-inner rounded-lg p-4 pointer-events-auto 

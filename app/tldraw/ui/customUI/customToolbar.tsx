@@ -21,11 +21,14 @@ interface ToolbarButtonProps {
 }
 
 const ToolbarZoneButton: React.FC<ToolbarButtonProps> = ({ zoneName, isSelected, handleButtonClick }) => {
-	 
+
+  const toolbarId = `create-${zoneName.replace(/\s/g, '-').toLowerCase()}-button`
+  // console.log("toolbarId", toolbarId)
   return (
     <motion.div >
       <button
         onClick={(_event) => handleButtonClick(zoneName)}
+        id={toolbarId}
         className={`w-10 h-10 rounded-lg ${isSelected(zoneName)} bg-purple-50 hover:bg-purple-200 flex items-center justify-center`}
       >
 				{/* <Image src={zoneIconPaths[zoneName]} alt={zoneName} width={24} height={24}/> */}
@@ -46,12 +49,12 @@ const selectedButtonColors = {
 }
 
 
-const softBgColors = {
-  "The Heart": "bg-red-100",
-  "The Craft": "bg-blue-100",
-  "The Cause": "bg-green-100",
-  "The Path": "bg-yellow-100"
-}
+// const softBgColors = {
+//   "The Heart": "bg-red-100",
+//   "The Craft": "bg-blue-100",
+//   "The Cause": "bg-green-100",
+//   "The Path": "bg-yellow-100"
+// }
 
 const buttonOffsets = {
 	// Centers (more or less) the new buttons on the zone button
@@ -97,7 +100,9 @@ const CreateAspectButtons: React.FC<CreateAspectButtonsProps> = ({ zoneName }) =
   
 
   return (
-    <div className={`flex flex-column bg-white rounded-lg pointer-events-auto p-2 mx-4 space-x-2 mb-2 shadow-md ${buttonOffsets[zoneName]}`}>
+    <div className={`flex flex-column bg-white rounded-lg pointer-events-auto p-2 mx-4 space-x-2 mb-2 shadow-md ${buttonOffsets[zoneName]}`}
+      id={`create-${zoneName.replace(/\s/g, '-').toLowerCase()}-aspects`}
+    >
       {zoneAspectTypes[zoneName].map((aspectType) => (
           <TooltipProvider key={aspectType}>
             <Tooltip>
@@ -174,18 +179,19 @@ const CustomToolbar: React.FC = () => {
           )}
         </AnimatePresence>
 
-        <div className="
+        <div id="create-aspect-toolbar" className="
           bg-white py-2 space-x-1 h-auto w-full mb-16 border border-gray-200
-          rounded-xl shadow-md flex items-bottom justify-center z-50
-        ">  
+          rounded-xl shadow-md flex items-bottom justify-center z-50"
+        >  
           <ToolbarZoneButton zoneName="The Craft" isSelected={isSelected} handleButtonClick={handleZoneButtonClick} />
           <ToolbarZoneButton zoneName="The Heart" isSelected={isSelected} handleButtonClick={handleZoneButtonClick} />
           <ToolbarZoneButton zoneName="The Cause" isSelected={isSelected} handleButtonClick={handleZoneButtonClick} />
           <ToolbarZoneButton zoneName="The Path" isSelected={isSelected} handleButtonClick={handleZoneButtonClick} />
         </div>
       </div>
-
-			<DefaultToolbar />
+      {/* <div id='tldraw-default-toolbar-container'> */}
+			  <DefaultToolbar />
+      {/* </div> */}
     </div>
   );
 };

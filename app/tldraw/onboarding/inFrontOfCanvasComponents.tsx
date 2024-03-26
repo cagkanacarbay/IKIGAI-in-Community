@@ -95,12 +95,15 @@ const QuestionHelperButton: React.FC = () => {
 
 
 const TutorialButton: React.FC = () => {
-  const { tutorialVisible, tutorialToCVisible, setTutorialToCVisible, step, totalSteps, isTutorialCompleted } = useBoardContext(); 
+  const { tutorialVisible, tutorialToCVisible, setTutorialToCVisible, step, completedSteps, totalSteps, isTutorialCompleted } = useBoardContext(); 
+  const completedStepsCount = completedSteps.size;
+
+  // console.log("istutorialcompleted: ", isTutorialCompleted)
   const [tutorialProgress, setTutorialProgress] = useState((step/totalSteps) * 100);
   // console.log("tutorialProgress: ", tutorialProgress)
 
   useEffect(() => {
-    setTutorialProgress((step/totalSteps) * 100);
+    setTutorialProgress((completedStepsCount/totalSteps) * 100);
   }, [step]);
 
   const bgColor = (tutorialVisible || tutorialToCVisible) ? 'bg-purple-300 hover:bg-purple-600' : 'bg-purple-100 hover:bg-purple-600';
@@ -123,7 +126,7 @@ const TutorialButton: React.FC = () => {
           onClick={() => setTutorialToCVisible(true)}
         >
           <div className="flex flex-col items-center pb-2">
-            <div className="text-center mb-1">{step+1}/{totalSteps}</div>
+            <div className="text-center mb-1">{completedStepsCount}/{totalSteps}</div>
             <div className="w-12 bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
               <div className={`bg-blue-600 h-1.5 rounded-full dark:bg-blue-500`} style={{width: `${tutorialProgress}%`}}></div>        
               
@@ -191,14 +194,14 @@ const NotLoggedInAlert: React.FC = () => {
 
 
 export const TutorialTableOfContents: React.FC = () => {
-  const { setStep, toggleTutorialVisibility, tutorialVisible, setTutorialToCVisible } = useBoardContext();
+  const { setStep, toggleTutorialVisibility, tutorialVisible, setTutorialToCVisible, completedSteps } = useBoardContext();
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className='pointer-events-auto flex flex-col bg-purple-50 w-80 top-80 absolute left-4 rounded-lg'
+      className='pointer-events-auto flex flex-col bg-purple-50 w-[320px] top-80 absolute left-4 rounded-lg'
       onPointerMove={stopEventPropagation} onPointerDown={stopEventPropagation}
     >
       <div className='m-4'>
@@ -210,8 +213,7 @@ export const TutorialTableOfContents: React.FC = () => {
         <AlertDescription className='text-black mt-1 py-1 flex-grow rounded-md bg-white px-6 shadow-md'>
           <div className="mt-1">
             {tutorialSteps.map((step, index) => (
-
-              <div key={step.id} className="mb-1 rounded hover:bg-purple-100 hover:text-purple-600">
+              <div key={step.id} className="mb-1 rounded hover:bg-purple-100 hover:text-purple-600 flex justify-between items-center">
                 <a 
                   onClick={() => {
                     console.log(step.props.title);
@@ -220,11 +222,11 @@ export const TutorialTableOfContents: React.FC = () => {
                       toggleTutorialVisibility();
                       setTutorialToCVisible(false);
                     }
-                    
                   }}
-                  className="text-lg font-medium  ">
+                  className="text-lg font-medium">
                   {index+1}. {step.props.title}
                 </a>
+                {completedSteps.has(index) && <span className="text-green-500 text-xl">✔</span>}
               </div>
             ))}
 
