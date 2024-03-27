@@ -86,7 +86,7 @@ export const ZonesOverviewStep: React.FC<GenericStepProps> = ({ goToStep }) => {
           ))}
         </div>
         <span className=''>
-          Together, they form your <strong>Ikigai</strong>. You'll explore the app as we go along. So let's dive right into it.
+          Together, they form your <strong>Ikigai</strong>. You&apos;ll explore the app as we go along. So let&apos;s dive right into it.
         </span>
       </AlertDescription>
     </>

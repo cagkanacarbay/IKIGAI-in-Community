@@ -101,7 +101,7 @@ export default function SignInForm() {
               {error && <div className="mt-2 text-center text-sm text-red-600">{error}</div>}
             </form>
             <p className="mt-4 text-center text-sm text-gray-300">
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link href="/signup" className="text-blue-400 transition-all duration-100 ease-in-out">
                   Sign Up
               </Link>

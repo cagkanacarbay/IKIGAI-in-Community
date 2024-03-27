@@ -46,7 +46,9 @@ export const BoardProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [questionHelperVisible, setQuestionHelperVisible] = useState<boolean>(false); 
   const [tutorialVisible, setTutorialVisible] = useState<boolean>(false);
   const [tutorialToCVisible, setTutorialToCVisible] = useState<boolean>(false);
-  const [step, setStep] = useState<number>(parseInt(localStorage.getItem('tutorialStep') || '0', 10));
+  // const [step, setStep] = useState<number>(parseInt(localStorage.getItem('tutorialStep') || '0', 10));
+  const [step, setStep] = useState<number>(0);
+
   const [isTutorialCompleted, setIsTutorialCompleted] = useState<boolean>(false);
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
 
@@ -54,7 +56,7 @@ export const BoardProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   useEffect(() => {
     const savedStep = parseInt(localStorage.getItem('tutorialStep') || '0', 10);
     setStep(savedStep);
-  
+
     const tutorialCompleted = localStorage.getItem('tutorialCompleted') === 'true';
     setIsTutorialCompleted(tutorialCompleted);
 
@@ -67,7 +69,6 @@ export const BoardProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   useEffect(() => {
     localStorage.setItem('tutorialStep', step.toString());
-
   }, [step]);
 
 
@@ -76,6 +77,7 @@ export const BoardProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       const newSteps = new Set(prevSteps.add(step));
       localStorage.setItem('completedSteps', JSON.stringify(Array.from(newSteps)));
       return newSteps;
+      
     });
 
     // console.log("here are all the completed steos: ", completedSteps)
@@ -85,7 +87,6 @@ export const BoardProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       setIsTutorialCompleted(true);
       localStorage.setItem('tutorialCompleted', 'true');
     }
-
   };
 
   const addCreatedAspect = (aspect: IAspectShape) => {

@@ -19,7 +19,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         const savedSnapshot = await prisma.ikigai_snapshot.create({
             data: { 
                 data: JSON.stringify(snapshotData),
-                user_id: parseInt(token.sub, 10)
+                user_id: parseInt(token.sub, 10),
+                ikigai_id: 1 // placeholder
             }
         });
 
