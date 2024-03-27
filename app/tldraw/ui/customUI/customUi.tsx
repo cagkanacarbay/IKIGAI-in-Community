@@ -3,7 +3,7 @@ import {
   Editor, toolbarItem, 
   TLUiActionItem, 
 } from '@tldraw/tldraw';
-import { saveImageAssetsAsBlobsAndUpdateMetadata, saveAsJSON, uploadSnapshot } from '../../boardStorage';
+import { saveBoardLocalJSON } from '../../../../lib/boardStorage';
 import { aspectTypes, getZoneName } from '@/lib/types';
 import { createAspectAction, addAspectTypeAction, removeAspectTypeAction } from './aspectActions';
 
@@ -56,39 +56,39 @@ export const uiOverrides = (isLoggedIn: boolean, editor: any): TLUiOverrides => 
   return {
     actions: (editor, actions) => {
 
-      actions['save-local'] = {
-        id: 'save-local',
-        label: 'Save Ikigai Locally',
-        icon: 'check',
-        readonlyOk: true,
-        onSelect: (source: any) => {
-          if (editor && editor.store) {
-            const snapshot = editor.store.getSnapshot();
-            const store = snapshot.store as Record<string, any>;
+      // actions['save-local'] = {
+      //   id: 'save-local',
+      //   label: 'Save Ikigai Locally',
+      //   icon: 'check',
+      //   readonlyOk: true,
+      //   onSelect: (source: any) => {
+      //     if (editor && editor.store) {
+      //       const snapshot = editor.store.getSnapshot();
+      //       const store = snapshot.store as Record<string, any>;
             
-            const assetSrcs: AssetSrc[] = [];
+      //       const assetSrcs: AssetSrc[] = [];
     
-            // Extract src from assets 
-            for (const key in store) {
-              if (key.startsWith('asset:')) {
-                const asset = store[key];
-                if (asset.props?.src) {
-                  assetSrcs.push({ id: key, src: asset.props.src });
-                  // delete asset.props.src;
-                }
-              }
-            }
+      //       // Extract src from assets 
+      //       for (const key in store) {
+      //         if (key.startsWith('asset:')) {
+      //           const asset = store[key];
+      //           if (asset.props?.src) {
+      //             assetSrcs.push({ id: key, src: asset.props.src });
+      //             // delete asset.props.src;
+      //           }
+      //         }
+      //       }
     
-            // Save the modified snapshot and asset SRCs
-            saveAsJSON(snapshot, 'editor-snapshot.json');
-            // console.log(snapshot)
-            // saveAsJSON(assetSrcs, 'asset-srcs.json');
-            // console.log(assetSrcs)
-          } else {
-            console.error('Editor or editor.store is undefined.');
-          }
-        },
-      };
+      //       // Save the modified snapshot and asset SRCs
+      //       saveBoardLocalJSON(snapshot, 'editor-snapshot.json');
+      //       // console.log(snapshot)
+      //       // saveAsJSON(assetSrcs, 'asset-srcs.json');
+      //       // console.log(assetSrcs)
+      //     } else {
+      //       console.error('Editor or editor.store is undefined.');
+      //     }
+      //   },
+      // };
 
       // "create-aspectType": Creates a new aspect with a type of aspectType
       aspectTypes.forEach((aspectType) => {

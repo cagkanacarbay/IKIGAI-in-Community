@@ -1,4 +1,4 @@
-import { uploadImageToStorageProviderTldraw } from "@/lib/storage";
+import { uploadImageToStorageProvider } from "@/lib/imageStorage";
 import { 
   TLBaseAsset, TLAssetPartial, TLStoreSnapshot, 
   SerializedStore, TLRecord, TLAsset, TLImageAsset, 
@@ -6,7 +6,7 @@ import {
 } from "@tldraw/tldraw";
 import { Editor } from "@tldraw/editor";
 import { useSession } from "next-auth/react";
-import { customShapeUtils } from "./shapes/customShapes";
+import { customShapeUtils } from "../app/tldraw/shapes/customShapes";
 
 
 type ImageAssetProps = {
@@ -40,7 +40,7 @@ export async function saveImageAssetsAsBlobsAndUpdateMetadata(storeSnapshot: Rec
       if (typeof asset.props.src === 'string' && !asset.meta?.blob_url) {
         const file = convertBase64ToFile(asset.props.src, key);
         if (file) {
-          const uploadedUrl = await uploadImageToStorageProviderTldraw(file);
+          const uploadedUrl = await uploadImageToStorageProvider(file);
           if (uploadedUrl) {
             updatedAssets.push({
               id: asset.id,
@@ -60,7 +60,7 @@ export async function saveImageAssetsAsBlobsAndUpdateMetadata(storeSnapshot: Rec
   editor.updateAssets(updatedAssets);
 }
   
-export function saveAsJSON<T>(data: T, filename: string): void {
+export function saveBoardLocalJSON<T>(data: T, filename: string): void {
   const stringified = JSON.stringify(data, null, 2);
   const blob = new Blob([stringified], { type: 'application/json' });
   const link = document.createElement('a');
@@ -88,27 +88,7 @@ export function convertBase64ToFile(base64Data: string, fileNameNoType: string):
 }
 
 
-// export async function uploadSnapshot(snapshot: TLStoreSnapshot) {
-
-//   const response = await fetch('/api/storage/snapshot', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify({ snapshotData: snapshot }),
-//   });
-
-//   if (!response.ok) {
-//     throw new Error(`Error while uploading your IKIGAI snapshot. Status: ${response.status}`);
-//   }
-
-//   const result = await response.json();
-
-//   return result
-// }
-
-
-export async function uploadSnapshot(snapshot: TLStoreSnapshot) {
+export async function uploadSnapshotToDatabase(snapshot: TLStoreSnapshot) {
   const cleanedSnapshot = cleanSnapshot(snapshot);
   console.log(cleanedSnapshot.store)
 
@@ -129,7 +109,7 @@ export async function uploadSnapshot(snapshot: TLStoreSnapshot) {
 
 
 /**
- * Takes the snapsjpt store from tldraw and modifies it prior to an upload
+ * Takes the snapshot store from tldraw and modifies it prior to an upload
  *  - removes IKIGAI circles from the store,
  *  - removes base64 src of assets (these are uploaded as blobs instead)
  * @param snapshot Snapshot of the editor.
@@ -241,38 +221,20 @@ async function fetchAssetSrcFromBlobStorage(blobUrl: string): Promise<string> {
   }
 }
 
-
-
-export async function fetchBoardGuideSnapshot() {
-  try {
-    // Fetch the snapshot from the API route
-    const response = await fetch('/api/storage/snapshot/board-guide');
-    const snapshot = await response.json();
-
-    // Return the store
-    return snapshot;
-  } catch (error) {
-    console.error('Error loading board guide:', error);
-    throw error;
+// Use this method to save a board to the database
+export const saveBoardToDatabase = async (editor: Editor): Promise<boolean> => {
+  if (editor && editor.store) {
+    const snapshot = editor.store.getSnapshot();
+    await saveImageAssetsAsBlobsAndUpdateMetadata(snapshot.store, editor);
+    const updatedSnapshot = editor.store.getSnapshot();
+    try {
+      const uploadResult = await uploadSnapshotToDatabase(updatedSnapshot);
+      console.log(uploadResult);
+      return true;
+    } catch (error) {
+      console.error("Failed to save the snapshot to the database.", error);
+      return false;
+    }
   }
-}
-
-
-export async function loadStoreWithBoardGuide(): Promise<TLStoreWithStatus> {
-  const newStore = createTLStore({
-    shapeUtils: customShapeUtils,
-  });
-
-  try {
-    const snapshot = await fetchBoardGuideSnapshot();
-    newStore.loadSnapshot(snapshot);
-  } catch (error) {
-    console.error('Error loading board guide snapshot:', error);
-  }
-
-  return {
-    store: newStore,
-    status: 'synced-remote',
-    connectionStatus: 'offline'
-  };
-}
+  return false;
+};

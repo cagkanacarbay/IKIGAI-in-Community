@@ -16,17 +16,9 @@ model ikigai_snapshot {
   data      String
   user_id   Int     
   user      user    @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  // items     items[]
+  createdAt DateTime @default(now())
+  ikigai_id Int   // keep track of an ikigai that changes over time. same id, means same ikigai over time
 }
-
-// model items {
-//   item_id   Int       @id @default(autoincrement())
-//   type      String
-//   text      String?
-//   image_url String?
-//   ikigai_id Int?
-//   ikigai    ikigai?   @relation(fields: [ikigai_id], references: [ikigai_id], onDelete: NoAction, onUpdate: NoAction)
-// }
 
 model user {
   id              Int       @id @default(autoincrement())
