@@ -193,10 +193,10 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
     };
   }, [hasUnsavedChanges]);
 
-  
+
   return (
       <div style={{ position: 'fixed', inset: 0 }} id="tldraw-ikigai-board">
-        {/* {!introCompleted && <IntroOverlay onFadeComplete={() => setIntroComplete(true)} />} */}
+        {!introCompleted && <IntroOverlay onFadeComplete={() => setIntroComplete(true)} />}
         <Toaster />
         <Tldraw
           onMount={initializeAppState}
