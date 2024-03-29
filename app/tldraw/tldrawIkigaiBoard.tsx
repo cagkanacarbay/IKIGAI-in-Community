@@ -50,7 +50,7 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
   const customUiOverrides = uiOverrides(isLoggedIn, editor);
 
   // Event Tracking
-  const { setHasUnsavedChanges } = useBoardContext();
+  const { hasUnsavedChanges, setHasUnsavedChanges } = useBoardContext();
 
   // Loader and intro sequence
   const [introCompleted, setIntroComplete] = useState(false);
@@ -168,24 +168,32 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
   useEffect(() => {
     // This useEffect ensures the user gets a chance to save their changes before quitting
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      console.log("beforeunload")
+      if (!hasUnsavedChanges) {
+        return;
+      }
+  
       e.preventDefault();
       e.returnValue = '';
     };
-
+  
     const handleUnload = () => {
+      if (!hasUnsavedChanges) {
+        return;
+      }
+  
       return "Navigating away will lose the changes you've made to your board. Please save if you'd like to keep your changes.";
     };
-
+  
     window.addEventListener('beforeunload', handleBeforeUnload);
     window.onbeforeunload = handleUnload;
-
+  
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       window.onbeforeunload = null;
     };
-  }, []);
+  }, [hasUnsavedChanges]);
 
+  
   return (
       <div style={{ position: 'fixed', inset: 0 }} id="tldraw-ikigai-board">
         {/* {!introCompleted && <IntroOverlay onFadeComplete={() => setIntroComplete(true)} />} */}
