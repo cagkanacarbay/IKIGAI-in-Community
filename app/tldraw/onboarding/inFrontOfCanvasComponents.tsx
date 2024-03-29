@@ -15,14 +15,13 @@ import { tutorialSteps } from './tutorial/welcomeSteps';
 
 const InFrontOfTheCanvasComponents: React.FC = ({}) => {
 
-  const { data: session } = useSession();
   const { tutorialToCVisible } = useBoardContext();
 
   return (
     <>
       <Tutorial />
       <QuestionHelper />
-      {session ? null : <NotLoggedInAlert />}
+      {/* {session ? null : <NotLoggedInAlert />} */}
       <div id='helper-buttons'>
         <QuestionHelperButton />
         <UserGuideButton />
@@ -140,55 +139,55 @@ const TutorialButton: React.FC = () => {
 };
 
 
-const NotLoggedInAlert: React.FC = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
+// const NotLoggedInAlert: React.FC = () => {
+//   const [isExpanded, setIsExpanded] = useState(false);
 
-  const handleToggleExpand = () => {
-    console.log("handleToggleExpand", isExpanded);
-    setIsExpanded(!isExpanded);
-  };
+//   const handleToggleExpand = () => {
+//     console.log("handleToggleExpand", isExpanded);
+//     setIsExpanded(!isExpanded);
+//   };
 
-  if (isExpanded) {
-    return (
-      <AnimatePresence>
-        <motion.div 
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.3 }}
-          exit={{ opacity: 0 }}
-          className='z-50 pointer-events-auto'
-          onPointerMove={stopEventPropagation} onPointerDown={stopEventPropagation}
-          >
+//   if (isExpanded) {
+//     return (
+//       <AnimatePresence>
+//         <motion.div 
+//           initial={{ scale: 0.8, opacity: 0 }}
+//           animate={{ scale: 1, opacity: 1 }}
+//           transition={{ duration: 0.3 }}
+//           exit={{ opacity: 0 }}
+//           className='z-50 pointer-events-auto'
+//           onPointerMove={stopEventPropagation} onPointerDown={stopEventPropagation}
+//           >
 
-          <div className="w-96 mx-auto border mt-2 rounded-md shadow-md bg-purple-50 ">
-            <div className='relative' >
-              <CloseButton onClick={handleToggleExpand}/>            
-            </div>            
-            <p className="text-center mb-2 mt-2 px-6 text-lg">To save your board, please <br/> sign up and log in to your account.</p>
-            <div className="flex justify-center gap-2 mb-1">
-              <Link href="/signup" passHref className="px-4 py-2 text-white bg-blue-300 hover:bg-blue-500 rounded transition duration-150 ease-in-out">
-                  Sign Up
-              </Link>
-              <Link href="/signin" passHref className="px-4 py-2 text-white bg-purple-300 hover:bg-purple-500 rounded transition duration-150 ease-in-out">
-                  Sign In
-              </Link>
-            </div>
+//           <div className="w-96 mx-auto border mt-2 rounded-md shadow-md bg-purple-50 ">
+//             <div className='relative' >
+//               <CloseButton onClick={handleToggleExpand}/>            
+//             </div>            
+//             <p className="text-center mb-2 mt-2 px-6 text-lg">To save your board, please <br/> sign up and log in to your account.</p>
+//             <div className="flex justify-center gap-2 mb-1">
+//               <Link href="/signup" passHref className="px-4 py-2 text-white bg-blue-300 hover:bg-blue-500 rounded transition duration-150 ease-in-out">
+//                   Sign Up
+//               </Link>
+//               <Link href="/signin" passHref className="px-4 py-2 text-white bg-purple-300 hover:bg-purple-500 rounded transition duration-150 ease-in-out">
+//                   Sign In
+//               </Link>
+//             </div>
 
-          </div>
-        </motion.div>
-      </AnimatePresence>
-    );
-  } else {
-    return (
-      <div className="flex items-center justify-center pointer-events-auto mt-2">
-        <button onClick={handleToggleExpand} onPointerMove={stopEventPropagation} onPointerDown={stopEventPropagation}
-          className="px-4 py-2 text-sm text-white bg-gray-400 hover:bg-gray-600 rounded transition duration-150 ease-in-out">
-            Not Logged In
-        </button>
-      </div>
-    );
-  }
-};
+//           </div>
+//         </motion.div>
+//       </AnimatePresence>
+//     );
+//   } else {
+//     return (
+//       <div className="flex items-center justify-center pointer-events-auto mt-2">
+//         <button onClick={handleToggleExpand} onPointerMove={stopEventPropagation} onPointerDown={stopEventPropagation}
+//           className="px-4 py-2 text-sm text-white bg-gray-400 hover:bg-gray-600 rounded transition duration-150 ease-in-out">
+//             Not Logged In
+//         </button>
+//       </div>
+//     );
+//   }
+// };
 
 
 

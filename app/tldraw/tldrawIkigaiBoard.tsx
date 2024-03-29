@@ -1,13 +1,13 @@
 "use client";
 import React, { useState, useEffect, useCallback } from 'react';
-import { Tldraw, Editor, TLStoreWithStatus, TLEditorComponents, TLEventMapHandler, TLUnknownShape, TLRecord } from '@tldraw/tldraw';
+import { Tldraw, Editor, TLStoreWithStatus, TLRecord, TLEventMapHandler, TLUnknownShape } from '@tldraw/tldraw';
 import '@tldraw/tldraw/tldraw.css';
 import IkigaiCircleShapeUtil, { IkigaiCircles } from './shapes/ikigaiCircles';
 import { uiOverrides } from './ui/customUI/customUi';
 import { useSession } from 'next-auth/react';
 import { Toaster } from "@/components/ui/sonner";
 import { useBoardContext } from './boardContext';
-import AspectShapeUtil, { IAspectShape } from './shapes/aspect';
+import AspectShapeUtil from './shapes/aspect';
 import { IntroOverlay } from './ui/IntroOverlay';
 import InFrontOfTheCanvasComponents from './onboarding/inFrontOfCanvasComponents';
 import { UserGuide } from './onboarding/userGuide/UserGuide';
@@ -18,6 +18,7 @@ import { DefaultToolbar, useTools, TLComponents, DefaultKeyboardShortcutsDialog,
 import 'tldraw/tldraw.css'
 import { aspectTypeTools } from './ui/customUI/aspectTypeTools';
 import CustomQuickActions from './ui/customUI/customQuickActions';
+import _ from 'lodash';
 
 
 const components: TLComponents = {
@@ -28,17 +29,6 @@ const components: TLComponents = {
   PageMenu: null,
   QuickActions: CustomQuickActions,
   HelpMenu: null
-  // ActionsMenu: CustomActionsMenu,
-  // KeyboardShortcutsDialog: (props) => {
-	// 	const tools = useTools() 
-	// 	return (
-	// 		<DefaultKeyboardShortcutsDialog {...props}>
-	// 			<DefaultKeyboardShortcutsDialogContent />
-	// 			{/* Ideally, we'd interleave this into the tools group */}
-	// 			{/* <TldrawUiMenuItem {...tools['arrow']} /> */}
-	// 		</DefaultKeyboardShortcutsDialog>
-	// 	)
-	// },
 }
 
 
@@ -48,15 +38,6 @@ const customShapeUtils = [IkigaiCircleShapeUtil, AspectShapeUtil];
 interface IkigaiBoardV2Props {
   storeWithStatus?: TLStoreWithStatus;
 }
-
-function convertToIAspectShape(record: TLRecord): IAspectShape | null {
-  if (record.typeName === 'shape' && record.type === 'aspect') {
-      return record as IAspectShape;
-  }
-
-  return null; 
-}
-
 
 export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
   
@@ -69,8 +50,7 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
   const customUiOverrides = uiOverrides(isLoggedIn, editor);
 
   // Event Tracking
-  const { addCreatedAspect, addEditedAspect } = useBoardContext();
-  const [ hasUnsavedChanges, setHasUnsavedChanges ] = useState(false);
+  const { setHasUnsavedChanges } = useBoardContext();
 
   // Loader and intro sequence
   const [introCompleted, setIntroComplete] = useState(false);
@@ -79,9 +59,6 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
   const initializeAppState = useCallback((editor: Editor) => {
     setEditor(editor);
   }, []);
-
-  const [storeEvents, setStoreEvents] = useState<string[]>([])
-
   
   useEffect(() => {
     if (editor && introCompleted) {
@@ -96,52 +73,96 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
     if (!editor) return;
 
     const handleChangeEvent: TLEventMapHandler<'change'> = (change) => {
+      // Here we listen to board events and if there is any relevant change
+      // we set the hasUnsavedChanges to true so the user can see the save button
 
+      // Added a shape to the board
+      for (const record of Object.values(change.changes.added)) {
+				if (record.typeName === 'shape') {
+					setHasUnsavedChanges(true);
+				}
+			}
 
-      // Create new aspect events
-      Object.values(change.changes.added)
-      .filter(record => record.typeName === 'shape' && record.type === 'aspect')
-      .forEach(record => {
-          const aspectShape = convertToIAspectShape(record);
-          if (aspectShape) {
-              // add to store events
-              // setStoreEvents([...storeEvents, {aspectShape.id}])
-              addCreatedAspect(aspectShape);
-              // console.log("User created a new aspect", aspectShape);
-              console.log(record)
+			// Updated a shape on the board
+			for (const [from, to] of Object.values(change.changes.updated)) {
+				// if (
+				// 	from.typeName === 'instance' &&
+				// 	to.typeName === 'instance' &&
+				// 	from.currentPageId !== to.currentPageId
+				// ) {
+				// 	logChangeEvent(`changed page (${from.currentPageId}, ${to.currentPageId})`)
+				// } else 
+        if (from.id.startsWith('shape') && to.id.startsWith('shape')) {
+          console.log("in there")
+					let diff = _.reduce(
+						from,
+						(result: any[], value: any, key: string) =>
+							_.isEqual(value, (to as any)[key]) ? result : result.concat([key, (to as any)[key]]),
+						[]
+					)
+					if (diff?.[0] === 'props') {
+						diff = _.reduce(
+							(from as any).props,
+							(result: any[], value: string, key: string) =>
+								_.isEqual(value, (to as any).props[key])
+									? result
+									: result.concat([key, (to as any).props[key]]),
+							[]
+						)
+					}
+          setHasUnsavedChanges(true);
+				}
+			}
 
-          }
-      });
+			// Removed a shape from the board
+			for (const record of Object.values(change.changes.removed)) {
+				if (record.typeName === 'shape') {
+					setHasUnsavedChanges(true);
+				}
+			}
 
+    //   console.log("Type of change:", typeof change);
+    //   console.log("Change object:", change);
+    //       // Create new aspect events
+    //   Object.values(change.changes.added)
+    //   .filter(record => record.typeName === 'shape' && record.type === 'aspect')
+    //   .forEach(record => {
+    //       const aspectShape = convertToIAspectShape(record);
+    //       if (aspectShape) {
+    //           console.log("User created a new aspect", aspectShape);
+    //       }
+    //   });
   
-      // TODO: Update TLRecords into IAspectShapes like above
-      for (const [from, to] of Object.values(change.changes.updated)) {
-        if (
-          from.typeName === 'shape' &&
-          to.typeName === 'shape' &&
-          from.type === 'aspect' &&
-          to.type === 'aspect'
-        ) {
-          // console.log("User edited an aspect", from, to);
-          // addEditedAspect(from, to);
-        }
-      }
+    //   // TODO: Update TLRecords into IAspectShapes like above
+    //   for (const [from, to] of Object.values(change.changes.updated)) {
+    //     if (
+    //       from.typeName === 'shape' &&
+    //       to.typeName === 'shape' &&
+    //       from.type === 'aspect' &&
+    //       to.type === 'aspect'
+    //     ) {
+    //       console.log("User edited an aspect", from, to);
+    //       // addEditedAspect(from, to);
+    //     }
+    //   }
 
 
-      for (const record of Object.values(change.changes.removed)) {
-        if (record.typeName === 'shape' && record.type === 'aspect') {
-          // console.log("Got a delete event")
-          // logChangeEvent(`deleted aspect (${record.type})`);
-        }
-      }
-    };
+    //   for (const record of Object.values(change.changes.removed)) {
+    //     if (record.typeName === 'shape' && record.type === 'aspect') {
+    //       console.log("Got a delete event")
+    //       // logChangeEvent(`deleted aspect (${record.type})`);
+    //     }
+    //   }
+    // };
+
+    }
 
     const cleanupFunction = editor.store.listen(handleChangeEvent, { source: 'user', scope: 'all' });
 
     return () => {
       cleanupFunction();
     };
-  }, [editor, addCreatedAspect]);
+  }, [editor]);
 
 
   useEffect(() => {

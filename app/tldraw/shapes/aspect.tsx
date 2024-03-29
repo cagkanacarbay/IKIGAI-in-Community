@@ -23,15 +23,17 @@ import {
   TLDefaultVerticalAlignStyle,
   EnumStyleProp,
   DefaultFontStyle,
-  Editor
+  Editor,
+  TLRecord
   
 } from '@tldraw/tldraw';
-import { ShapePropsType } from '../tldrawHelpers/deepTldraw';
+import { ShapePropsType } from '../utilities/deepTldraw';
 import { AspectIcon, ZoneIcon} from './aspectIcons';
 import { AspectType } from '@/lib/types';
-import { TextLabel, TEXT_PROPS, FONT_FAMILIES, LABEL_FONT_SIZES } from '../tldrawHelpers/textLabel';
+import { TextLabel, TEXT_PROPS, FONT_FAMILIES, LABEL_FONT_SIZES } from '../utilities/textLabel';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import { IAspectShape } from './aspect';
 
 export const BASE_ASPECT_HEIGHT = 32
 export const MIN_ASPECT_WIDTH = 120
@@ -359,4 +361,11 @@ function updateGrowYProp(editor: Editor, shape: IAspectShape, prevGrowY = 0) {
     },
   }
   
+}function convertToIAspectShape(record: TLRecord): IAspectShape | null {
+  if (record.typeName === 'shape' && record.type === 'aspect') {
+    return record as IAspectShape;
+  }
+
+  return null;
 }
+

@@ -5,10 +5,10 @@ import { AspectType } from '@/lib/types';
 import { tutorialSteps } from './onboarding/tutorial/welcomeSteps';
 
 interface BoardContextType {
-  createdAspects: IAspectShape[];
-  addCreatedAspect: (aspect: IAspectShape) => void;
-  editedAspects: { fromAspect: IAspectShape, toAspect: IAspectShape }[];
-  addEditedAspect: (fromAspect: IAspectShape, toAspect: IAspectShape) => void;
+  // createdAspects: IAspectShape[];
+  // addCreatedAspect: (aspect: IAspectShape) => void;
+  // editedAspects: { fromAspect: IAspectShape, toAspect: IAspectShape }[];
+  // addEditedAspect: (fromAspect: IAspectShape, toAspect: IAspectShape) => void;
   userGuideVisible: boolean;
   toggleUserGuideVisibility: () => void;
   tutorialVisible: boolean;
@@ -26,6 +26,8 @@ interface BoardContextType {
   setIsTutorialCompleted: (isCompleted: boolean) => void;
   completedSteps: Set<number>;
   setCurrentStepAsCompleted: () => void;
+  hasUnsavedChanges: boolean;
+  setHasUnsavedChanges: (hasChanges: boolean) => void;
 }
 
 const BoardContext = createContext<BoardContextType | undefined>(undefined);
@@ -39,8 +41,8 @@ export const useBoardContext = () => {
 };
 
 export const BoardProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [createdAspects, setCreatedAspects] = useState<IAspectShape[]>([]);
-  const [editedAspects, setEditedAspects] = useState<{ fromAspect: IAspectShape, toAspect: IAspectShape }[]>([]);
+  // const [createdAspects, setCreatedAspects] = useState<IAspectShape[]>([]);
+  // const [editedAspects, setEditedAspects] = useState<{ fromAspect: IAspectShape, toAspect: IAspectShape }[]>([]);
   const [questionAspectType, setQuestionAspectType] = useState<AspectType>("community");
   const [userGuideVisible, setUserGuideVisible] = useState<boolean>(false); 
   const [questionHelperVisible, setQuestionHelperVisible] = useState<boolean>(false); 
@@ -51,6 +53,8 @@ export const BoardProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const [isTutorialCompleted, setIsTutorialCompleted] = useState<boolean>(false);
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
+
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
 
 
   useEffect(() => {
@@ -89,13 +93,13 @@ export const BoardProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
   };
 
-  const addCreatedAspect = (aspect: IAspectShape) => {
-    setCreatedAspects((prevAspects) => [...prevAspects, aspect]);
-  };
+  // const addCreatedAspect = (aspect: IAspectShape) => {
+  //   setCreatedAspects((prevAspects) => [...prevAspects, aspect]);
+  // };
 
-  const addEditedAspect = (fromAspect: IAspectShape, toAspect: IAspectShape) => {
-    setEditedAspects([...editedAspects, { fromAspect, toAspect }]);
-  };
+  // const addEditedAspect = (fromAspect: IAspectShape, toAspect: IAspectShape) => {
+  //   setEditedAspects([...editedAspects, { fromAspect, toAspect }]);
+  // };
 
   const toggleUserGuideVisibility = () => setUserGuideVisible(!userGuideVisible);
   const toggleQuestionHelperVisibility = () => setQuestionHelperVisible(!questionHelperVisible);
@@ -103,10 +107,10 @@ export const BoardProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   return (
     <BoardContext.Provider value={{
-      createdAspects,
-      addCreatedAspect,
-      editedAspects,
-      addEditedAspect,
+      // createdAspects,
+      // addCreatedAspect,
+      // editedAspects,
+      // addEditedAspect,
       userGuideVisible, 
       toggleUserGuideVisibility, 
       questionHelperVisible,
@@ -123,7 +127,9 @@ export const BoardProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       isTutorialCompleted,
       setIsTutorialCompleted,
       completedSteps,
-      setCurrentStepAsCompleted
+      setCurrentStepAsCompleted,
+      hasUnsavedChanges,
+      setHasUnsavedChanges
     }}>
       {children}
     </BoardContext.Provider>
