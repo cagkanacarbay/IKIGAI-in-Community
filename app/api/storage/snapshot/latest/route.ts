@@ -32,7 +32,6 @@ export async function GET(
           return NextResponse.json({ error: 'Snapshot not found for the user' }, { status: 404 });
       }
 
-    //   console.log("latestIkigaiSnapshot", latestIkigaiSnapshot)
       // Respond with the latest snapshot data
       return NextResponse.json(latestIkigaiSnapshot, { status: 200 });
 

@@ -31,27 +31,9 @@ import { AspectIcon, ZoneIcon} from './aspectIcons';
 import { AspectType } from '@/lib/types';
 import { TextLabel, TEXT_PROPS, FONT_FAMILIES, LABEL_FONT_SIZES } from '../utilities/textLabel';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
 
 export const BASE_ASPECT_HEIGHT = 32
 export const MIN_ASPECT_WIDTH = 120
-
-// const bgColors = {
-//   "blue": "bg-blue-100",
-//   "green": "bg-green-100",
-//   "red": "bg-red-100",
-//   "yellow": "bg-yellow-100",
-//   "teal": "bg-teal-100",
-//   "purple": "bg-purple-50",
-//   "lime": "bg-lime-100",
-//   "amber": "bg-amber-100",
-//   "purple-strong": "bg-purple-200",
-//   "orange": "bg-orange-200",
-//   "yellow-strong": "bg-yellow-200",
-//   "emerald": "bg-emerald-200",
-//   "amber-strong": "bg-amber-400",
-//   "default": "bg-gray-100"
-// }
 
 const bgColors = {
   "craft": '#7D77FF',
@@ -73,7 +55,6 @@ const bgColors = {
 }
 
 export const aspectShapeProps = {
-  // color: T.setEnum(new Set(["blue", "green", "red", "yellow", "teal", "purple", "lime", "amber", "purple-strong", "orange", "yellow-strong", "emerald", "amber-strong", "default"])),
   color: T.setEnum(new Set(["heart", "craft", "path", "cause", "heart-craft", "heart-cause", "heart-path", "craft-cause", "craft-path", "cause-path", "heart-craft-cause", "craft-path-cause", "heart-craft-path", "heart-cause-path", "ikigai", "default"])),
   size: DefaultSizeStyle,
   font: DefaultFontStyle,
@@ -93,7 +74,6 @@ export interface AspectShapeMeta {
 
 declare type AspectShapeProps = ShapePropsType<typeof aspectShapeProps>;
 export declare type IAspectShape = TLBaseShape<'aspect', AspectShapeProps> & { meta: AspectShapeMeta };
-
 
 
 export default class AspectShape extends ShapeUtil<IAspectShape> {
