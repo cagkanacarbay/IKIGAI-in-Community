@@ -72,7 +72,7 @@ export default function LoadSnapshotId({ params }: { params: { snapshotId: strin
   }, [params.snapshotId]);
 
   const loadNewBoard = () => {
-    router.push('/tldraw');
+    router.push('/board/new');
   }
 
   const goToMostRecentBoard = () => {
