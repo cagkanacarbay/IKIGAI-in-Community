@@ -135,7 +135,6 @@ export const QUESTIONS: Record<AspectType, string[]> = {
   "financial-freedom": [
     "What's a freelance project you'd like to work on in the future?",
     "What's a one day business you can spin up today?",
-    "",
   ],
   growth: [
     "What area of your professional expertise are you looking to deepen?",
