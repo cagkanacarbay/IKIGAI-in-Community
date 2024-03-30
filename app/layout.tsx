@@ -10,7 +10,7 @@ export const metadata = {
   description: 'explore your ikigai',
 }
 
-const GTAG_ID = process.env.GTAG_ID;
+const GTAG_ID = process.env.NEXT_PUBLIC_GTAG_ID;
 
 
 export default function RootLayout({
@@ -18,15 +18,18 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
   return (
+    
     <html lang="en">
-      <Head>
+      <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-        {process.env.NODE_ENV === "production" && (
+        {process.env.VERCEL_ENV === 'production' && (
           <>
             <Script async src={`https://www.googletagmanager.com/gtag/js?id=${GTAG_ID}`}></Script>
             <Script id="google-analytics">
               {`
+                console.log("GTAG_ID", '${GTAG_ID}');
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
@@ -35,8 +38,7 @@ export default function RootLayout({
             </Script>
           </>
         )}
-      </Head>
-
+      </head>
       <body className={`${inter.className}`}>
         {children}
       </body>
