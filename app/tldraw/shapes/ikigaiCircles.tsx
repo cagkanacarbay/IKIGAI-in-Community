@@ -186,8 +186,6 @@ export function IkigaiCircles() {
         });
       }
     }
-
-    // console.log("ikigai circles to be created: ", shapesToCreate)
   
     if (shapesToCreate.length > 0) {
       editor.createShapes(shapesToCreate);

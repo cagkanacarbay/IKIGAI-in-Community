@@ -23,8 +23,7 @@ import {
   TLDefaultVerticalAlignStyle,
   EnumStyleProp,
   DefaultFontStyle,
-  Editor,
-  TLRecord
+  Editor
   
 } from '@tldraw/tldraw';
 import { ShapePropsType } from '../utilities/deepTldraw';
@@ -33,7 +32,6 @@ import { AspectType } from '@/lib/types';
 import { TextLabel, TEXT_PROPS, FONT_FAMILIES, LABEL_FONT_SIZES } from '../utilities/textLabel';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { IAspectShape } from './aspect';
 
 export const BASE_ASPECT_HEIGHT = 32
 export const MIN_ASPECT_WIDTH = 120
@@ -129,22 +127,6 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
     const inTheCraft = this.editor.isPointInShape(ikigaiCircleMap['theCraft'], { x: current.x, y: current.y })
     const inTheCause = this.editor.isPointInShape(ikigaiCircleMap['theCause'], { x: current.x, y: current.y })
     const inThePath = this.editor.isPointInShape(ikigaiCircleMap['thePath'], { x: current.x, y: current.y })
-  
-    // const color = 
-    //   inTheHeart && inTheCraft && inTheCause && inThePath ? "amber-strong" : 
-    //   inTheHeart && inTheCraft && inTheCause ? "orange" :
-    //   inTheHeart && inTheCraft && inThePath ? "purple-strong" :
-    //   inTheHeart && inTheCause && inThePath ? "emerald" :
-    //   inTheCraft && inTheCause && inThePath ? "yellow-strong" :
-    //   inTheHeart && inTheCraft ? "purple" : 
-    //   inTheHeart && inTheCause ? "amber" : 
-    //   inThePath && inTheCause ? "lime" : 
-    //   inThePath && inTheCraft ? "teal" : 
-    //   inTheHeart ? "red" : 
-    //   inTheCraft ? "blue" :
-    //   inTheCause ? "green" : 
-    //   inThePath ? "yellow" : 
-    //   "default"; 
 
     const color = 
       inTheHeart && inTheCraft && inTheCause && inThePath ? "ikigai" : 
@@ -168,10 +150,6 @@ export default class AspectShape extends ShapeUtil<IAspectShape> {
     })
 
   };
-
-  // onDoubleClick = (shape: IAspectShape) => {
-  //   console.log("double click: ", shape)
-  // }
 
   getDefaultProps(): IAspectShape['props'] {
     return {
@@ -361,11 +339,4 @@ function updateGrowYProp(editor: Editor, shape: IAspectShape, prevGrowY = 0) {
     },
   }
   
-}function convertToIAspectShape(record: TLRecord): IAspectShape | null {
-  if (record.typeName === 'shape' && record.type === 'aspect') {
-    return record as IAspectShape;
-  }
-
-  return null;
 }
-

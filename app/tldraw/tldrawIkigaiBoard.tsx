@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useCallback } from 'react';
-import { Tldraw, Editor, TLStoreWithStatus, TLRecord, TLEventMapHandler, TLUnknownShape } from '@tldraw/tldraw';
+import { Tldraw, Editor, TLStoreWithStatus, TLRecord, TLShapeId, TLEventMapHandler, TLUnknownShape } from '@tldraw/tldraw';
 import '@tldraw/tldraw/tldraw.css';
 import IkigaiCircleShapeUtil, { IkigaiCircles } from './shapes/ikigaiCircles';
 import { uiOverrides } from './ui/customUI/customUi';
@@ -58,7 +58,31 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
   const [loadWelcome, setLoadWelcome] = useState(false);
 
   const initializeAppState = useCallback((editor: Editor) => {
+
+    const unlockLoadedShapes = () => {
+      // Objects are locked when saved to the database for some reason. Unlock them here on load
+      const shapesToUnlock: TLShapeId[] = [];
+
+      const snapshot = editor.store.getSnapshot()
+      console.log("snapshot", snapshot)
+
+      // Iterate over the snapshot to find shapes that are locked
+      Object.entries(snapshot.store).forEach(([id, shape]) => {
+          // Check if the key indicates a shape and the shape is not an ikigaiCircle
+          if (id.startsWith("shape:") && !id.includes("ikigaiCircle") ) {
+            if ((shape as any).isLocked) {
+              shapesToUnlock.push(id as TLShapeId)
+            }
+          }
+      });
+      editor.toggleLock(shapesToUnlock);
+
+    }
+
+    setTimeout(unlockLoadedShapes, 200);
+
     setEditor(editor);
+
   }, []);
   
   useEffect(() => {
@@ -94,7 +118,7 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
 				// 	logChangeEvent(`changed page (${from.currentPageId}, ${to.currentPageId})`)
 				// } else 
         if (from.id.startsWith('shape') && to.id.startsWith('shape')) {
-          console.log("in there")
+          
 					let diff = _.reduce(
 						from,
 						(result: any[], value: any, key: string) =>
@@ -193,6 +217,8 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
       window.onbeforeunload = null;
     };
   }, [hasUnsavedChanges]);
+
+
 
 
   return (
