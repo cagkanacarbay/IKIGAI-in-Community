@@ -195,6 +195,8 @@ export function IkigaiCircles() {
       editor.toggleLock(circles);
       editor.zoomToFit({ duration: 500 });
     }
+
+    editor.sendToBack([...Object.values(ikigaiCircleIds)])
   }, [editor]);
 
   return null;

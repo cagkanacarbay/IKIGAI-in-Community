@@ -1,5 +1,5 @@
 import { Editor } from '@tldraw/tldraw';
-import { ikigaiCircleIds, zoneNameToId } from '../shapes/shapeIds';
+import { ikigaiCircleIds } from '../shapes/shapeIds';
 import { ZoneName } from '@/lib/types';
 import { TLShapeId } from '@tldraw/tldraw';
 
@@ -19,7 +19,7 @@ export function zoomToIkigaiCircles(editor: Editor) {
 
 export function zoomToZone(editor: Editor, zoneName: ZoneName) {
 
-  const ikigaiCircleId = zoneNameToId[zoneName];
+  const ikigaiCircleId = ikigaiCircleIds[zoneName];
   editor.select(ikigaiCircleId);
   editor.zoomToSelection({duration: 300});
   editor.deselect(ikigaiCircleId);

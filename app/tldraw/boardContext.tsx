@@ -28,6 +28,8 @@ interface BoardContextType {
   setCurrentStepAsCompleted: () => void;
   hasUnsavedChanges: boolean;
   setHasUnsavedChanges: (hasChanges: boolean) => void;
+  ikigaiId: string | undefined;
+  setIkigaiId: (id: string | undefined) => void;
 }
 
 const BoardContext = createContext<BoardContextType | undefined>(undefined);
@@ -56,6 +58,7 @@ export const BoardProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
 
+  const [ikigaiId, setIkigaiId] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     const savedStep = parseInt(localStorage.getItem('tutorialStep') || '0', 10);
@@ -129,7 +132,9 @@ export const BoardProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       completedSteps,
       setCurrentStepAsCompleted,
       hasUnsavedChanges,
-      setHasUnsavedChanges
+      setHasUnsavedChanges,
+      ikigaiId,
+      setIkigaiId
     }}>
       {children}
     </BoardContext.Provider>

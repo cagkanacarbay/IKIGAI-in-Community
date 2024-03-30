@@ -10,7 +10,7 @@ import AspectShapeUtil, { IAspectShape } from '../../shapes/aspect';
 import { getAspectColorByZone } from '@/lib/types';
 import { ulid } from 'ulid';
 import { QUESTIONS } from './questions';
-import { zoneNameToId } from '../../shapes/shapeIds';
+import { ikigaiCircleIds } from '../../shapes/shapeIds';
 import { IIkigaiCircleShape } from '../../shapes/ikigaiCircles';
 import {
   Select,
@@ -92,7 +92,7 @@ export const QuestionHelper: React.FC = () => {
       const newAspectId = createShapeId(`aspect-${ulid()}`);
       setAspectId(newAspectId);
 
-      const ikigaiCircle = editor.getShape(zoneNameToId[zone]) as IIkigaiCircleShape;
+      const ikigaiCircle = editor.getShape(ikigaiCircleIds[zone]) as IIkigaiCircleShape;
       const { x, y, radius } = ikigaiCircle.props;
 
       let adjustedX = x + radius;
@@ -158,7 +158,7 @@ export const QuestionHelper: React.FC = () => {
       }
     };
 
-    editor.select(zoneNameToId[zone]);
+    editor.select(ikigaiCircleIds[zone]);
     editor.zoomToSelection({duration: 500});
 
     if (questionHelperVisible) {

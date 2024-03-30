@@ -41,7 +41,7 @@ export default function CustomQuickActions() {
 const SaveButton: React.FC = () => {
   const editor = useEditor();
   const { data: session } = useSession();
-  const { hasUnsavedChanges, setHasUnsavedChanges } = useBoardContext();
+  const { hasUnsavedChanges, setHasUnsavedChanges, ikigaiId, setIkigaiId } = useBoardContext();
   const [isSaving, setIsSaving] = useState(false); 
   const [showNotLoggedInAlert, setShowNotLoggedInAlert] = useState(false);
 
@@ -59,13 +59,14 @@ const SaveButton: React.FC = () => {
     
     setIsSaving(true);
     const start = Date.now();
-    const saveStatus = await saveBoardToDatabase(editor);
+    const saveResult = await saveBoardToDatabase(editor, ikigaiId);
+    // console.log("Save Status: ", saveResult	)
     const end = Date.now();
   
-    if (!saveStatus) {
-      // alert("Failed to save the snapshot to the database. Please try again.");
+    if (saveResult.status === "error") {
+      alert("Failed to save the snapshot to the database. Please try again.");
     } else {
-      // alert("Saved successfully!");
+      setIkigaiId(saveResult.result.ikigai_id)
       setHasUnsavedChanges(false);
     }
   
@@ -108,13 +109,8 @@ const SaveButton: React.FC = () => {
 };
 
 
-
-
 const NotLoggedInAlertContent: React.FC = () => {
 
-  const handleClose = () => {
-    console.log("sdsads");
-  };
   return (
     <AlertDialogContent>
       <AlertDialogCancel  className="absolute top-0 right-0 bg-red-200 hover:bg-red-700 p-2">

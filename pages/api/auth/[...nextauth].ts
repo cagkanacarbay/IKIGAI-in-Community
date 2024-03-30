@@ -13,7 +13,7 @@ export default NextAuth({
         password:  { label: "Password", type: "password" }
       },
       authorize: async (credentials, req) => {
-        console.log("new loging", credentials)
+        // console.log("new loging", credentials)
 
         if (!credentials) return null;
         
@@ -21,7 +21,7 @@ export default NextAuth({
           where: { username: credentials.username }
         });
 
-        console.log("user", user)
+        // console.log("user", user)
 
         if (user && bcrypt.compareSync(credentials.password, user.password_hash)) {
           return {
@@ -38,7 +38,7 @@ export default NextAuth({
   ],
   callbacks: {
     async session({ session, token }) {
-      console.log("session", session, token	)
+      // console.log("session", session, token	)
       if (token.sub) {
         session.user.id = token.sub; 
       }

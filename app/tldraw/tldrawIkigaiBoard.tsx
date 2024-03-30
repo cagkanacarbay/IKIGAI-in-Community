@@ -10,7 +10,7 @@ import { useBoardContext } from './boardContext';
 import AspectShapeUtil from './shapes/aspect';
 import { IntroOverlay } from './ui/IntroOverlay';
 import InFrontOfTheCanvasComponents from './onboarding/inFrontOfCanvasComponents';
-import { UserGuide } from './onboarding/userGuide/UserGuide';
+// import { UserGuide } from './onboarding/userGuide/UserGuide';
 import CustomActionsMenu from './ui/customUI/customActions';
 import CustomToolbar from './ui/customUI/customToolbar';
 import { customAssetUrls } from './ui/customUI/customAssets';
@@ -23,7 +23,7 @@ import _ from 'lodash';
 
 const components: TLComponents = {
   Toolbar: CustomToolbar, 
-  OnTheCanvas: UserGuide,
+  // OnTheCanvas: UserGuide,
   InFrontOfTheCanvas: InFrontOfTheCanvasComponents,
   ActionsMenu: null,
   PageMenu: null,
@@ -33,10 +33,11 @@ const components: TLComponents = {
 
 
 const customTools = [...aspectTypeTools];
-const customShapeUtils = [IkigaiCircleShapeUtil, AspectShapeUtil];
+export const customShapeUtils = [IkigaiCircleShapeUtil, AspectShapeUtil];
 
 interface IkigaiBoardV2Props {
   storeWithStatus?: TLStoreWithStatus;
+  // ikigaiId?: string;
 }
 
 export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
@@ -196,7 +197,7 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
 
   return (
       <div style={{ position: 'fixed', inset: 0 }} id="tldraw-ikigai-board">
-        {!introCompleted && <IntroOverlay onFadeComplete={() => setIntroComplete(true)} />}
+        {/* {!introCompleted && <IntroOverlay onFadeComplete={() => setIntroComplete(true)} />} */}
         <Toaster />
         <Tldraw
           onMount={initializeAppState}

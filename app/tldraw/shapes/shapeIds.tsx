@@ -7,9 +7,9 @@ export const ikigaiCircleIds = {
   "The Path": createShapeId('ikigaiCircle-thePath')
 };
 
-export const zoneNameToId = {
-  'The Heart': ikigaiCircleIds['The Heart'],
-  'The Craft': ikigaiCircleIds['The Craft'],
-  'The Path': ikigaiCircleIds['The Path'],
-  'The Cause': ikigaiCircleIds['The Cause'],
-};
+// export const zoneNameToId = {
+//   'The Heart': ikigaiCircleIds['The Heart'],
+//   'The Craft': ikigaiCircleIds['The Craft'],
+//   'The Path': ikigaiCircleIds['The Path'],
+//   'The Cause': ikigaiCircleIds['The Cause'],
+// };

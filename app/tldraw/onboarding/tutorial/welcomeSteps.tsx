@@ -308,14 +308,14 @@ export const tutorialSteps: OnboardingStep[] = [
   //     bgColor: 'bg-yellow-50'
   //   }
   // },
-  {
-    id: 'introduce-user-guide',
-    component: IntroduceUserGuide,
-    props: {
-      title: 'User Guide',
-    }, 
-    noView: true, // Don't render the parent in welcomeTour, just the component.
-  },
+  // {
+  //   id: 'introduce-user-guide',
+  //   component: IntroduceUserGuide,
+  //   props: {
+  //     title: 'User Guide',
+  //   }, 
+  //   noView: true, // Don't render the parent in welcomeTour, just the component.
+  // },
   {
     id: 'introduce-aspects',
     component: IntroduceAspects,

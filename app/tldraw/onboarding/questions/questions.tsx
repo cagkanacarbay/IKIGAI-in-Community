@@ -12,7 +12,7 @@ export const QUESTIONS: Record<AspectType, string[]> = {
     "What unique insights have you gained from your current or past job roles?",
     "Are there any niche or unconventional tools that you have expertise in using?",
     "What languages do you know?",
-    "Do you any mental models or frameworks that you find particularly useful?",
+    "Are there any mental models or frameworks that you find particularly useful?",
     "From software applications to hardware gadgets, what are your must-have tools for enhancing productivity, creativity, and well-being?",
     "What specialized knowledge do you have that you believe is rare in your industry or area of study?",
     "What's a concept or idea you've come to understand that you wish more people knew about?",

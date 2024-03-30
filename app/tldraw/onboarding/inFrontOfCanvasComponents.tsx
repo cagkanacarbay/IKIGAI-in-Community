@@ -24,7 +24,7 @@ const InFrontOfTheCanvasComponents: React.FC = ({}) => {
       {/* {session ? null : <NotLoggedInAlert />} */}
       <div id='helper-buttons'>
         <QuestionHelperButton />
-        <UserGuideButton />
+        {/* <UserGuideButton /> */}
         <TutorialButton />
       </div>
       { tutorialToCVisible ? <TutorialTableOfContents /> : null}
@@ -108,7 +108,7 @@ const TutorialButton: React.FC = () => {
   const bgColor = (tutorialVisible || tutorialToCVisible) ? 'bg-purple-300 hover:bg-purple-600' : 'bg-purple-100 hover:bg-purple-600';
 
   return (
-    <div className={`fixed top-56 left-4 z-50 pointer-events-auto`}
+    <div className={`fixed top-36 left-4 z-50 pointer-events-auto`}
       onPointerMove={stopEventPropagation} onPointerDown={stopEventPropagation}
       id="tutorial-button"
     >
@@ -135,6 +135,53 @@ const TutorialButton: React.FC = () => {
         </Button>
       )}
     </div>
+  );
+};
+
+
+
+export const TutorialTableOfContents: React.FC = () => {
+  const { setStep, toggleTutorialVisibility, tutorialVisible, setTutorialToCVisible, completedSteps } = useBoardContext();
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className='pointer-events-auto flex flex-col bg-purple-50 w-[320px] top-60 absolute left-4 rounded-lg'
+      onPointerMove={stopEventPropagation} onPointerDown={stopEventPropagation}
+    >
+      <div className='m-4'>
+        <AlertTitle className="ml-2 text-2xl font-semibold text-purple-600">
+          Tutorial
+          <CloseButton onClick={() => setTutorialToCVisible(false)}/>
+          {/* <div className='text-xs text-purple-300'>Click on any step to go to that part of the tutorial.</div> */}
+        </AlertTitle>
+        <AlertDescription className='text-black mt-1 py-1 flex-grow rounded-md bg-white px-6 shadow-md'>
+          <div className="mt-1">
+            {tutorialSteps.map((step, index) => (
+              <div key={step.id} className="mb-1 rounded hover:bg-purple-100 hover:text-purple-600 flex justify-between items-center">
+                <a 
+                  onClick={() => {
+                    console.log(step.props.title);
+                    setStep(index);
+                    if (!tutorialVisible) {
+                      toggleTutorialVisibility();
+                      setTutorialToCVisible(false);
+                    }
+                  }}
+                  className="text-lg font-medium">
+                  {index+1}. {step.props.title}
+                </a>
+                {completedSteps.has(index) && <span className="text-green-500 text-xl">✔</span>}
+              </div>
+            ))}
+
+            </div>
+          </AlertDescription>
+      </div>
+    </motion.div>
+
   );
 };
 
@@ -191,48 +238,3 @@ const TutorialButton: React.FC = () => {
 
 
 
-
-export const TutorialTableOfContents: React.FC = () => {
-  const { setStep, toggleTutorialVisibility, tutorialVisible, setTutorialToCVisible, completedSteps } = useBoardContext();
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className='pointer-events-auto flex flex-col bg-purple-50 w-[320px] top-80 absolute left-4 rounded-lg'
-      onPointerMove={stopEventPropagation} onPointerDown={stopEventPropagation}
-    >
-      <div className='m-4'>
-        <AlertTitle className="ml-2 text-2xl font-semibold text-purple-600">
-          Tutorial
-          <CloseButton onClick={() => setTutorialToCVisible(false)}/>
-          {/* <div className='text-xs text-purple-300'>Click on any step to go to that part of the tutorial.</div> */}
-        </AlertTitle>
-        <AlertDescription className='text-black mt-1 py-1 flex-grow rounded-md bg-white px-6 shadow-md'>
-          <div className="mt-1">
-            {tutorialSteps.map((step, index) => (
-              <div key={step.id} className="mb-1 rounded hover:bg-purple-100 hover:text-purple-600 flex justify-between items-center">
-                <a 
-                  onClick={() => {
-                    console.log(step.props.title);
-                    setStep(index);
-                    if (!tutorialVisible) {
-                      toggleTutorialVisibility();
-                      setTutorialToCVisible(false);
-                    }
-                  }}
-                  className="text-lg font-medium">
-                  {index+1}. {step.props.title}
-                </a>
-                {completedSteps.has(index) && <span className="text-green-500 text-xl">✔</span>}
-              </div>
-            ))}
-
-            </div>
-          </AlertDescription>
-      </div>
-    </motion.div>
-
-  );
-};
