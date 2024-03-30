@@ -1,7 +1,7 @@
 import { Inter } from 'next/font/google';
 import '@/styles/globals.css'
 import Head from 'next/head';
-
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,24 +21,22 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Head>
-        {GTAG_ID && (
-            <>
-              <script async src={`https://www.googletagmanager.com/gtag/js?id=${GTAG_ID}`}></script>
-              <script
-                dangerouslySetInnerHTML={{
-                  __html: `
-                    window.dataLayer = window.dataLayer || [];
-                    function gtag(){dataLayer.push(arguments);}
-                    gtag('js', new Date());
-                    gtag('config', '${GTAG_ID}');
-                  `,
-                }}
-              />
-            </>
-          )}
-      <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        {process.env.NODE_ENV === "production" && (
+          <>
+            <Script async src={`https://www.googletagmanager.com/gtag/js?id=${GTAG_ID}`}></Script>
+            <Script id="google-analytics">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GTAG_ID}');
+              `}
+            </Script>
+          </>
+        )}
       </Head>
+
       <body className={`${inter.className}`}>
         {children}
       </body>
