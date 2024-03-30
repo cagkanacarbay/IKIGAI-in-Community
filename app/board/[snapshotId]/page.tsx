@@ -19,12 +19,15 @@ import { downloadSnapshot, downloadLatestUserSnapshot } from '@/lib/boardStorage
 import { useRouter } from 'next/navigation';
 import {Button} from "@/components/ui/button";
 import { useBoardContext } from '../boardContext';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 type BoardLoadState = 'loading' | 'loaded' | 'error'; 
 
 export default function LoadSnapshotId({ params }: { params: { snapshotId: string } }) {
   const router = useRouter();
   const { setIkigaiId } = useBoardContext();
+  const { data: session } = useSession();
 
   const [storeWithStatus, setStoreWithStatus] = useState<TLStoreWithStatus>({ status: 'loading' });
   const [loadState, setLoadState] = useState<BoardLoadState>('loading');
@@ -72,6 +75,9 @@ export default function LoadSnapshotId({ params }: { params: { snapshotId: strin
     router.push('/tldraw');
   }
 
+  const goToMostRecentBoard = () => {
+    router.push('/board/latest');
+  }  
 
   return (
     <>  
@@ -87,12 +93,34 @@ export default function LoadSnapshotId({ params }: { params: { snapshotId: strin
             <AlertDialogTitle>Snapshot Not Found</AlertDialogTitle>
             <AlertDialogDescription>
               The requested snapshot could not be loaded. Please retry or create a new board.
+
+              {!session && (
+                <>
+                  <br/><br/>
+                  If not logged in, please log in to work on your most recent board.
+                </>
+              )}
+              
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="flex justify-center gap-2 mb-1">
+          {!session && (
+            <Button variant="secondary" className="px-4 py-2 text-black rounded transition duration-150 hover:bg-purple-300 ease-in-out">
+              <Link href="/signin" passHref >
+                  Sign In
+              </Link>
+            </Button>
+            )}
+          {params.snapshotId !== 'latest' ? (
+            <Button onClick={goToMostRecentBoard} className="px-4 py-2 text-white rounded bg-purple-300 hover:bg-purple-700 transition duration-150 ease-in-out">
+              Go to my most recent board
+            </Button>
+          ) : (
             <Button onClick={loadNewBoard} className="px-4 py-2 text-white rounded bg-purple-300 hover:bg-purple-700 transition duration-150 ease-in-out">
               Create a New Board
             </Button>
+          )}
+
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

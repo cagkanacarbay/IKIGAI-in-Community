@@ -15,7 +15,7 @@ export default function SignInForm() {
     // console.log("session", session, status)
     if (status === "authenticated") {
       // Redirect or perform actions based on the authenticated session
-      window.location.href = '/tldraw'; 
+      window.location.href = '/board/latest'; 
     }
   }, [session]);
 

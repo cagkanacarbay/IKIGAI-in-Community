@@ -64,7 +64,7 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
       const shapesToUnlock: TLShapeId[] = [];
 
       const snapshot = editor.store.getSnapshot()
-      console.log("snapshot", snapshot)
+      // console.log("snapshot", snapshot)
 
       // Iterate over the snapshot to find shapes that are locked
       Object.entries(snapshot.store).forEach(([id, shape]) => {
@@ -218,9 +218,6 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
     };
   }, [hasUnsavedChanges]);
 
-
-
-
   return (
       <div style={{ position: 'fixed', inset: 0 }} id="tldraw-ikigai-board">
         {/* {!introCompleted && <IntroOverlay onFadeComplete={() => setIntroComplete(true)} />} */}
@@ -233,7 +230,7 @@ export default function IkigaiBoardV2({ storeWithStatus }: IkigaiBoardV2Props) {
           tools={customTools}
           components={components}
           autoFocus
-          persistenceKey="persistence-key"
+          persistenceKey="ikigai-board"
           className='z-10'
           assetUrls={customAssetUrls}
         >

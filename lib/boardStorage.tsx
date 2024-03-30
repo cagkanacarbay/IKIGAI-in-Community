@@ -6,7 +6,7 @@ import {
 } from "@tldraw/tldraw";
 import { Editor } from "@tldraw/editor";
 import { useSession } from "next-auth/react";
-import { customShapeUtils } from "../app/tldraw/shapes/customShapes";
+import { customShapeUtils } from "../app/board/shapes/customShapes";
 import { SnapshotInDB } from "./types";
 
 type ImageAssetProps = {
@@ -194,8 +194,6 @@ export async function downloadLatestUserSnapshot(): Promise<DownloadSnapshotResu
 const parseSnapshotResponse = async (response: Response): Promise<DownloadSnapshotResult> => {
 
     // Log the response for debugging
-    console.log("response", response);
-
     if (!response.ok) {
       const errorResult = await response.json(); // Assuming the error message is in JSON format
       return {
@@ -222,8 +220,6 @@ const parseSnapshotResponse = async (response: Response): Promise<DownloadSnapsh
       }
     }
 
-    // Log the parsed result
-    console.log(result);
     // Return success status with data and a 200 HTTP status code
     return {
       status: 'success',
@@ -342,7 +338,7 @@ export const saveBoardToDatabase = async (editor: Editor, ikigaiId?: string): Pr
         message: 'Snapshot saved successfully',
       };
     } catch (error) {
-      console.error("Failed to save the snapshot to the database.", error);
+      // console.error("Failed to save the snapshot to the database.", error);
       return {
         status: 'error',
         result: null,

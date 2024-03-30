@@ -11,7 +11,7 @@ import { saveBoardToDatabase } from '@/lib/boardStorage';
 import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useBoardContext } from '@/app/tldraw/boardContext';
+import { useBoardContext } from '@/app/board/boardContext';
 import "@/styles/loader.css";
 import {
   AlertDialog,

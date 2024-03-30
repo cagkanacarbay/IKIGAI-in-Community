@@ -316,14 +316,14 @@ export const tutorialSteps: OnboardingStep[] = [
   //   }, 
   //   noView: true, // Don't render the parent in welcomeTour, just the component.
   // },
-  {
-    id: 'introduce-aspects',
-    component: IntroduceAspects,
-    props: {
-      title: 'Aspect Types',
-    }, 
-    noView: true, // Don't render the parent in welcomeTour, just the component.
-  },
+  // {
+  //   id: 'introduce-aspects',
+  //   component: IntroduceAspects,
+  //   props: {
+  //     title: 'Aspect Types',
+  //   }, 
+  //   noView: true, // Don't render the parent in welcomeTour, just the component.
+  // },
   {
     id: 'tldraw-tools',
     component: IntroduceTldrawTools,
