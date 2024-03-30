@@ -1,0 +1,13 @@
+# Created by Vercel CLI
+BLOB_READ_WRITE_TOKEN="supersecret token"
+TURSO_AUTH_TOKEN="supersecret token"
+TURSO_DATABASE_URL="supersecret database url"
+TURBO_REMOTE_ONLY=""
+TURBO_RUN_SUMMARY=""
+VERCEL="1"
+VERCEL_ENV="development"
+NODE_ENV="development"
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="uuu secret"
+# IF NO GTAG_ID is set we skip that in code. so do that in prev and dev envs
+GTAG_ID="someid"

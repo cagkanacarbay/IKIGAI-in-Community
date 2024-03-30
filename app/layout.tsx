@@ -1,5 +1,6 @@
 import { Inter } from 'next/font/google';
 import '@/styles/globals.css'
+import Head from 'next/head';
 
 
 const inter = Inter({ subsets: ['latin'] });
@@ -9,6 +10,9 @@ export const metadata = {
   description: 'explore your ikigai',
 }
 
+const GTAG_ID = process.env.GTAG_ID;
+
+
 export default function RootLayout({
   children,
 }: {
@@ -16,7 +20,25 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <Head>
+        {GTAG_ID && (
+            <>
+              <script async src={`https://www.googletagmanager.com/gtag/js?id=${GTAG_ID}`}></script>
+              <script
+                dangerouslySetInnerHTML={{
+                  __html: `
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', '${GTAG_ID}');
+                  `,
+                }}
+              />
+            </>
+          )}
       <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+      </Head>
       <body className={`${inter.className}`}>
         {children}
       </body>
