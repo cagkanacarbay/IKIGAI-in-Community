@@ -13,7 +13,8 @@ if (process.env.VERCEL_ENV === 'production') {
 
   const adapter = new PrismaLibSQL(libsql);
   prisma = new PrismaClient({ adapter });
-} else {
+} 
+else {
   // Development environment (SQLite)
   prisma = new PrismaClient();
 }
