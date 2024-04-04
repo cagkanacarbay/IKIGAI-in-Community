@@ -250,8 +250,8 @@ export const QuestionHelper: React.FC = () => {
           }>
             <AlertTitle className="flex justify-center items-center" >
               <Select onValueChange={setAspectTypeQuestion} >
-                <SelectTrigger className="inline-flex items-center w-60 ml-12 mr-16 pl-4 pr-6 py-1 rounded-full shadow-inner hover:bg-purple-300 bg-purple-100" id="question-helper-aspect-type-selector">
-                  <Image 
+                <SelectTrigger className="inline-flex items-center max-w-xs min-w-0 ml-12 mr-16 pl-4 pr-6 py-1 rounded-full shadow-inner hover:bg-purple-300 bg-purple-100" id="question-helper-aspect-type-selector">
+                  <Image
                     width={36} height={36}
                     src={`/icons/aspects/${currentQuestion.aspectType}.png`} alt={currentQuestion.aspectType} 
                   />
