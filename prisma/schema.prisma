@@ -29,3 +29,12 @@ model user {
   updated_at      DateTime  @updatedAt
   snapshots       ikigai_snapshot[]
 }
+
+model answer {
+  id              Int       @id @default(autoincrement())
+  user_id Int
+  question String
+  event String
+  answer String
+  created_at      DateTime  @default(now())
+}

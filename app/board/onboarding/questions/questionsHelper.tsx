@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/select"
 import CloseButton from '@/components/ui/closeButton';
 import { useBoardContext } from '../../boardContext';
+import { uploadAnswer, Answer } from '@/lib/answerStorage';
 
 
 interface Question {
@@ -64,7 +65,7 @@ const reshapeQuestions = (): Question[] => {
 
 const defaultQuestion: Question = {
   text: 'loading...',
-  aspectType: 'knowledge', 
+  aspectType: 'knowledge',
   zone: 'The Heart',
 };
 
@@ -80,11 +81,12 @@ export const QuestionHelper: React.FC = () => {
   useEffect(() => {
     setCurrentQuestion(questions[currentQuestionIndex]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentQuestionIndex]);  
+  }, [currentQuestionIndex]);
 
   const editor = useEditor();
 
-  
+
+
   useEffect(() => {
     let timeoutId: NodeJS.Timeout | undefined | null = null;
 
@@ -131,13 +133,18 @@ export const QuestionHelper: React.FC = () => {
       });
 
       editor.select(newAspectId);
-      editor.zoomToSelection({ duration: 400});
+      editor.zoomToSelection({ duration: 400 });
       editor.setEditingShape(newAspectId)
 
     };
 
     const deleteAspect = () => {
       if (aspectId) {
+        const aspect = editor.getShape(aspectId)
+        if (aspect == undefined) {
+          alert("undefined aspect")
+          return
+        }
         editor.deleteShape(aspectId);
         setAspectId(undefined);
       }
@@ -159,7 +166,7 @@ export const QuestionHelper: React.FC = () => {
     };
 
     editor.select(ikigaiCircleIds[zone]);
-    editor.zoomToSelection({duration: 500});
+    editor.zoomToSelection({ duration: 500 });
 
     if (questionHelperVisible) {
       timeoutId = setTimeout(handleNextQuestion, 300);
@@ -173,7 +180,7 @@ export const QuestionHelper: React.FC = () => {
       }
     };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionHelperVisible, currentQuestion]);
 
   // When the question changes, update the context to the correct aspect type so we can reference it elsewhere
@@ -193,20 +200,48 @@ export const QuestionHelper: React.FC = () => {
 
   // Handlers to get the next, previous, or random question
   const setNextQuestion = () => {
+    logQuestion(aspectId, "pressed next")
     // console.log("setting next question, current index: ", currentQuestionIndex)
     // console.log("current question: ", currentQuestion)
     setCurrentQuestionIndex((currentQuestionIndex + 1) % questions.length); // loop back to 0th index
   };
 
+  const logQuestion = (aspectId: TLShapeId | undefined, description: string) => {
+    if (aspectId) {
+      const aspect = editor.getShape(aspectId)
+      if (aspect == undefined) {
+        console.log("can't log answer, aspect is undefined")
+        return
+      }
+      let a: Answer;
+      a = {
+        user_id: 0,
+        question: currentQuestion.text,
+        event: description,
+        answer: aspect.props.text,
+      }
+      uploadAnswer(a)
+    } else {
+      console.log("can't log answer, no aspectID")
+    }
+  }
+
   const setPreviousQuestion = () => {
+    logQuestion(aspectId, "prev. question")
     const newIndex = currentQuestionIndex - 1;
     setCurrentQuestionIndex(newIndex >= 0 ? newIndex : questions.length - 1); // loop to the other edge
   };
 
   const setRandomQuestion = () => {
+    logQuestion(aspectId, "pressed random")
     const randomIndex = Math.floor(Math.random() * questions.length);
     setCurrentQuestionIndex(randomIndex);
   };
+
+  const handleCloseQuestion = () => {
+    logQuestion(aspectId, "closed question")
+    toggleQuestionHelperVisibility();
+  }
 
   const setAspectTypeQuestion = (aspectType: AspectType) => {
     // console.log("setting aspect type question: ", aspectType)
@@ -246,14 +281,14 @@ export const QuestionHelper: React.FC = () => {
             fixed m-auto ${bgColor} pointer-events-auto 
             rounded-lg rounded-lg p-4 shadow-xl 
             w-[450px] h-[200px] z-40
-            top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2` 
+            top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2`
           }>
             <AlertTitle className="flex justify-center items-center" >
               <Select onValueChange={setAspectTypeQuestion} >
                 <SelectTrigger className="inline-flex items-center max-w-xs min-w-0 ml-12 mr-16 pl-4 pr-6 py-1 rounded-full shadow-inner hover:bg-purple-300 bg-purple-100" id="question-helper-aspect-type-selector">
                   <Image
                     width={36} height={36}
-                    src={`/icons/aspects/${currentQuestion.aspectType}.png`} alt={currentQuestion.aspectType} 
+                    src={`/icons/aspects/${currentQuestion.aspectType}.png`} alt={currentQuestion.aspectType}
                   />
                   <span className="text-xl font-semibold">{currentQuestion.aspectType}</span>
                 </SelectTrigger>
@@ -261,21 +296,21 @@ export const QuestionHelper: React.FC = () => {
                   {Object.entries(zoneAspectTypes).map(([zone, aspects]) => (
                     <SelectGroup key={zone}>
                       <SelectLabel className="flex items-center space-x-2 p-2">
-                        <Image 
-                          src={`/icons/zones/${zoneIconSrc[zone as keyof typeof zoneIconSrc]}`} 
-                          alt={`${zone} icon`} 
-                          height={24} 
-                          width={24} 
+                        <Image
+                          src={`/icons/zones/${zoneIconSrc[zone as keyof typeof zoneIconSrc]}`}
+                          alt={`${zone} icon`}
+                          height={24}
+                          width={24}
                         />
                         <span>{zone}</span>
                       </SelectLabel>
                       {aspects.map((aspectType) => (
                         <SelectItem key={aspectType} value={aspectType} className='hover:bg-purple-100'>
-                          <Image 
-                            src={`/icons/aspects/${aspectType}.png`} 
-                            alt={`${zone} icon`} 
-                            height={24} 
-                            width={24} 
+                          <Image
+                            src={`/icons/aspects/${aspectType}.png`}
+                            alt={`${zone} icon`}
+                            height={24}
+                            width={24}
                             className='ml-6 mr-4 inline-block'
                           />
                           <span className=''>{aspectType}</span>
@@ -291,7 +326,7 @@ export const QuestionHelper: React.FC = () => {
                 {currentQuestion.text}
               </div>
             </AlertDescription>
-            <CloseButton onClick={toggleQuestionHelperVisibility} />
+            <CloseButton onClick={handleCloseQuestion} />
             <div className="absolute bottom-2 right-2 flex space-x-2">
               <Button onClick={setPreviousQuestion} className="bg-purple-100 hover:bg-purple-400 rounded-full p-2">
                 <Image src="/icons/previous.svg" alt="Previous" width={20} height={20} />
