@@ -10,13 +10,13 @@ export default NextAuth({
       name: 'credentials',
       credentials: {
         username: { label: "Username", type: "text" },
-        password:  { label: "Password", type: "password" }
+        password: { label: "Password", type: "password" }
       },
       authorize: async (credentials, req) => {
         // console.log("new loging", credentials)
 
         if (!credentials) return null;
-        
+
         const user = await prisma.user.findUnique({
           where: { username: credentials.username }
         });
@@ -27,7 +27,8 @@ export default NextAuth({
           return {
             id: user.id.toString(),
             username: user.username,
-            email: user.email
+            email: user.email,
+            name: user.username
           };
         }
         console.log("Authentication failed");
@@ -40,7 +41,10 @@ export default NextAuth({
     async session({ session, token }) {
       // console.log("session", session, token	)
       if (token.sub) {
-        session.user.id = token.sub; 
+        session.user.id = token.sub;
+      }
+      if (token.name) {
+        session.user.name = token.name;
       }
       return session;
     },

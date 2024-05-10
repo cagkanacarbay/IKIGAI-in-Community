@@ -218,7 +218,7 @@ export const QuestionHelper: React.FC = () => {
         user_id: 0,
         question: currentQuestion.text,
         event: description,
-        answer: aspect.props.text,
+        answer: (aspect.props as any).text,
       }
       uploadAnswer(a)
     } else {
